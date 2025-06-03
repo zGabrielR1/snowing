@@ -1,0 +1,33 @@
+name: Build and cache NixOS flake
+
+on: 
+  push: 
+    branches: [master] 
+  pull_request: 
+    branches: [master]
+
+jobs: 
+  build: 
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+    
+      - name: Install Nix
+        uses: cachix/install-nix-action@v25
+        with:
+          nix_path: nixpkgs=channel:nixos-unstable
+
+      - name: Set up Cachix
+        uses: cachix/cachix-action@v12
+        with:
+          name: zgabrielr  # Replace with your actual cache name
+          authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+    
+      - name: Build NixOS flake
+        run: |
+          nix build .#nixosConfigurations.laptop.config.system.build.toplevel
+    
+      - name: Show derivation info
+        run: |
+          nix show-derivation .#nixosConfigurations.laptop.config.system.build.toplevel
+
