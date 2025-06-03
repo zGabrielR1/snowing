@@ -1,14 +1,17 @@
 # modules/nixos/default.nix
-# Main entry point for shared NixOS modules
 { config, pkgs, lib, inputs, ... }:
 
 {
   imports = [
-    ./locale.nix
-    ./virtualization.nix
     ./audio.nix
+    ./fonts.nix       # Moved from system/programs/fonts.nix
+    ./locale.nix
     ./networking.nix
+    ./nix-settings.nix # This is the single source of truth for nix settings
+    ./nh.nix          # Moved from system/nix/nh.nix
     ./packages.nix
-    ./nix-settings.nix
+    ./virtualization.nix
+    # Add a new module for general program settings if desired
+    # ./programs.nix
   ];
 }

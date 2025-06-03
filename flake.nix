@@ -1,3 +1,4 @@
+# flake.nix
 {
   description = "My configs (Refactored with flake-parts)";
 
@@ -14,12 +15,11 @@
       url = "github:hercules-ci/flake-parts";
       inputs.nixpkgs-lib.follows = "nixpkgs";
     };
-    systems.url = "github:nix-systems/default-linux"; # Match flake-parts expectation if needed, or adjust perSystem systems list
+    systems.url = "github:nix-systems/default-linux";
 
     # --- Theming ---
     nix-colors.url = "github:misterio77/nix-colors";
     matugen.url = "github:InioX/matugen";
-    # base16-schemes is implicitly pulled by nix-colors/stylix if needed
 
     # --- Hyprland Ecosystem ---
     hyprland = {
@@ -45,8 +45,8 @@
     };
 
     # --- Bars / Launchers / Widgets ---
-    ags.url = "github:Aylur/ags/v1"; # Keep specific tag for now
-    anyrun.url = "github:fufexan/anyrun/launch-prefix"; # Keep specific fork/branch for now
+    ags.url = "github:Aylur/ags/v1";
+    anyrun.url = "github:fufexan/anyrun/launch-prefix";
 
     # --- Utilities / Libraries ---
     agenix = {
@@ -71,85 +71,58 @@
       url = "github:pfaj/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # ghostty = { url = "github:ghostty-org/ghostty"; }; # Keep if needed
 
     # --- Compatibility ---
-    flake-compat.url = "github:edolstra/flake-compat"; # Keep if legacy tools need it
+    flake-compat.url = "github:edolstra/flake-compat";
 
     # --- Community Repos ---
-    nur.url = "github:nix-community/NUR"; # Keep if NUR packages are used
-    # --- Rices ---
-    #amadeus-wm-nixos-dots.url = "github:AmadeusWM/nixos-dots";
-    #CmrCrabsNixDots.url = "github:CmrCrabs/nixdots";
-    #crystal-og.url = "github:namishh/crystal";
-    #isabel-roses-dotfiles.url = "github:isabelroses/dotfiles";
-    #kaku.url = "github:linuxmobile/kaku";
-    #ndots.url = "github:niksingh710/ndots";
-    #nixy.url = "path:./import/nixy";
+    nur.url = "github:nix-community/NUR";
   };
 
   outputs = { self, nixpkgs, home-manager, flake-parts, determinate, chaotic, ... }@inputs:
     flake-parts.lib.mkFlake { inherit inputs; } {
-      systems = [ "x86_64-linux" ]; # Define supported systems
+      systems = [ "x86_64-linux" ];
       perSystem = { config, pkgs, system, lib, ... }: {
-        # Packages defined in pkgs/ can be exposed here if needed
-        # Example: packages = import ./pkgs { inherit pkgs; };
-        # Or specific packages: packages.my-package = pkgs.callPackage ./pkgs/my-package {};
-
-        # DevShells can be defined here
-        # devShells.default = pkgs.mkShell { ... };
+        # Example: Expose custom font packages if they are defined locally
+        # packages = {
+        #   SF-Pro = pkgs.callPackage ./pkgs/fonts/sf-pro.nix {};
+        #   SF-Pro-mono = pkgs.callPackage ./pkgs/fonts/sf-pro-mono.nix {};
+        # };
+        # For now, assuming SF fonts are handled differently or placeholder
       };
       flake = {
         # NixOS Configurations
-        nixosConfigurations = {
-          "laptop" = nixpkgs.lib.nixosSystem {
-            system = "x86_64-linux"; # Or reference system from perSystem if multiple are supported
-            specialArgs = { inherit inputs self; }; # Pass inputs and self
-            modules = [
-              # Core Modules
-              home-manager.nixosModules.home-manager
-              determinate.nixosModules.default
-              chaotic.nixosModules.default # Chaotic Nyx Module
+        nixosConfigurations.laptop = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = { inherit inputs self; }; # Pass all inputs and self
+          modules = [
+            # Core Modules
+            home-manager.nixosModules.home-manager
+            determinate.nixosModules.default
+            chaotic.nixosModules.default # Chaotic Nyx Module
 
-              # Custom NixOS Modules (Import the top-level module directly)
-              ./modules/nixos/default.nix
-              ./modules/nixos/nix-settings.nix  # ← Add this line
+            # Custom NixOS Modules (Import the top-level module directly)
+            ./modules/nixos/default.nix # This should import nix-settings.nix among others
 
-              # Host specific config
-              ./hosts/laptop/configuration.nix
+            # Host specific config
+            ./hosts/laptop/configuration.nix
 
-              # Hyprland Module (if needed system-wide)
-              inputs.hyprland.nixosModules.default
+            # Hyprland Module (if needed system-wide for XDG portals etc.)
+            inputs.hyprland.nixosModules.default
 
-              # Global settings previously defined inline
-              {
-                home-manager.useGlobalPkgs = true;
-                home-manager.useUserPackages = true;
-              }
-            ];
-          };
-          # Add other hosts here if needed
-          # "desktop" = nixpkgs.lib.nixosSystem { ... };
+            # Niri module (if you plan to use Niri system-wide for portals etc.)
+            # inputs.niri.nixosModules.niri # Or .default, check niri-flake docs
+
+            # Note: home-manager.useGlobalPkgs and useUserPackages are deprecated
+            # and removed. Configuration happens in home-manager.users.<name>
+          ];
         };
+        # Add other hosts here if needed
+        # "desktop" = nixpkgs.lib.nixosSystem { ... };
 
-        # Home Manager Configurations (if managing standalone HM users)
-        # homeConfigurations = {
-        #   "zrrg@laptop" = home-manager.lib.homeManagerConfiguration {
-        #     pkgs = nixpkgs.legacyPackages.x86_64-linux; # Or use pkgs from perSystem
-        #     extraSpecialArgs = { inherit inputs self; };
-        #     modules = [
-        #       ./home/zrrg/home.nix # Assuming a base home.nix for the user
-        #       # Import specific profile modules as needed, potentially driven by specialArgs
-        #       # ./home/profiles/zrrg/wm/awesome/aura.nix
-        #     ];
-        #   };
-        # };
-
-        # NixOS and Home Manager modules are now imported directly where needed
-        # (NixOS modules in nixosConfigurations, HM modules within host config)
-
-        # Expose a simple package for testing
-
+        # Expose Home Manager modules if you want to reference them like self.homeManagerModules.myProfile
+        # homeManagerModules.zrrgBase = ./modules/home/profiles/zrrg/default.nix;
+        # homeManagerModules.zrrgHyprland = ./modules/home/profiles/zrrg/wm/hyprland/default.nix;
       };
     };
 }

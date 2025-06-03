@@ -52,20 +52,6 @@
   
 
   # Enable sound with pipewire.
-  services.pulseaudio.enable = false;
-  security.rtkit.enable = true;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-    # If you want to use JACK applications, uncomment this
-    #jack.enable = true;
-
-    # use the example session manager (no others are packaged yet so this is enabled by default,
-    # no need to redefine it in your config for now)
-    #media-session.enable = true;
-  };
 
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
@@ -74,24 +60,22 @@
   users.users.zrrg = {
     isNormalUser = true;
     description = "Gabriel Renostro";
-    extraGroups = [ "networkmanager" "wheel" "incus-admin" "podman" ];
-    packages = with pkgs; [
-    #  thunderbird
-    ];
-    # packages = with pkgs; [ ]; # System-level packages for user are less common with HM
+    extraGroups = [ "networkmanager" "wheel" "incus-admin" "podman" "docker" ]; # Added docker
+    # System-level packages for user are less common with HM, keep this minimal or empty
+    # packages = with pkgs; [ ];
   };
 
   # Define Home Manager configuration for the user 'zrrg'
-  home-manager.users.zrrg = { pkgs, ... }: {
+  home-manager.users.zrrg = {
+    imports = [
+      # This is the main entry point for zrrg's Home Manager config
+      ../../modules/home/profiles/zrrg/default.nix
     ];
-
-    # You can set home-manager options directly here too, or keep them in imported files
-    home.username = "zrrg";
-    home.homeDirectory = "/home/zrrg";
-
-    # Ensure state version matches system state version for consistency
-    home.stateVersion = config.system.stateVersion;
+    # You can pass pkgs and other args if your HM module is a function
+    # pkgs = pkgs;
+    # extraSpecialArgs = { inherit inputs; }; # Pass inputs to HM modules
   };
+
 
   # Install firefox.
   programs.firefox.enable = true;
@@ -150,43 +134,12 @@
     enable = true;
     binfmt = true;
   };
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
+
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
-  environment.systemPackages = with pkgs; [
-  #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-  #  wget
-    # VSCode Insiders build
-    ((pkgs.vscode.override { isInsiders = true; }).overrideAttrs (oldAttrs: rec {
-      src = (builtins.fetchTarball {
-        url = "https://code.visualstudio.com/sha/download?build=insider&os=linux-x64";
-        sha256 = "sha256:1ys4d79pnf1y4aslq0bnm20cgmmfcgl7cd3lhw88h41mx2bi1hfl";
-      });
-      version = "latest";
-      buildInputs = oldAttrs.buildInputs ++ [ pkgs.krb5 ];
-    }))
-    code-cursor
-    windsurf
-    git
-    runc
-    cri-o
-    distrobox
-    boxbuddy
-    toolbox
-    pods
-    github-desktop
-    kitty
-    awesome
-    niri
-    flatpak
-    rofi-wayland
-    bottles
-    wine-staging
-    jetbrains-toolbox
-  ];
+
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
