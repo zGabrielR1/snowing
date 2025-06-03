@@ -133,7 +133,7 @@
     networkmanagerapplet # nm-applet
     # blueman # if you need bluetooth
     polkit_gnome # for authentication
-    inputs.mcmojave-hyprcursor.packages.${pkgs.system}.default # Cursor theme
+    #inputs.mcmojave-hyprcursor.packages.${pkgs.system}.default # Cursor theme
     # For theming
     (nerdfonts.override { fonts = [ "JetBrainsMono" "SymbolsNerdFont" ]; })
   ];

@@ -4,14 +4,13 @@
 {
   imports = [
     ./audio.nix
-    ./fonts.nix       # Moved from system/programs/fonts.nix
+    # ./fonts.nix       # Removed or commented out
     ./locale.nix
     ./networking.nix
-    ./nix-settings.nix # This is the single source of truth for nix settings
-    ./nh.nix          # Moved from system/nix/nh.nix
+    ./nix-settings.nix
+    ./nh.nix
     ./packages.nix
     ./virtualization.nix
-    # Add a new module for general program settings if desired
     # ./programs.nix
   ];
 }
