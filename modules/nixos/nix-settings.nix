@@ -8,7 +8,7 @@
   nix = let
     flakeInputs = lib.filterAttrs (_: v: builtins.isAttrs v && v ? type && v.type == "flake") inputs;
   in {
-    package = pkgs.nix; # Or pkgs.lix if you strongly prefer it and it's stable enough for you
+    package = lib.mkDefault pkgs.nix; # Or pkgs.lix if you strongly prefer it and it's stable enough for you
 
     # Pin the registry to avoid downloading and evaling a new nixpkgs version every time
     # registry = lib.mapAttrs (_: v: { flake = v; }) flakeInputs;
