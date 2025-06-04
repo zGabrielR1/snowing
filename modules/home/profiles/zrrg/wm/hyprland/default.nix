@@ -135,10 +135,11 @@
     polkit_gnome # for authentication
     #inputs.mcmojave-hyprcursor.packages.${pkgs.system}.default # Cursor theme
     # For theming
-    (nerdfonts.override { fonts.packages = [ 
+    (pkgs.nerdfonts.override { fonts.packages = [ 
     	pkgs.JetBrainsMono
     	pkgs.SymbolsNerdFont 
-    ]; })
+    ]; }
+    )
   ];
 
 
