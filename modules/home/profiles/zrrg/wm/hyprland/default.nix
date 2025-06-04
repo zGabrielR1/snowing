@@ -135,25 +135,12 @@
     polkit_gnome # for authentication
     #inputs.mcmojave-hyprcursor.packages.${pkgs.system}.default # Cursor theme
     # For theming
-    (nerdfonts.override { fonts = [ "JetBrainsMono" "SymbolsNerdFont" ]; })
+    (nerdfonts.override { fonts.packages = [ 
+    	pkgs.JetBrainsMono
+    	pkgs.SymbolsNerdFont 
+    ]; })
   ];
 
-  # Configure Hyprlock (from its flake input)
-  # programs.hyprlock = {
-  #   enable = true;
-  #   package = inputs.hyprlock.packages.${pkgs.system}.default;
-  #   settings = {
-  #     general = {
-  #       disable_while_typing = false;
-  #       grace = 0;
-  #     };
-  #     background = {
-  #       path = "screenshot"; # or path to a wallpaper
-  #       color = "rgba(20, 20, 20, 1.0)";
-  #     };
-  #     # ... more hyprlock config
-  #   };
-  # };
 
   # Configure Hypridle (from its flake input)
   # services.hypridle = {
