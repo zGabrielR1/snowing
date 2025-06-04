@@ -5,7 +5,7 @@
   inputs = {
     # --- Core ---
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
-    determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/*";
+    #determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/*";
     chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -45,8 +45,8 @@
     };
 
     # --- Bars / Launchers / Widgets ---
-    ags.url = "github:Aylur/ags/v1";
-    anyrun.url = "github:fufexan/anyrun/launch-prefix";
+    #ags.url = "github:Aylur/ags/v1";
+    #anyrun.url = "github:fufexan/anyrun/launch-prefix";
 
     # --- Utilities / Libraries ---
     agenix = {
@@ -79,7 +79,7 @@
     nur.url = "github:nix-community/NUR";
   };
 
-  outputs = { self, nixpkgs, home-manager, flake-parts, determinate, chaotic, ... }@inputs:
+  outputs = { self, nixpkgs, home-manager, flake-parts, chaotic, ... }@inputs:
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = [ "x86_64-linux" ];
       perSystem = { config, pkgs, system, lib, ... }: {
@@ -98,7 +98,7 @@
           modules = [
             # Core Modules
             home-manager.nixosModules.home-manager
-            determinate.nixosModules.default
+            #determinate.nixosModules.default
             chaotic.nixosModules.default # Chaotic Nyx Module
 
             # Custom NixOS Modules (Import the top-level module directly)
