@@ -134,12 +134,8 @@
     # blueman # if you need bluetooth
     polkit_gnome # for authentication
     #inputs.mcmojave-hyprcursor.packages.${pkgs.system}.default # Cursor theme
-    # For theming
-    (pkgs.nerdfonts.override { fonts.packages = [ 
-    	pkgs.JetBrainsMono
-    	pkgs.SymbolsNerdFont 
-    ]; }
-    )
+    pkgs.nerd-fonts.jetbrains-mono
+    pkgs.nerd-fonts.symbols-only
   ];
 
 
