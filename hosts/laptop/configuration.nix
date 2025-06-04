@@ -66,14 +66,28 @@
   };
 
   # Define Home Manager configuration for the user 'zrrg'
-  home-manager.users.zrrg = {
-    imports = [
-      # This is the main entry point for zrrg's Home Manager config
-      ../../modules/home/profiles/zrrg/default.nix
-    ];
-    # You can pass pkgs and other args if your HM module is a function
-    # pkgs = pkgs;
-    # extraSpecialArgs = { inherit inputs; }; # Pass inputs to HM modules
+  home-manager = {
+    # This is where you list users managed by Home Manager
+    users.zrrg = {
+      imports = [
+        # This is the main entry point for zrrg's Home Manager config
+        ../../modules/home/profiles/zrrg/default.nix
+      ];
+      # You can also set Home Manager options directly here if needed, e.g.:
+      # home.username = "zrrg";
+      # home.homeDirectory = "/home/zrrg";
+    };
+
+    # --- THIS IS THE FIX ---
+    # Pass special arguments to all Home Manager modules for all users
+    extraSpecialArgs = {
+      inherit inputs; # This passes the 'inputs' from your flake to your HM modules
+      # You could also pass 'self' from the flake if needed:
+      # self = inputs.self; # Assuming 'self' was passed to specialArgs in flake.nix
+                           # Your flake.nix does: specialArgs = { inherit inputs self; }
+                           # So you could do:
+      # inherit inputs self;
+    };
   };
 
 
