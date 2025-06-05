@@ -6,7 +6,7 @@ let
     if desktop == "gnome" then
       config.services.desktopManager.gnome.enable
     else if desktop == "kde" then
-      config.services.desktopManager.plasma5.enable
+      config.services.desktopManager.plasma6.enable
     else
       false;
 
@@ -36,8 +36,12 @@ in
     fi
   '';
 
-  # Enable software centers based on desktop environment
-  services.gnome.gnome-software.enable = enableGnomeSoftware;
-  programs.kdeconnect.enable = enableKdeDiscover; # KDE Connect is required for Discover
-  services.desktopManager.plasma6.enable = enableKdeDiscover;
+  # Enable software centers through system packages
+  environment.systemPackages = with pkgs; [
+    (lib.mkIf enableGnomeSoftware gnome.gnome-software)
+    (lib.mkIf enableKdeDiscover kdePackages.discover)
+  ];
+
+  # Additional KDE Connect requirement for Discover
+  programs.kdeconnect.enable = enableKdeDiscover;
 }
