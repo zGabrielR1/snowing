@@ -15,48 +15,22 @@
     # e.g., inputs.nix-colors.homeManagerModules.default if you use nix-colors
   ];
 
-  home = {
-    username = "zrrg";
-    homeDirectory = "/home/zrrg";
-    stateVersion = "24.11"; # Or keep consistent with system.stateVersion, e.g., "25.05"
-
-    # Packages managed by Home Manager for this user
-    packages = with pkgs; [
-      firefox # User-specific Firefox profile
-      thunderbird
-      kitty
-      rofi-wayland # If you use it with Hyprland
-      # Add other user-specific GUI and CLI tools here
-      gh # GitHub CLI
-    ];
-  };
-
-  # Enable programs
-  programs.git.enable = true;
-  programs.home-manager.enable = true; # Good practice
-
-  # Example: Starship prompt
+  # Enable extra programs and settings not defined in home.nix
   programs.starship = {
     enable = true;
     # settings = { ... };
   };
 
-  # Basic shell setup
-  programs.zsh = { # Or bash
+  programs.zsh = {
     enable = true;
     # ohMyZsh.enable = true; # Example
   };
 
-  # Link dotfiles
+  # Example: Link dotfiles or set environment variables here if not in home.nix
   # home.file.".config/nvim/init.vim".source = ./config/nvim/init.vim;
-  # Or use xdg.configFile for better organization
-  #xdg.configFile."kitty/kitty.conf".source = ./config/kitty/kitty.conf; # Example path
-
-  # Environment variables
+  # xdg.configFile."kitty/kitty.conf".source = ./config/kitty/kitty.conf;
   # home.sessionVariables = {
   #   EDITOR = "nvim";
   # };
-
-  # Fontconfig (user-specific overrides/additions if needed)
   # fonts.fontconfig.enable = true;
 }

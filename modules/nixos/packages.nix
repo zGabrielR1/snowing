@@ -5,7 +5,7 @@
 
   environment.systemPackages = with pkgs; [
     # Custom VSCode Insiders build
-    ((pkgs.vscode.override { isInsiders = true; }).overrideAttrs (oldAttrs: rec {
+    /*((pkgs.vscode.override { isInsiders = true; }).overrideAttrs (oldAttrs: rec {
       src = (builtins.fetchTarball {
         url = "https://code.visualstudio.com/sha/download?build=insider&os=linux-x64";
         sha256 = "sha256:1ys4d79pnf1y4aslq0bnm20cgmmfcgl7cd3lhw88h41mx2bi1hfl";
@@ -13,12 +13,14 @@
       version = "latest";
       buildInputs = oldAttrs.buildInputs ++ [ pkgs.krb5 ];
     }))
-
+    */
     helix
     kakoune
     micro
     vis
     emacs
+    amp
+    ad
     code-cursor
     windsurf
     git
@@ -26,7 +28,8 @@
     runc
     cri-o
     distrobox
-    boxbuddy
+    distroshelf
+    #boxbuddy
     toolbox
     podman
     pods

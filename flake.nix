@@ -67,10 +67,7 @@
         flake-parts.follows = "flake-parts";
       };
     };
-    zen-browser = {
-      url = "github:pfaj/zen-browser-flake";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    zen-browser.url = "github:0xc000022070/zen-browser-flake";
 
     # --- Compatibility ---
     flake-compat.url = "github:edolstra/flake-compat";
@@ -98,6 +95,16 @@
           modules = [
             # Core Modules
             home-manager.nixosModules.home-manager
+            home-manager.nixosModules.home-manager
+              {
+              home-manager.useGlobalPkgs = true;
+              home-manager.backupFileExtension = "HMBackup";
+              home-manager.useUserPackages = true;
+              #home-manager.users.quiet.imports = [
+              #  ./home.nix
+              #  catppuccin.homeManagerModules.catppuccin
+              #];
+            }
             #determinate.nixosModules.default
             chaotic.nixosModules.default # Chaotic Nyx Module
 
