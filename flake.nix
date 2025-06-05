@@ -32,10 +32,10 @@
     #  url = "github:hyprwm/hyprland-plugins";
     #  inputs.hyprland.follows = "hyprland";
     #};
-    hyprspace = {
-      url = "github:KZDKM/Hyprspace";
-      inputs.hyprland.follows = "hyprland";
-    };
+    #hyprspace = {
+    #  url = "github:KZDKM/Hyprspace";
+    #  inputs.hyprland.follows = "hyprland";
+    #};
     mcmojave-hyprcursor.url = "github:libadoxon/mcmojave-hyprcursor";
 
     # --- Niri ---
