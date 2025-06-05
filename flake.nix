@@ -67,7 +67,10 @@
         flake-parts.follows = "flake-parts";
       };
     };
-    zen-browser.url = "github:0xc000022070/zen-browser-flake";
+    zen-browser = {
+    url = "github:0xc000022070/zen-browser-flake";
+    inputs.nixpkgs.follows = "nixpkgs";
+  };
 
     # --- Compatibility ---
     flake-compat.url = "github:edolstra/flake-compat";

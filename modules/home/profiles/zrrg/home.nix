@@ -7,7 +7,7 @@
 
   # Packages that should be installed to the user profile.
   home.packages = with pkgs; [
-    inputs.zen-browser.packages."${system}".specific
+    #inputs.zen-browser.packages."${system}".specific
     zip
     xz
     unzip
