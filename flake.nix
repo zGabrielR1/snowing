@@ -118,7 +118,7 @@
             ./hosts/laptop/configuration.nix
 
             # Hyprland Module (if needed system-wide for XDG portals etc.)
-            inputs.hyprland.nixosModules.default
+            #inputs.hyprland.nixosModules.default
 
             # Niri module (if you plan to use Niri system-wide for portals etc.)
             # inputs.niri.nixosModules.niri # Or .default, check niri-flake docs
