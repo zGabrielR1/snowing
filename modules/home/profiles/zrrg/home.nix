@@ -51,11 +51,12 @@
   };
 
   # Catppuccin theming
-  catppuccin = {
+  /*catppuccin = {
     enable = true;
     flavor = "mocha";
     accent = "blue";
   };
+  */
 
   # Git configuration
   programs.git = {
