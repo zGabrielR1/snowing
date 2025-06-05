@@ -15,22 +15,6 @@
     # e.g., inputs.nix-colors.homeManagerModules.default if you use nix-colors
   ];
 
-  home = {
-    username = "zrrg";
-    homeDirectory = "/home/zrrg";
-    stateVersion = "24.11"; # Or keep consistent with system.stateVersion, e.g., "25.05"
-
-    # Packages managed by Home Manager for this user
-    packages = with pkgs; [
-      firefox # User-specific Firefox profile
-      thunderbird
-      kitty
-      rofi-wayland # If you use it with Hyprland
-      # Add other user-specific GUI and CLI tools here
-      gh # GitHub CLI
-    ];
-  };
-
   # Enable programs
   programs.git.enable = true;
   programs.home-manager.enable = true; # Good practice
