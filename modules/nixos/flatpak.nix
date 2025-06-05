@@ -38,7 +38,7 @@ in
 
   # Enable software centers through system packages
   environment.systemPackages = with pkgs; [
-    (lib.mkIf enableGnomeSoftware gnome.gnome-software)
+    (lib.mkIf enableGnomeSoftware gnome-software)
     (lib.mkIf enableKdeDiscover kdePackages.discover)
   ];
 
