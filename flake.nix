@@ -22,10 +22,10 @@
     matugen.url = "github:InioX/matugen";
 
     # --- Hyprland Ecosystem ---
-    hyprland = {
-      url = "github:hyprwm/Hyprland";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    #hyprland = {
+    #  url = "github:hyprwm/Hyprland?";
+    #  inputs.nixpkgs.follows = "nixpkgs";
+    #};
     hyprlock.url = "github:hyprwm/hyprlock";
     hypridle.url = "github:hyprwm/hypridle";
     hyprland-plugins = {

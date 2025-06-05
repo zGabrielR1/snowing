@@ -32,10 +32,10 @@
     "docker0" 
 ];
 # Enable the Cinnamon Desktop Environment.
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome.enable = true;
-  #services.xserver.displayManager.lightdm.enable = true;
-  #services.xserver.desktopManager.cinnamon.enable = true;
+  services.displayManager.gdm.enable = true;
+  services.desktopManager.gnome.enable = true;
+  #services.displayManager.lightdm.enable = true;
+  #services.desktopManager.cinnamon.enable = true;
   
 
   # Configure keymap in X11
