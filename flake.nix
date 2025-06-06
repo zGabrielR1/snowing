@@ -5,7 +5,6 @@
   inputs = {
     # --- Core ---
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
-    #determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/*";
     chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -108,7 +107,6 @@
               #  catppuccin.homeManagerModules.catppuccin
               #];
             }
-            #determinate.nixosModules.default
             chaotic.nixosModules.default # Chaotic Nyx Module
 
             # Custom NixOS Modules (Import the top-level module directly)
