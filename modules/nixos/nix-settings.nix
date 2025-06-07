@@ -1,29 +1,57 @@
 # modules/nixos/nix-settings.nix
 { config, lib, pkgs, inputs, ... }:
 
+let
+  flakeInputs = lib.filterAttrs (_: v: builtins.isAttrs v && v.type == "flake") inputs;
+  autoGarbageCollector = config.var.autoGarbageCollector or false;
+in
 {
   # For flakes
   environment.systemPackages = [ pkgs.git ];
 
-  nix = let
-    flakeInputs = lib.filterAttrs (_: v: builtins.isAttrs v && v ? type && v.type == "flake") inputs;
-  in {
-    package = lib.mkDefault pkgs.nix; # Or pkgs.lix if you strongly prefer it and it's stable enough for you
+  # Sudo rules for nixos-rebuild
+  security.sudo.extraRules = [{
+    users = [ config.var.username ];
+    commands = [{
+      command = "/run/current-system/sw/bin/nixos-rebuild";
+      options = [ "NOPASSWD" ];
+    }];
+  }];
 
-    # Pin the registry to avoid downloading and evaling a new nixpkgs version every time
-    # registry = lib.mapAttrs (_: v: { flake = v; }) flakeInputs;
-    # A more robust way to handle registry for inputs available in 'inputs':
+  # nh configuration
+  programs.nh = {
+    enable = true;
+    clean = {
+      enable = true;
+      extraArgs = "--keep-since 7d";
+    };
+  };
+
+  # nixpkgs configuration
+  nixpkgs.config = {
+    allowUnfree = true;
+    allowBroken = true;
+  };
+
+  nix = {
+    package = lib.mkDefault pkgs.nix;
+
+    # Registry configuration
     registry = lib.mapAttrs (_key: flake: { inherit flake; }) (
       lib.filterAttrs (name: _: name != "self" && inputs ? ${name} && inputs.${name} ? type && inputs.${name}.type == "flake") inputs
     );
 
-
     # Set the path for channels compat
     nixPath = lib.mapAttrsToList (key: value: "${key}=flake:${key}") config.nix.registry;
 
+    # Extra options
+    extraOptions = ''
+      warn-dirty = false
+    '';
+
     settings = {
       substituters = [
-        "https://cache.nixos.org/"
+        "https://cache.nixos.org?priority=10"
         "https://zgabrielr.cachix.org"
         "https://hyprland.cachix.org"
         "https://nix-community.cachix.org"
@@ -59,16 +87,24 @@
       ];
 
       auto-optimise-store = true;
-      builders-use-substitutes = true; # Already default, but explicit is fine
+      builders-use-substitutes = true;
       experimental-features = [ "nix-command" "flakes" ];
-      flake-registry = "/etc/nix/registry.json"; # This is usually managed by nix itself
+      flake-registry = "/etc/nix/registry.json";
 
       # for direnv GC roots
       keep-derivations = true;
       keep-outputs = true;
 
-      trusted-users = [ "root" "@wheel" "zrrg" ]; # Add your user for certain operations
-      accept-flake-config = true; # Often needed for flakes with system/kernel params
+      trusted-users = [ "root" "@wheel" "zrrg" ];
+      accept-flake-config = true;
+    };
+
+    # Garbage collection settings
+    gc = {
+      automatic = autoGarbageCollector;
+      persistent = true;
+      dates = "weekly";
+      options = "--delete-older-than 7d";
     };
   };
 }

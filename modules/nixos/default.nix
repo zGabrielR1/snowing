@@ -10,7 +10,6 @@
     ./networking.nix
     ./nix-ld.nix       # Added nix-ld module
     ./nix-settings.nix
-    ./nh.nix
     ./packages.nix
     ./virtualization.nix
     # ./programs.nix
