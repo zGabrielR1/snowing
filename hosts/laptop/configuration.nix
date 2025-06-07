@@ -98,8 +98,6 @@
   # Enable nix-ld with all necessary libraries
   programs.nix-ld.enable = true;
 
-  # Enable AppImage support
-  programs.appimage.enable = true;
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
