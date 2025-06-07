@@ -3,9 +3,9 @@
 with lib;
 
 let
-  cfg = config.programs.appimage;
+  cfg = config.custom.appimage;
 in {
-  options.programs.appimage = {
+  options.custom.appimage = {
     enable = mkEnableOption "AppImage support";
     binfmt = mkOption {
       type = types.bool;
@@ -15,6 +15,10 @@ in {
   };
 
   config = mkIf cfg.enable {
+    # Enable the built-in AppImage module
+    programs.appimage.enable = true;
+    
+    # Configure binfmt if enabled
     boot.binfmt.registrations.appimage = mkIf cfg.binfmt {
       wrapInterpreterInShell = false;
       interpreter = "${pkgs.appimage-run}/bin/appimage-run";
