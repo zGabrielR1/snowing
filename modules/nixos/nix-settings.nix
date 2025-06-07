@@ -10,8 +10,8 @@ in
   environment.systemPackages = [ pkgs.git ];
 
   # Sudo rules for nixos-rebuild
-  security.sudo.extraRules = [{
-    users = [ config.var.username ];
+  security.sudo.extraRules = lib.mkIf (config.users.users ? ${config.users.users.mainUser or "root"}) [{
+    users = [ config.users.users.mainUser or "root" ];
     commands = [{
       command = "/run/current-system/sw/bin/nixos-rebuild";
       options = [ "NOPASSWD" ];
