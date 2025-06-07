@@ -3,9 +3,9 @@
 with lib;
 
 let
-  cfg = config.programs.nix-ld;
+  cfg = config.custom.nix-ld;
 in {
-  options.programs.nix-ld = {
+  options.custom.nix-ld = {
     enable = mkEnableOption "nix-ld support";
     libraries = mkOption {
       type = types.listOf types.package;
@@ -56,9 +56,9 @@ in {
   };
 
   config = mkIf cfg.enable {
-    programs.nix-ld = {
-      enable = true;
-      libraries = cfg.libraries;
-    };
+    # Enable the built-in nix-ld module
+    programs.nix-ld.enable = true;
+    # Set the libraries
+    programs.nix-ld.libraries = cfg.libraries;
   };
 } 
