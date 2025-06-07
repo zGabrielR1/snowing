@@ -4,7 +4,7 @@
 {
   imports = [
     ./audio.nix
-    # ./fonts.nix       # Removed or commented out
+    ./fonts.nix       
     ./flatpak.nix      # Added flatpak module
     ./locale.nix
     ./networking.nix
