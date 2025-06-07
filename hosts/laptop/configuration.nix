@@ -99,7 +99,8 @@
   custom.nix-ld.enable = true;
 
   # Enable AppImage support with binfmt
-  custom.appimage.enable = true;
+  programs.appimage.enable = true;
+  programs.appimage.binfmt = true;
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget

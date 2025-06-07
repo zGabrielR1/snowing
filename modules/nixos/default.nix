@@ -5,7 +5,6 @@
   imports = [
     ./audio.nix
     # ./fonts.nix       # Removed or commented out
-    ./appimage.nix     # Added AppImage module
     ./flatpak.nix      # Added flatpak module
     ./locale.nix
     ./networking.nix
