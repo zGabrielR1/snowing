@@ -94,61 +94,12 @@
   # Install firefox.
   programs.firefox.enable = true;
   programs.hyprland.enable = true;
+  
+  # Enable nix-ld with all necessary libraries
   programs.nix-ld.enable = true;
-  programs.nix-ld.libraries = with pkgs; [
-    # GLib and related libraries
-    glib
-    glib-networking
-    gobject-introspection
-    
-    # NSS components
-    nss
-    nspr
-    
-    # System libraries
-    dbus
-    libdbusmenu-gtk3
-    systemd # For libudev.so.1
-    
-    # GTK and display related
-    gtk3
-    atk
-    at-spi2-atk
-    at-spi2-core
-    cups
-    libdrm
-    pango
-    cairo
-    xorg.libX11
-    xorg.libXcomposite
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXrandr
-    mesa
-    libgbm
-    
-    # Other dependencies
-    libxkbcommon
-    expat
-    xorg.libxcb
-    alsa-lib
-    
-    # Special handling for libffmpeg.so
-    # You may need to copy this from the AppImage itself if it's not in a standard location
-    # Otherwise, try using ffmpeg-full which might provide a compatible version
-    ffmpeg-full
-    
-    # Already provided by the system but included for completeness
-    # glibc
-    # gcc.cc.lib
-  ];
 
-  programs.appimage = {
-    enable = true;
-    binfmt = true;
-  };
-
+  # Enable AppImage support
+  programs.appimage.enable = true;
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
