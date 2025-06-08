@@ -8,6 +8,7 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      ../../modules/nixos/hyprland.nix
     ];
 
   # Bootloader.
@@ -95,8 +96,7 @@
 
   # Install firefox.
   programs.firefox.enable = true;
-  programs.hyprland.enable = true;
-  
+
   # Enable nix-ld with all necessary libraries
   custom.nix-ld.enable = true;
 

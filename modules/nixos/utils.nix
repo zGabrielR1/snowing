@@ -3,13 +3,6 @@
   networking.networkmanager.enable = true;
   systemd.services.NetworkManager-wait-online.enable = false;
 
-  system.autoUpgrade = {
-    enable = autoUpgrade;
-    dates = "04:00";
-    flake = "${/home/zrrg/Downloads/flakesss-master-master}";
-    flags = [ "--update-input" "nixpkgs" "--commit-lock-file" ];
-    allowReboot = false;
-  };
 
   services = {
     gnome.gnome-keyring.enable = true;
