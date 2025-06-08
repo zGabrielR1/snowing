@@ -6,7 +6,7 @@
   system.autoUpgrade = {
     enable = autoUpgrade;
     dates = "04:00";
-    flake = "${configDir}";
+    flake = "${/home/zrrg/Downloads/flakesss-master-master}";
     flags = [ "--update-input" "nixpkgs" "--commit-lock-file" ];
     allowReboot = false;
   };
