@@ -12,6 +12,8 @@
     ./nix-settings.nix
     ./packages.nix
     ./virtualization.nix
+    ./hyprland.nix
+    ./utils.nix
     # ./programs.nix
   ];
 }
