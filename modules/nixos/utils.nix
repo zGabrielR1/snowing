@@ -1,15 +1,5 @@
 { pkgs, config, inputs, ... }:
-/* let
-  hostname = config.var.hostname;
-  keyboardLayout = config.var.keyboardLayout;
-  configDir = config.var.configDirectory;
-  timeZone = config.var.timeZone;
-  defaultLocale = config.var.defaultLocale;
-  extraLocale = config.var.extraLocale;
-  autoUpgrade = config.var.autoUpgrade;
-in {
-  networking.hostName = hostname;
-
+{
   networking.networkmanager.enable = true;
   systemd.services.NetworkManager-wait-online.enable = false;
 
@@ -21,41 +11,21 @@ in {
     allowReboot = false;
   };
 
-  time = { timeZone = timeZone; };
-  i18n.defaultLocale = defaultLocale;
-  i18n.extraLocaleSettings = {
-    LC_ADDRESS = extraLocale;
-    LC_IDENTIFICATION = extraLocale;
-    LC_MEASUREMENT = extraLocale;
-    LC_MONETARY = extraLocale;
-    LC_NAME = extraLocale;
-    LC_NUMERIC = extraLocale;
-    LC_PAPER = extraLocale;
-    LC_TELEPHONE = extraLocale;
-    LC_TIME = extraLocale;
-  };
-
   services = {
-    xserver = {
-      enable = true;
-      xkb.layout = keyboardLayout;
-      xkb.variant = "";
-    };
     gnome.gnome-keyring.enable = true;
     psd = {
       enable = true;
       resyncTimer = "10m";
     };
   };
-  console.keyMap = keyboardLayout;
-*/
+
   environment.variables = {
     XDG_DATA_HOME = "$HOME/.local/share";
     PASSWORD_STORE_DIR = "$HOME/.local/share/password-store";
     EDITOR = "nvim";
     TERMINAL = "kitty";
     TERM = "kitty";
-    BROWSER = "zen";
+    BROWSER = "zen-beta";
   };
 
   services.libinput.enable = true;
@@ -84,7 +54,7 @@ in {
     info.enable = false;
     nixos.enable = false;
   };
-/*
+  /*
   environment.systemPackages = with pkgs; [
     hyprland-qtutils
     fd
@@ -96,7 +66,7 @@ in {
     curl
     vim
   ];
-*/
+  */
   xdg.portal = {
     enable = true;
     xdgOpenUsePortal = true;
@@ -120,7 +90,7 @@ in {
   };
 
   services.logind.extraConfig = ''
-    # don’t shutdown when power button is short-pressed
+    # don't shutdown when power button is short-pressed
     HandlePowerKey=ignore
   '';
 }
