@@ -23,6 +23,7 @@
     # Example: custom flake input package
     # inputs.zen-browser.packages."${system}".specific
     hyprpaper
+    hyprsunset
     waybar
     dunst
     wofi

@@ -100,10 +100,8 @@ in
         "https://helix.cachix.org"
         "https://niri.cachix.org"
         # Additional high-performance caches
-        "https://cache.ngi0.nixos.org"
         "https://nixpkgs-update.cachix.org"
         "https://mic92.cachix.org"
-        "https://ryantm.cachix.org"
         "https://dram.cachix.org"
       ];
 
@@ -123,12 +121,9 @@ in
         "fufexan.cachix.org-1:LwCDjCJNJQf5XD2BV+yamQIMZfcKWR9ISIFy5curUsY="
         "helix.cachix.org-1:ejp9KQpR1FBI2onstMQ34yogDm4OgU2ru6lIwPvuCVs="
         "niri.cachix.org-1:Wv0OmO7PsuocRKzfDoJ3mulSl7Z6oezYhGhR+3W2964="
-        # Additional cache keys
-        "cache.ngi0.nixos.org-1:q8R2Ba8C+dm6NqzQS+bB1Ww8j7oFQ/Yb7b5LpDb5QYw="
-        "nixpkgs-update.cachix.org-1:6y6Z+JpovGm7X66o6dQfrLwDGj0qXe4b3X5wJ8L5VYI="
-        "mic92.cachix.org-1:j1faOshT0cC2mu8ujyxw1O9Pq8cN1+QvtAbj5V14tks="
-        "ryantm.cachix.org-1:diX/183g5WLj8PJFKkXx+NKZXJfLJCjU0hqXe6zBzKc="
-        "dram.cachix.org-1:3RuPzdxQmXxJqSkoJr77yQcTEP8iFJ+0HqK0Hh7VK1E="
+        "nixpkgs-update.cachix.org-1:6y6Z2JdoL3APdu6/+Iy8eZX2ajf09e4EE9SnxSML1W8="
+        "mic92.cachix.org-1:gi8IhgiT3CYZnJsaW7fxznzTkMUOn1RY4GmXdT/nXYQ="
+        "dram.cachix.org-1:baoy1SXpwYdKbqdTbfKGTKauDDeDlHhUpC+QuuILEMY="
       ];
 
       # Performance optimizations
