@@ -23,6 +23,9 @@ in
     ${pkgs.flatpak}/bin/flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
   '';
 
+  # Enable portal
+  xdg.portal.enable = true;
+
   # Install Flatpak applications
   system.activationScripts.flatpakApps = lib.mkIf config.services.flatpak.enable ''
     # Install Zen Browser

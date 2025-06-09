@@ -21,6 +21,8 @@
     emacs
     amp
     ad
+    lapce
+    lite-xl
     code-cursor
     windsurf
     git

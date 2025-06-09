@@ -63,7 +63,7 @@
   users.users.zrrg = {
     isNormalUser = true;
     description = "Gabriel Renostro";
-    extraGroups = [ "networkmanager" "wheel" "incus-admin" "podman" "docker" ]; # Added docker
+    extraGroups = [ "networkmanager" "wheel" "incus-admin" "podman" "docker" ];
     # System-level packages for user are less common with HM, keep this minimal or empty
     # packages = with pkgs; [ ];
   };
@@ -81,7 +81,6 @@
       # home.homeDirectory = "/home/zrrg";
     };
 
-    # --- THIS IS THE FIX ---
     # Pass special arguments to all Home Manager modules for all users
     extraSpecialArgs = {
       inherit inputs; # This passes the 'inputs' from your flake to your HM modules

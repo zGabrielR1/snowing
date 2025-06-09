@@ -8,6 +8,12 @@
   # Packages that should be installed to the user profile.
   home.packages = with pkgs; [
     #inputs.zen-browser.packages."${system}".specific
+    # Utils
+    optipng
+    jpegoptim
+    pfetch
+    btop
+    fastfetch
     zip
     xz
     unzip
@@ -50,19 +56,12 @@
     # cursorTheme.name = "McMojave-cursors";
   };
 
-  # Catppuccin theming
-  /*catppuccin = {
-    enable = true;
-    flavor = "mocha";
-    accent = "blue";
-  };
-  */
 
   # Git configuration
   programs.git = {
     enable = true;
-    userName = "notquitethereyet";
-    userEmail = "example@example.com";
+    userName = "zGabrielR1";
+    userEmail = "gabrielrenostro581@gmail.com";
     extraConfig = {
       init.defaultBranch = "main";
     };
