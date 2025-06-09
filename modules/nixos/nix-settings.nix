@@ -57,29 +57,6 @@ in
     # Extra options - optimized for speed
     extraOptions = ''
       warn-dirty = false
-      # Performance optimizations
-      max-jobs = auto
-      cores = 0
-      # Faster evaluation
-      eval-cache = true
-      # Reduce memory usage
-      gc-reserved-space = 1G
-      # Optimize for speed over space
-      min-free = 1G
-      max-free = 5G
-      # Faster store operations
-      fsync-metadata = false
-      # Optimize for parallel builds
-      build-max-jobs = auto
-      # Reduce network overhead
-      http-connections = 50
-      # Optimize for local builds
-      builders-use-substitutes = true
-      # Faster garbage collection
-      gc-keep-derivations = true
-      gc-keep-outputs = true
-      # Optimize for flakes
-      accept-flake-config = true
     '';
 
     settings = {
@@ -129,34 +106,12 @@ in
       # Performance optimizations
       auto-optimise-store = true;
       builders-use-substitutes = true;
-      experimental-features = [ "nix-command" "flakes" "ca-derivations" "recursive-nix" ];
+      experimental-features = [ "nix-command" "flakes" ];
       flake-registry = "/etc/nix/registry.json";
 
       # for direnv GC roots
       keep-derivations = true;
       keep-outputs = true;
-
-      # Performance-focused settings
-      max-jobs = "auto";
-      cores = 0;
-      build-max-jobs = "auto";
-      
-      # Memory and storage optimizations
-      gc-reserved-space = "1G";
-      min-free = "1G";
-      max-free = "5G";
-      
-      # Network optimizations
-      http-connections = 50;
-      
-      # Store optimizations
-      fsync-metadata = false;
-      
-      # Evaluation optimizations
-      eval-cache = true;
-      
-      # System features for better performance
-      system-features = [ "kvm" "big-parallel" "nixos-test" "recursive-nix" ];
 
       trusted-users = [ "root" "@wheel" "zrrg" ];
       accept-flake-config = true;
@@ -167,36 +122,7 @@ in
       automatic = autoGarbageCollector;
       persistent = true;
       dates = "weekly";
-      options = "--delete-older-than 7d --max-freed 10G";
+      options = "--delete-older-than 7d";
     };
-  };
-
-  # Additional performance optimizations
-  boot = {
-    # Faster boot times
-    loader.timeout = 1;
-    # Optimize kernel parameters for faster rebuilds
-    kernelParams = [ 
-      "elevator=deadline"
-      "i915.enable_rc6=1"
-      "i915.enable_fbc=1"
-      "i915.lvds_downclock=1"
-      "radeon.dpm=1"
-      "radeon.audio=1"
-      "amdgpu.dpm=1"
-      "amdgpu.audio=1"
-    ];
-  };
-
-  # Optimize systemd for faster rebuilds
-  systemd = {
-    # Faster service startup
-    services.systemd-udev-trigger.enable = false;
-    # Optimize for rebuilds
-    extraConfig = ''
-      DefaultTimeoutStartSec=10s
-      DefaultTimeoutStopSec=10s
-      DefaultRestartSec=100ms
-    '';
   };
 }
