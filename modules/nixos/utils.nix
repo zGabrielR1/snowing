@@ -38,15 +38,6 @@
   # enable zsh autocompletion for system packages (systemd, etc)
   environment.pathsToLink = [ "/share/zsh" ];
 
-  # Faster rebuilding
-  documentation = {
-    enable = true;
-    doc.enable = false;
-    man.enable = true;
-    dev.enable = false;
-    info.enable = false;
-    nixos.enable = false;
-  };
   /*
   environment.systemPackages = with pkgs; [
     hyprland-qtutils

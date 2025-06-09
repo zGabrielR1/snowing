@@ -23,6 +23,7 @@
     ad
     lapce
     lite-xl
+    kdePackages.kate
     code-cursor
     windsurf
     git
