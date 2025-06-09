@@ -34,6 +34,7 @@
     pavucontrol
     networkmanagerapplet
     polkit_gnome
+    gnome-tweaks
     pkgs.nerd-fonts.jetbrains-mono
     pkgs.nerd-fonts.symbols-only
   ];
