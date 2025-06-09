@@ -64,6 +64,18 @@
     isNormalUser = true;
     description = "Gabriel Renostro";
     extraGroups = [ "networkmanager" "wheel" "incus-admin" "podman" "docker" ];
+    subGidRanges = [
+        {
+            count = 65536;
+            startGid = 1000;
+        }
+    ];
+    subUidRanges = [
+        {
+            count = 65536;
+            startUid = 1000;
+        }
+    ];
     # System-level packages for user are less common with HM, keep this minimal or empty
     # packages = with pkgs; [ ];
   };
