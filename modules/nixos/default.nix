@@ -5,15 +5,22 @@
   imports = [
     ./audio.nix
     ./fonts.nix       
-    ./flatpak.nix      # Added flatpak module
+    ./flatpak.nix     
     ./locale.nix
     ./networking.nix
-    ./nix-ld.nix       # Added nix-ld module
+    ./nix-ld.nix     
     ./nix-settings.nix
     ./packages.nix
     ./virtualization.nix
+    ./vm-virtualization.nix  
     ./hyprland.nix
     ./utils.nix
     # ./programs.nix
   ];
+
+  virtualisation.vm = {
+    enable = true;
+    type = "virt-manager";
+    username = "zrrg";  # Replace with your actual username
+  };
 }
