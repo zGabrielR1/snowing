@@ -12,15 +12,16 @@
     ./nix-settings.nix
     ./packages.nix
     ./virtualization.nix
-    ./vm-virtualization.nix  
+     #./vm-virtualization.nix  
     ./hyprland.nix
     ./utils.nix
     # ./programs.nix
   ];
-
+  /*
   virtualisation.vm = {
     enable = true;
     type = "virt-manager";
     username = "zrrg";  # Replace with your actual username
   };
+  */
 }
