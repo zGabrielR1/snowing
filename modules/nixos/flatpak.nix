@@ -46,5 +46,9 @@ in
   ];
 
   # Additional KDE Connect requirement for Discover
-  programs.kdeconnect.enable = enableKdeDiscover;
+  #programs.kdeconnect.enable = enableKdeDiscover;
+  programs.kdeconnect = {
+      enable = enableKdeDiscover;
+      package = pkgs.gnomeExtensions.gsconnect;
+  };
 }

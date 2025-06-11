@@ -24,6 +24,7 @@
     # inputs.zen-browser.packages."${system}".specific
     hyprpaper
     hyprsunset
+    zoxide
     waybar
     dunst
     wofi
