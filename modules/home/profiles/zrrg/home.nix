@@ -20,12 +20,22 @@
     p7zip
     oh-my-zsh
     oh-my-posh
+    #hyprstellar
+    ctpv
+    lf
+    kitty
+    mpv
+    neovim
+    rofi-wayland
+    swaynotificationcenter
+    wlogout
+    wezterm
+    tmux
     # Example: custom flake input package
     # inputs.zen-browser.packages."${system}".specific
     hyprpaper
     hyprsunset
     zoxide
-    waybar
     dunst
     wofi
     wl-clipboard

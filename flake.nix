@@ -10,6 +10,9 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # Snaps? why?
+    #nix-snapd.url = "github:nix-community/nix-snapd";
+    #ix-snapd.inputs.nixpkgs.follows = "nixpkgs";
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
       inputs.nixpkgs-lib.follows = "nixpkgs";
