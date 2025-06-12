@@ -36,9 +36,9 @@
     "docker0" 
 ];
 # Enable the Cinnamon Desktop Environment.
-  #services.displayManager.sddm.enable = true;
+  services.displayManager.sddm.enable = true;
   #services.desktopManager.plasma6.enable = true;
-  services.displayManager.gdm.enable = true;
+  #services.displayManager.gdm.enable = true;
   services.desktopManager.gnome.enable = true;
   #services.displayManager.lightdm.enable = true;
   #services.desktopManager.cinnamon.enable = true;
