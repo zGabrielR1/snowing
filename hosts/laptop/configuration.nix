@@ -9,8 +9,6 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ../../modules/nixos/hyprland.nix
-      # To enable SDDM with Makima theme, uncomment the line below:
-      ../../modules/nixos/sddm.nix
     ];
 
   # Bootloader.
