@@ -7,17 +7,29 @@
   xdg.dataFile."sddm/themes/Makima-SDDM/Main.qml".source = ./Makima-SDDM/Main.qml;
   xdg.dataFile."sddm/themes/Makima-SDDM/metadata.desktop".source = ./Makima-SDDM/metadata.desktop;
   
-  # Copy all files from Components directory
-  xdg.dataFile."sddm/themes/Makima-SDDM/Components/".source = ./Makima-SDDM/Components;
+  # Copy individual files from Components directory
+  xdg.dataFile."sddm/themes/Makima-SDDM/Components/UserList.qml".source = ./Makima-SDDM/Components/UserList.qml;
+  xdg.dataFile."sddm/themes/Makima-SDDM/Components/VirtualKeyboard.qml".source = ./Makima-SDDM/Components/VirtualKeyboard.qml;
+  xdg.dataFile."sddm/themes/Makima-SDDM/Components/LoginForm.qml".source = ./Makima-SDDM/Components/LoginForm.qml;
+  xdg.dataFile."sddm/themes/Makima-SDDM/Components/SessionButton.qml".source = ./Makima-SDDM/Components/SessionButton.qml;
+  xdg.dataFile."sddm/themes/Makima-SDDM/Components/SystemButtons.qml".source = ./Makima-SDDM/Components/SystemButtons.qml;
+  xdg.dataFile."sddm/themes/Makima-SDDM/Components/Input.qml".source = ./Makima-SDDM/Components/Input.qml;
+  xdg.dataFile."sddm/themes/Makima-SDDM/Components/Clock.qml".source = ./Makima-SDDM/Components/Clock.qml;
   
-  # Copy all files from Assets directory
-  xdg.dataFile."sddm/themes/Makima-SDDM/Assets/".source = ./Makima-SDDM/Assets;
+  # Copy individual files from Assets directory
+  xdg.dataFile."sddm/themes/Makima-SDDM/Assets/User.svg".source = ./Makima-SDDM/Assets/User.svg;
+  xdg.dataFile."sddm/themes/Makima-SDDM/Assets/Shutdown.svg".source = ./Makima-SDDM/Assets/Shutdown.svg;
+  xdg.dataFile."sddm/themes/Makima-SDDM/Assets/Suspend.svg".source = ./Makima-SDDM/Assets/Suspend.svg;
+  xdg.dataFile."sddm/themes/Makima-SDDM/Assets/Hibernate.svg".source = ./Makima-SDDM/Assets/Hibernate.svg;
+  xdg.dataFile."sddm/themes/Makima-SDDM/Assets/Reboot.svg".source = ./Makima-SDDM/Assets/Reboot.svg;
   
-  # Copy all files from Backgrounds directory
-  xdg.dataFile."sddm/themes/Makima-SDDM/Backgrounds/".source = ./Makima-SDDM/Backgrounds;
+  # Copy individual files from Backgrounds directory
+  xdg.dataFile."sddm/themes/Makima-SDDM/Backgrounds/background.png".source = ./Makima-SDDM/Backgrounds/background.png;
   
-  # Copy all files from Previews directory
-  xdg.dataFile."sddm/themes/Makima-SDDM/Previews/".source = ./Makima-SDDM/Previews;
+  # Copy individual files from Previews directory
+  xdg.dataFile."sddm/themes/Makima-SDDM/Previews/Right.png".source = ./Makima-SDDM/Previews/Right.png;
+  xdg.dataFile."sddm/themes/Makima-SDDM/Previews/Left.png".source = ./Makima-SDDM/Previews/Left.png;
+  xdg.dataFile."sddm/themes/Makima-SDDM/Previews/Center.png".source = ./Makima-SDDM/Previews/Center.png;
   
   # Configure SDDM to use the theme
   xdg.configFile."sddm.conf".text = ''
