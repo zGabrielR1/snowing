@@ -9,6 +9,8 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ../../modules/nixos/hyprland.nix
+      # To enable SDDM with Makima theme, uncomment the line below:
+      # ../../modules/nixos/sddm.nix
     ];
 
   # Bootloader.
@@ -41,6 +43,10 @@
   #services.displayManager.lightdm.enable = true;
   #services.desktopManager.cinnamon.enable = true;
   
+  # To enable SDDM with Makima theme:
+  # 1. Comment out the GDM lines above
+  # 2. Uncomment the SDDM import in the imports section
+  # 3. The theme will be automatically configured
 
   # Configure keymap in X11
   services.xserver.xkb = {
