@@ -5,7 +5,6 @@
   imports = [
     ./home.nix # Common settings for zrrg
     ./wm/hyprland/default.nix # Hyprland specific settings
-    ../../sddm-theme.nix # SDDM theme configuration
 
     # Other components
     # ./cli-tools.nix
