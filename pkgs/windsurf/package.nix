@@ -87,7 +87,7 @@ in stdenv.mkDerivation {
       The Windsurf Editor is where the work of developers and AI truly flow together, allowing for a coding experience that feels like literal magic.
     '';
     homepage = "https://codeium.com/windsurf";
-    license = lib.licenses.unfree;
+    license = lib.licenses.free;
     platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
   };
 } 
