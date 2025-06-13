@@ -7,7 +7,9 @@
 
   # Packages that should be installed to the user profile.
   home.packages = with pkgs; [
-    #inputs.zen-browser.packages."${system}".specific
+    inputs.zen-browser.packages."${system}".default 
+    # Windsurf IDE (latest version)
+    inputs.windsurf.packages."${system}".windsurf
     # Utils
     optipng
     jpegoptim
@@ -50,6 +52,11 @@
     pkgs.nerd-fonts.jetbrains-mono
     pkgs.nerd-fonts.symbols-only
   ];
+
+
+  programs.zen-browser = {
+    enable = true;
+  };
 
   # Shell aliases
   home.shellAliases = {

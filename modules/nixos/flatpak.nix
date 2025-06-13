@@ -29,9 +29,9 @@ in
   # Install Flatpak applications
   system.activationScripts.flatpakApps = lib.mkIf config.services.flatpak.enable ''
     # Install Zen Browser
-    if ! ${pkgs.flatpak}/bin/flatpak list --app | grep -q "app.zen_browser.zen"; then
-      ${pkgs.flatpak}/bin/flatpak install --noninteractive flathub app.zen_browser.zen
-    fi
+    #if ! ${pkgs.flatpak}/bin/flatpak list --app | grep -q "app.zen_browser.zen"; then
+    #  ${pkgs.flatpak}/bin/flatpak install --noninteractive flathub app.zen_browser.zen
+    #fi
 
     # Install Kontainer
     if ! ${pkgs.flatpak}/bin/flatpak list --app | grep -q "io.github.DenysMb.Kontainer"; then

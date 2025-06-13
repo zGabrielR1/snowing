@@ -12,7 +12,7 @@
     };
     # Snaps? why?
     #nix-snapd.url = "github:nix-community/nix-snapd";
-    #ix-snapd.inputs.nixpkgs.follows = "nixpkgs";
+    #nix-snapd.inputs.nixpkgs.follows = "nixpkgs";
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
       inputs.nixpkgs-lib.follows = "nixpkgs";
@@ -73,6 +73,12 @@
     url = "github:0xc000022070/zen-browser-flake";
     inputs.nixpkgs.follows = "nixpkgs";
   };
+
+    # --- Windsurf IDE ---
+    windsurf = {
+      url = "path:./pkgs/windsurf";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     # --- Compatibility ---
     flake-compat.url = "github:edolstra/flake-compat";

@@ -14,7 +14,6 @@
     ./virtualization.nix
     #./vm-virtualization.nix  
     ./hyprland.nix
-    ./sddm.nix
     ./utils.nix
     # ./programs.nix
   ];

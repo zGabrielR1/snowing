@@ -99,6 +99,7 @@
     # Pass special arguments to all Home Manager modules for all users
     extraSpecialArgs = {
       inherit inputs; # This passes the 'inputs' from your flake to your HM modules
+      system = "x86_64-linux"; # Pass the system architecture
       # You could also pass 'self' from the flake if needed:
       # self = inputs.self; # Assuming 'self' was passed to specialArgs in flake.nix
                            # Your flake.nix does: specialArgs = { inherit inputs self; }
@@ -148,6 +149,7 @@
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
+  nixpkgs.config.allowUnfree = true;
   system.stateVersion = "25.05"; # Did you read the comment?
   system.autoUpgrade = {
     enable = true;

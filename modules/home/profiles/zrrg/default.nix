@@ -5,6 +5,7 @@
   imports = [
     ./home.nix # Common settings for zrrg
     ./wm/hyprland/default.nix # Hyprland specific settings
+    inputs.zen-browser.homeModules.beta
 
     # Other components
     # ./cli-tools.nix

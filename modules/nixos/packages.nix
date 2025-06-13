@@ -25,7 +25,7 @@
     lite-xl
     kdePackages.kate
     code-cursor
-    windsurf
+    #windsurf
     git
     gh
     runc
