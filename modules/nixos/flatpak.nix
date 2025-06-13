@@ -37,6 +37,11 @@ in
     if ! ${pkgs.flatpak}/bin/flatpak list --app | grep -q "io.github.DenysMb.Kontainer"; then
       ${pkgs.flatpak}/bin/flatpak install --noninteractive flathub io.github.DenysMb.Kontainer
     fi
+
+    # Install Flatseal
+    if ! ${pkgs.flatpak}/bin/flatpak list --app | grep -q "com.github.tchx84.Flatseal"; then
+      ${pkgs.flatpak}/bin/flatpak install --noninteractive flathub com.github.tchx84.Flatseal
+    fi
   '';
 
   # Enable software centers through system packages
