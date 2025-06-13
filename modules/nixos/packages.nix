@@ -14,22 +14,13 @@
       buildInputs = oldAttrs.buildInputs ++ [ pkgs.krb5 ];
     }))
     */
-    helix
-    kakoune
-    micro
-    vis
-    emacs
-    amp
-    ad
-    lapce
-    lite-xl
-    kdePackages.kate
+    nano
     code-cursor
     #windsurf
     git
     gh
     runc
-    cri-o
+    #cri-o
     distrobox
     distroshelf
     #boxbuddy

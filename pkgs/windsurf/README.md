@@ -1,55 +1,65 @@
-# Windsurf Flake
+## How to Update Your Nix Package Flake
 
-This flake provides the latest version of Windsurf IDE, an agentic IDE powered by AI Flow paradigm.
-
-## Features
-
-- **Automatic Updates**: Fetches the latest version directly from Windsurf's API
-- **No Manual Hash Checking**: Automatically handles SHA256 hashes
-- **Multi-platform Support**: Supports Linux (x86_64) and macOS (x86_64, aarch64)
-
-## Usage
-
-The Windsurf package is automatically included in your home-manager configuration and will always be the latest version available.
-
-### Manual Installation
-
-If you want to install Windsurf manually in a development environment:
-
+### 1. **Update Input Dependencies**
+To update the dependencies in your main flake, run:
 ```bash
-nix run .#windsurf
+cd flakesss-master-master
+nix flake update
 ```
 
-### Building from Source
+This will update all the input URLs in your `flake.nix` to their latest commits.
 
+### 2. **Update Specific Inputs**
+If you want to update only specific inputs:
 ```bash
+nix flake update nixpkgs
+nix flake update home-manager
+nix flake update chaotic
+```
+
+### 3. **Update the Windsurf Package**
+Looking at your Windsurf package, I can see it's currently at version `1.10.3`. To update it:
+
+1. **Check for a newer version** of Windsurf on their website or repository
+2. **Update the version and build hash** in `pkgs/windsurf/package.nix`:
+   ```nix
+   version = "1.10.4";  # or whatever the new version is
+   buildHash = "new-build-hash-here";
+   ```
+
+3. **Update the SHA256 hash** by running:
+   ```bash
+   nix-prefetch-url "https://windsurf-stable.codeiumdata.com/linux-x64/stable/NEW_BUILD_HASH/Windsurf-linux-x64-NEW_VERSION.tar.gz"
+   ```
+
+4. **Replace the placeholder hash** in the package.nix file with the actual hash.
+
+### 4. **Test Your Updates**
+After making changes:
+```bash
+# Test the build
 nix build .#windsurf
+
+# Or test the entire system
+nix build .#nixosConfigurations.laptop.config.system.build.toplevel
 ```
 
-## How It Works
-
-1. The flake fetches the latest version information from Windsurf's API
-2. It automatically downloads the correct binary for your platform
-3. The package is built using the `vscode-generic` builder
-4. No manual hash checking required - everything is handled automatically
-
-## Updating
-
-The flake automatically fetches the latest version every time you rebuild your system. To force an update:
-
+### 5. **Apply System Updates**
+If you're updating your NixOS system:
 ```bash
-nix flake update windsurf
-nixos-rebuild switch
+# Switch to the new configuration
+sudo nixos-rebuild switch --flake .#laptop
 ```
 
-## Troubleshooting
+### 6. **Lock File Management**
+The `flake.lock` file will be automatically updated when you run `nix flake update`. You can also:
+- **Regenerate the lock file**: `nix flake lock --recreate-lock-file`
+- **Update specific inputs in lock**: `nix flake lock --update-input nixpkgs`
 
-If you encounter issues:
+### Key Points:
+- Your Windsurf package is currently using a **placeholder SHA256 hash** (`1ywd53mp2i2vic52kswnkbxy3fyyi485sqvj69n9y60l8xi333v3`) - you'll need to get the real hash when updating
+- The package supports Linux x64, Darwin x64, and Darwin ARM64
+- Your main flake uses `flake-parts` for better organization
+- The Windsurf package is exposed as both a package and an app in your flake
 
-1. Check that your system is supported (x86_64-linux, x86_64-darwin, aarch64-darwin)
-2. Ensure you have internet connectivity to fetch the latest version
-3. Try running `nix flake update` to refresh the flake inputs
-
-## License
-
-Windsurf is proprietary software. See the package metadata for more details. 
+Would you like me to help you update to a specific version of Windsurf, or do you need help with any particular part of this process?

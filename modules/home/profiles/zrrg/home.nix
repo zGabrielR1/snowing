@@ -10,6 +10,21 @@
     inputs.zen-browser.packages."${system}".default 
     # Windsurf IDE (latest version)
     inputs.windsurf.packages."${system}".windsurf
+    # file browser
+    pcmanfm
+
+    # Editors
+    helix
+    kakoune
+    micro
+    vis
+    emacs
+    amp
+    ad
+    lapce
+    lite-xl
+    kdePackages.kate
+
     # Utils
     optipng
     jpegoptim
@@ -22,6 +37,7 @@
     p7zip
     oh-my-zsh
     oh-my-posh
+
     #hyprstellar
     ctpv
     lf
@@ -36,6 +52,8 @@
     # Example: custom flake input package
     # inputs.zen-browser.packages."${system}".specific
     hyprpaper
+    #swww
+    glab #gitlab
     hyprsunset
     zoxide
     dunst
