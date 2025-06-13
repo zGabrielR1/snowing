@@ -97,6 +97,11 @@
         #   SF-Pro-mono = pkgs.callPackage ./pkgs/fonts/sf-pro-mono.nix {};
         # };
         # For now, assuming SF fonts are handled differently or placeholder
+        
+        # Expose Windsurf package
+        packages = {
+          windsurf = inputs.windsurf.packages.${system}.windsurf;
+        };
       };
       flake = {
         # NixOS Configurations

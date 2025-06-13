@@ -1,66 +1,85 @@
-{ stdenv, lib, curl, jq }:
+{ stdenv, lib, fetchurl }:
 
 let
+  # Windsurf version and build info
+  version = "1.10.3";
+  buildHash = "c1afeb8ae2b17dbdda415f9aa5dec23422c1fe47";
+  
+  # Map Nix system to Windsurf system
   systemMap = {
     "x86_64-linux" = "linux-x64";
     "x86_64-darwin" = "darwin-x64";
     "aarch64-darwin" = "darwin-arm64";
   };
   targetSystem = systemMap.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
-  infoUrl = "https://windsurf-stable.codeium.com/api/update/${targetSystem}/stable/latest";
+  
+  # Construct the download URL
+  url = "https://windsurf-stable.codeiumdata.com/${targetSystem}/stable/${buildHash}/Windsurf-${targetSystem}-${version}.tar.gz";
+  
+  # For now, using a placeholder hash - you'll need to update this
+  # You can get the actual hash by running: nix-prefetch-url "https://windsurf-stable.codeiumdata.com/linux-x64/stable/c1afeb8ae2b17dbdda415f9aa5dec23422c1fe47/Windsurf-linux-x64-1.10.3.tar.gz"
+  sha256 = "1ywd53mp2i2vic52kswnkbxy3fyyi485sqvj69n9y60l8xi333v3";
+  
+  src = fetchurl {
+    inherit url sha256;
+  };
+  
   unpackDir = if stdenv.isDarwin then "Windsurf.app" else "Windsurf";
-  binPath = if stdenv.isDarwin then "$out/${unpackDir}/Contents/MacOS/Windsurf" else "$out/${unpackDir}/windsurf";
-  iconPath = if stdenv.isDarwin then "$out/${unpackDir}/Contents/Resources/windsurf.icns" else "$out/${unpackDir}/resources/app/resources/linux/code.png";
-  desktopFile = if stdenv.isDarwin then null else "$out/${unpackDir}/resources/app/resources/linux/windsurf.desktop";
-in
-stdenv.mkDerivation {
+  binPath = if stdenv.isDarwin then "Contents/MacOS/Windsurf" else "windsurf";
+  
+in stdenv.mkDerivation {
   pname = "windsurf";
-  version = "latest";
-  nativeBuildInputs = [ curl jq ];
+  inherit version src;
+  
+  nativeBuildInputs = [ ];
+  
   buildCommand = ''
     set -e
-    mkdir -p $out/bin $out/share/applications $out/share/icons/hicolor/256x256/apps
-
-    # Fetch info and parse
-    curl -s "${infoUrl}" > info.json
-    url=$(jq -r .url info.json)
-    version=$(jq -r .windsurfVersion info.json)
-    sha256=$(jq -r .sha256hash info.json)
-
-    # Download and extract
-    curl -L "$url" -o windsurf.tar.gz
-    tar -xf windsurf.tar.gz
-
-    # Copy the app bundle or directory
+    echo "Building Windsurf ${version} for ${targetSystem}..."
+    
+    # Create output directories
+    mkdir -p $out/bin
+    mkdir -p $out/share/applications
+    mkdir -p $out/share/icons/hicolor/256x256/apps
+    
+    # Extract the archive
+    echo "Extracting Windsurf..."
+    tar -xf $src
+    
+    # Copy the extracted directory
     cp -r ${unpackDir} $out/
-
-    # Symlink the binary
-    if [ -f ${binPath} ]; then
-      ln -sf ${binPath} $out/bin/windsurf
-    fi
-
-    # Copy icon if it exists
-    if [ -f ${iconPath} ]; then
-      cp ${iconPath} $out/share/icons/hicolor/256x256/apps/windsurf.png
-    fi
-
-    # Create desktop file if on Linux
-    if [ ! -z "${desktopFile}" ] && [ -f ${desktopFile} ]; then
-      cp ${desktopFile} $out/share/applications/windsurf.desktop
-      sed -i "s|Exec=.*|Exec=$out/bin/windsurf|" $out/share/applications/windsurf.desktop
+    
+    # Create symlink to the binary
+    if [ -f "$out/${unpackDir}/${binPath}" ]; then
+      ln -sf $out/${unpackDir}/${binPath} $out/bin/windsurf
+      echo "Binary symlinked successfully"
     else
-      # Fallback desktop file
-      cat > $out/share/applications/windsurf.desktop << EOF
-      [Desktop Entry]
-      Name=Windsurf
-      Comment=Agentic IDE powered by AI Flow paradigm
-      Exec=$out/bin/windsurf
-      Icon=windsurf
-      Type=Application
-      Categories=Development;IDE;
-      EOF
+      echo "Could not find Windsurf binary at $out/${unpackDir}/${binPath}"
+      ls -la $out/${unpackDir}/
+      exit 1
     fi
+    
+    # Copy icon if it exists
+    if [ -f "$out/${unpackDir}/resources/app/resources/linux/code.png" ]; then
+      cp "$out/${unpackDir}/resources/app/resources/linux/code.png" $out/share/icons/hicolor/256x256/apps/windsurf.png
+    elif [ -f "$out/${unpackDir}/Contents/Resources/windsurf.icns" ]; then
+      cp "$out/${unpackDir}/Contents/Resources/windsurf.icns" $out/share/icons/hicolor/256x256/apps/windsurf.icns
+    fi
+    
+    # Create desktop file
+    cat > $out/share/applications/windsurf.desktop << EOF
+    [Desktop Entry]
+    Name=Windsurf
+    Comment=Agentic IDE powered by AI Flow paradigm
+    Exec=$out/bin/windsurf
+    Icon=windsurf
+    Type=Application
+    Categories=Development;IDE;
+    EOF
+    
+    echo "Windsurf ${version} built successfully!"
   '';
+  
   meta = {
     description = "Agentic IDE powered by AI Flow paradigm";
     longDescription = ''
