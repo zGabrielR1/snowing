@@ -50,8 +50,8 @@ in {
     
     # Install required fonts for the theme
     fonts.packages = with pkgs; [
-      noto-fonts-cjk
-      otf-ipafont
+      noto-fonts-cjk-sans
+      ipafont
     ];
   };
 } 
