@@ -34,11 +34,17 @@
     "incusbr0" 
     "docker0" 
 ];
-# Enable the Cinnamon Desktop Environment.
+
+  # Enable SDDM with Makima theme
+  custom.sddm-theme.enable = true;
+  
+  # Disable GDM and GNOME desktop manager since we're using SDDM
+  # services.displayManager.gdm.enable = true;
+  services.desktopManager.gnome.enable = true;
+  
+  # Alternative display managers (commented out)
   #services.displayManager.sddm.enable = true;
   #services.desktopManager.plasma6.enable = true;
-  services.displayManager.gdm.enable = true;
-  services.desktopManager.gnome.enable = true;
   #services.displayManager.lightdm.enable = true;
   #services.desktopManager.cinnamon.enable = true;
   

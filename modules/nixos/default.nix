@@ -11,6 +11,7 @@
     ./nix-ld.nix     
     ./nix-settings.nix
     ./packages.nix
+    ./sddm-theme.nix
     ./virtualization.nix
     #./vm-virtualization.nix  
     ./hyprland.nix
