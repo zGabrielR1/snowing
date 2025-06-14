@@ -54,6 +54,7 @@ in
     # Set the path for channels compat
     nixPath = lib.mapAttrsToList (key: value: "${key}=flake:${key}") config.nix.registry;
 
+
     # Extra options - optimized for speed
     extraOptions = ''
       warn-dirty = false

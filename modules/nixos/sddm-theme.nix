@@ -17,12 +17,18 @@ let
       sha256 = "sha256-N/h0feb9GNTDYsv4qc2syy12sUWx1x2SOAJyfjV8ZAo=";
     };
     
-    buildInputs = with pkgs; [
-      qt6.full
-      qt6.qtgraphicaleffects
-      qt6.qtquickcontrols2
-      qt6.qtmultimedia
+    nativeBuildInputs = with pkgs; [
+      qt5.qmake
+      qt5.qtbase
     ];
+    
+    buildInputs = with pkgs; [
+      qt5.full
+      libsForQt5.qt5.qtgraphicaleffects
+    ];
+    
+    dontWrapQtApps = true;
+    dontUseQmakeConfigure = true;
     
     installPhase = ''
       mkdir -p $out/share/sddm/themes/Makima-SDDM
@@ -49,7 +55,7 @@ in {
     # Install the theme package and Qt dependencies
     environment.systemPackages = with pkgs; [
       makima-theme
-      qt6.full
+      qt5.full
       libsForQt5.qt5.qtgraphicaleffects
     ];
     
