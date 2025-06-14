@@ -24,6 +24,7 @@
     lapce
     lite-xl
     kdePackages.kate
+    zed-editor
 
     # Utils
     optipng
