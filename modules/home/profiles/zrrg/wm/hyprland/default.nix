@@ -118,26 +118,11 @@
     # };
   };
 
-  # Hyprland related packages
+  # Hyprland related packages (moved most to home.nix, keeping only essential ones here)
   home.packages = with pkgs; [
     hyprpaper # or swaybg
-    waybar
-    dunst
-    wofi # or rofi-wayland
-    wl-clipboard
-    slurp # for screen capture selection
-    grim # for screen capture
-    swappy # for editing screenshots
-    brightnessctl
-    pavucontrol # or other volume control
-    networkmanagerapplet # nm-applet
-    # blueman # if you need bluetooth
-    polkit_gnome # for authentication
-    #inputs.mcmojave-hyprcursor.packages.${pkgs.system}.default # Cursor theme
-    pkgs.nerd-fonts.jetbrains-mono
-    pkgs.nerd-fonts.symbols-only
+    nautilus # file manager for keybinding
   ];
-
 
   # Configure Hypridle (from its flake input)
   # services.hypridle = {

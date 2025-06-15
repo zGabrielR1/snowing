@@ -1,0 +1,17 @@
+# -----------------------------------------------------
+# INIT
+# -----------------------------------------------------
+
+# -----------------------------------------------------
+# Exports
+# -----------------------------------------------------
+export EDITOR=nvim                                                  
+if [ -d "$HOME/.local/bin" ]; then
+        export PATH="$HOME/.local/bin:$PATH"
+fi
+
+export ZSH="$HOME/.oh-my-zsh"
+export PATH=$PATH:~/.cargo/bin/
+export PATH="$HOME/.local/bin/aider:$PATH"
+export PATH="$HOME/.emacs.d/bin:$PATH"
+export PATH="$HOME/.npm-global/bin:$PATH"

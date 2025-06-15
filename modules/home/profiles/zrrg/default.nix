@@ -20,28 +20,140 @@
   programs.git.enable = true;
   programs.home-manager.enable = true; # Good practice
 
+  # Zsh configuration
+  programs.zsh = {
+    enable = true;
+    enableCompletion = true;
+    enableAutosuggestions = true;
+    enableSyntaxHighlighting = true;
+    history = {
+      size = 10000;
+      path = "$HOME/.zsh_history";
+      save = 10000;
+    };
+    # Source the dotfiles zshrc
+    initExtra = ''
+      # Source the dotfiles zshrc
+      if [ -f ${config.home.homeDirectory}/.zshrc ]; then
+        source ${config.home.homeDirectory}/.zshrc
+      fi
+    '';
+  };
+
+  # Tmux configuration
+  programs.tmux = {
+    enable = true;
+    shortcut = "\\";
+    baseIndex = 1;
+    escapeTime = 10;
+    keyMode = "vi";
+    mouse = true;
+    terminal = "tmux-256color";
+    # The tmux config will be sourced from the dotfiles
+  };
+
+  # Vim configuration
+  programs.vim = {
+    enable = true;
+    settings = {
+      number = true;
+      ignorecase = true;
+      smartcase = true;
+      expandtab = true;
+      tabstop = 4;
+      softtabstop = 4;
+      shiftwidth = 4;
+      clipboard = "unnamedplus";
+    };
+    # The vimrc will be sourced from the dotfiles
+  };
+
+  # Neovim configuration
+  programs.neovim = {
+    enable = true;
+    viAlias = true;
+    vimAlias = true;
+    withNodeJs = true;
+    withPython3 = true;
+    withRuby = true;
+  };
+
+  # Git configuration with delta themes
+  programs.git = {
+    enable = true;
+    userName = "zGabrielR1";
+    userEmail = "gabrielrenostro581@gmail.com";
+    extraConfig = {
+      init.defaultBranch = "main";
+      core.editor = "nvim";
+      delta = {
+        navigate = true;
+        light = false;
+        side-by-side = true;
+      };
+    };
+  };
+
+  # GTK configuration
+  gtk = {
+    enable = true;
+    font = {
+      name = "Noto Sans";
+      size = 11;
+    };
+    gtk3.extraConfig = {
+      gtk-application-prefer-dark-theme = true;
+    };
+    gtk4.extraConfig = {
+      gtk-application-prefer-dark-theme = true;
+    };
+  };
+
+  # XDG configuration
+  xdg = {
+    enable = true;
+    configFile = {
+      # Source dotfiles configs
+      "zshrc".source = ./lazuhyprDotfiles/.config/zshrc;
+      "hypr".source = ./lazuhyprDotfiles/.config/hypr;
+      "waybar".source = ./lazuhyprDotfiles/.config/waybar;
+      "rofi".source = ./lazuhyprDotfiles/.config/rofi;
+      "swaync".source = ./lazuhyprDotfiles/.config/swaync;
+      "wlogout".source = ./lazuhyprDotfiles/.config/wlogout;
+      "wezterm".source = ./lazuhyprDotfiles/.config/wezterm;
+      "btop".source = ./lazuhyprDotfiles/.config/btop;
+      "lf".source = ./lazuhyprDotfiles/.config/lf;
+      "ctpv".source = ./lazuhyprDotfiles/.config/ctpv;
+      "mpv".source = ./lazuhyprDotfiles/.config/mpv;
+      "fastfetch".source = ./lazuhyprDotfiles/.config/fastfetch;
+      "lsd".source = ./lazuhyprDotfiles/.config/lsd;
+      "spicetify".source = ./lazuhyprDotfiles/.config/spicetify;
+      "nvim".source = ./lazuhyprDotfiles/.config/nvim;
+      "ohmyposh".source = ./lazuhyprDotfiles/.config/ohmyposh;
+      "fish".source = ./lazuhyprDotfiles/.config/fish;
+      "bashrc".source = ./lazuhyprDotfiles/.config/bashrc;
+    };
+  };
+
+  # Home files (dotfiles in home directory)
+  home.file = {
+    ".zshrc".source = ./lazuhyprDotfiles/.zshrc;
+    ".tmux.conf".source = ./lazuhyprDotfiles/.tmux.conf;
+    ".vimrc".source = ./lazuhyprDotfiles/.vimrc;
+    ".bashrc".source = ./lazuhyprDotfiles/.bashrc;
+    ".gtkrc-2.0".source = ./lazuhyprDotfiles/.gtkrc-2.0;
+    ".Xresources".source = ./lazuhyprDotfiles/.Xresources;
+    ".ideavimrc".source = ./lazuhyprDotfiles/.ideavimrc;
+    ".delta-themes.gitconfig".source = ./lazuhyprDotfiles/.delta-themes.gitconfig;
+    ".stow-local-ignore".source = ./lazuhyprDotfiles/.stow-local-ignore;
+  };
+
   # Example: Starship prompt
   programs.starship = {
     enable = true;
     # settings = { ... };
   };
 
-  # Basic shell setup
-  programs.zsh = { # Or bash
-    enable = true;
-    # ohMyZsh.enable = true; # Example
-  };
-
-  # Link dotfiles
-  # home.file.".config/nvim/init.vim".source = ./config/nvim/init.vim;
-  # Or use xdg.configFile for better organization
-  #xdg.configFile."kitty/kitty.conf".source = ./config/kitty/kitty.conf; # Example path
-
-  # Environment variables
-  # home.sessionVariables = {
-  #   EDITOR = "nvim";
-  # };
-
   # Fontconfig (user-specific overrides/additions if needed)
-  # fonts.fontconfig.enable = true;
+  fonts.fontconfig.enable = true;
 }

@@ -7,11 +7,24 @@
 
   # Packages that should be installed to the user profile.
   home.packages = with pkgs; [
+    # Browser
     inputs.zen-browser.packages."${system}".default 
     # Windsurf IDE (latest version)
     inputs.windsurf.packages."${system}".windsurf
-    # file browser
+    
+    # File browsers and managers
     pcmanfm
+    lf
+    ctpv
+
+    # Terminal and shells
+    kitty
+    wezterm
+    tmux
+    fish
+    zsh
+    oh-my-zsh
+    oh-my-posh
 
     # Editors
     helix
@@ -26,8 +39,17 @@
     lite-xl
     kdePackages.kate
     zed-editor
+    neovim
+    vim
 
-    # Utils
+    # Development tools
+    lazygit
+    glab # gitlab
+    delta # git diff viewer
+    fzf
+    sesh # tmux session manager
+
+    # System utilities
     optipng
     jpegoptim
     pfetch
@@ -37,8 +59,11 @@
     xz
     unzip
     p7zip
-    oh-my-zsh
-    oh-my-posh
+    brightnessctl
+    pavucontrol
+    networkmanagerapplet
+    polkit_gnome
+    gnome-tweaks
 
     #hyprstellar
     ctpv
@@ -61,22 +86,89 @@
     udiskie
     glab #gitlab
     hyprsunset
-    zoxide
-    dunst
+    swww
+    waybar
+    swaynotificationcenter
+    wlogout
+    rofi-wayland
     wofi
     wl-clipboard
     slurp
     grim
     swappy
-    brightnessctl
-    pavucontrol
-    networkmanagerapplet
-    polkit_gnome
-    gnome-tweaks
-    pkgs.nerd-fonts.jetbrains-mono
-    pkgs.nerd-fonts.symbols-only
-  ];
 
+    # Other utilities
+    udiskie
+    zoxide
+    dunst
+    mpv
+    spicetify-cli
+
+    # Fonts
+    nerd-fonts.jetbrains-mono
+    nerd-fonts.symbols-only
+    noto-fonts
+    noto-fonts-cjk
+    noto-fonts-emoji
+
+    # Tmux plugins (for tpm)
+    tmuxPlugins.sensible
+    tmuxPlugins.vim-tmux-navigator
+    tmuxPlugins.fzf
+    tmuxPlugins.nova
+
+    # Shell enhancements
+    zsh-syntax-highlighting
+    zsh-autosuggestions
+    zsh-completions
+    starship
+
+    # Additional tools that might be needed
+    ripgrep
+    fd
+    bat
+    exa
+    lsd
+    tree
+    htop
+    bottom
+    du-dust
+    procs
+    sd
+    tokei
+    hyperfine
+    bandwhich
+    gping
+    dog
+    xh
+    curlie
+    as-tree
+    choose
+    jq
+    yq
+    xq
+    htmlq
+    pup
+    xsv
+    csvkit
+    miller
+    q
+    rush
+    xsv
+    tuc
+    visidata
+    xlsx2csv
+    in2csv
+    csvcut
+    csvjoin
+    csvlook
+    csvsort
+    csvstat
+    csvstack
+    csvformat
+    csvgrep
+    csvclean
+  ];
 
   programs.zen-browser = {
     enable = true;
@@ -86,6 +178,21 @@
   home.shellAliases = {
     ll = "ls -l";
     update = "nh os switch --flake ~/Dev/nixland";
+    # Additional aliases from dotfiles
+    ls = "lsd";
+    cat = "bat";
+    grep = "rg";
+    find = "fd";
+    top = "btm";
+    ps = "procs";
+    du = "dust";
+    df = "duf";
+    ping = "gping";
+    dig = "dog";
+    curl = "xh";
+    wget = "xh";
+    http = "xh";
+    https = "xh";
   };
 
   # GTK Theming
@@ -100,7 +207,6 @@
     # cursorTheme.name = "McMojave-cursors";
   };
 
-
   # Git configuration
   programs.git = {
     enable = true;
@@ -108,6 +214,12 @@
     userEmail = "gabrielrenostro581@gmail.com";
     extraConfig = {
       init.defaultBranch = "main";
+      core.editor = "nvim";
+      delta = {
+        navigate = true;
+        light = false;
+        side-by-side = true;
+      };
     };
   };
 
