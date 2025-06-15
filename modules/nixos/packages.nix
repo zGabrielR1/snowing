@@ -23,6 +23,8 @@
     #cri-o
     distrobox
     distroshelf
+    apx
+    apx-gui
     #boxbuddy
     toolbox
     podman
@@ -34,7 +36,7 @@
     flatpak
     rofi-wayland
     bottles
-    wine-staging
+    wineWowPackages.stagingFull
     jetbrains-toolbox
     
   ];
