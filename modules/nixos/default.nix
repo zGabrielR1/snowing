@@ -6,6 +6,7 @@
     ./audio.nix
     ./fonts.nix       
     ./flatpak.nix     
+    ./gnome.nix
     ./locale.nix
     ./networking.nix
     ./nix-ld.nix     

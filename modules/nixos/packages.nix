@@ -20,12 +20,10 @@
     #windsurf
     git
     gh
-    #runc
-    #cri-o
+    runc
+    cri-o
     distrobox
     distroshelf
-    apx
-    apx-gui
     #boxbuddy
     toolbox
     podman

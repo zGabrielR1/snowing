@@ -118,7 +118,6 @@
     zsh-syntax-highlighting
     zsh-autosuggestions
     zsh-completions
-    starship
 
     # Additional tools that might be needed
     ripgrep

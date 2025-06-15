@@ -107,12 +107,6 @@
     ".stow-local-ignore".source = ./lazuhyprDotfiles/.stow-local-ignore;
   };
 
-  # Example: Starship prompt
-  programs.starship = {
-    enable = true;
-    # settings = { ... };
-  };
-
   # Fontconfig (user-specific overrides/additions if needed)
   fonts.fontconfig.enable = true;
 }
