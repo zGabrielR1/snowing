@@ -40,8 +40,6 @@
     kdePackages.kate
     zed-editor
     neovim
-    vim
-
     # Development tools
     lazygit
     glab # gitlab
@@ -70,7 +68,6 @@
     lf
     kitty
     mpv
-    neovim
     rofi-wayland
     swaynotificationcenter
     wlogout
@@ -140,20 +137,19 @@
     bandwhich
     gping
     dog
-    xh
-    curlie
-    as-tree
-    choose
-    jq
-    yq
-    xq
-    htmlq
-    pup
-    csvkit
-    miller
-    q
-    rush
-    tuc
+    # xh
+    # curlie
+    # as-tree
+    # choose
+    # jq
+    # yq
+    # htmlq
+    # pup
+    # csvkit
+    # miller
+    # q
+    # rush
+    # tuc
   ];
 
   programs.zen-browser = {

@@ -52,21 +52,6 @@
     # The tmux config will be sourced from the dotfiles
   };
 
-  # Vim configuration
-  programs.vim = {
-    enable = true;
-    # The vimrc will be sourced from the dotfiles
-  };
-
-  # Neovim configuration
-  programs.neovim = {
-    enable = true;
-    viAlias = true;
-    vimAlias = true;
-    withNodeJs = true;
-    withPython3 = true;
-    withRuby = true;
-  };
   /*
   # GTK configuration
   gtk = {

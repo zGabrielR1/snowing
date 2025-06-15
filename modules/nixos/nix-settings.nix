@@ -81,6 +81,7 @@ in
         "https://nixpkgs-update.cachix.org"
         "https://mic92.cachix.org"
         "https://dram.cachix.org"
+        "https://nixpkgs.cachix.org"
       ];
 
       trusted-public-keys = [
@@ -102,6 +103,7 @@ in
         "nixpkgs-update.cachix.org-1:6y6Z2JdoL3APdu6/+Iy8eZX2ajf09e4EE9SnxSML1W8="
         "mic92.cachix.org-1:gi8IhgiT3CYZnJsaW7fxznzTkMUOn1RY4GmXdT/nXYQ="
         "dram.cachix.org-1:baoy1SXpwYdKbqdTbfKGTKauDDeDlHhUpC+QuuILEMY="
+        "nixpkgs.cachix.org-1:q91R6hxbwFvDqTSDKwDAV4T5PxqXGxswD8vhONFMeOE="
       ];
 
       # Performance optimizations
