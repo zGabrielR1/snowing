@@ -30,9 +30,11 @@ in
     serviceConfig = {
       Type = "oneshot";
       RemainAfterExit = true;
-      ExecStart = "${pkgs.bash}/bin/bash -c '${pkgs.flatpak}/bin/flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo'";
-      ExecStartPost = "${pkgs.bash}/bin/bash -c '${pkgs.flatpak}/bin/flatpak update --appstream'";
-      ExecStartPost = "${pkgs.bash}/bin/bash -c '${pkgs.flatpak}/bin/flatpak remote-modify --enable flathub'";
+      ExecStart = "${pkgs.bash}/bin/bash -c '
+        ${pkgs.flatpak}/bin/flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+        ${pkgs.flatpak}/bin/flatpak update --appstream
+        ${pkgs.flatpak}/bin/flatpak remote-modify --enable flathub
+      '";
     };
   };
 
