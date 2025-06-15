@@ -15,10 +15,8 @@
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  # Use stable kernel to avoid compilation - testing kernel often needs building
-  # boot.kernelPackages = pkgs.linuxPackages_testing;
-  boot.kernelPackages = pkgs.linuxPackages_latest;
-  #boot.readOnlyStore = false;
+  boot.kernelPackages = pkgs.linuxPackages_testing;
+  boot.readOnlyNixStore = false;
 
   networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -32,10 +30,6 @@
 
   # Enable the X11 windowing system - but minimize what gets pulled in
   services.xserver.enable = true;
-  # Disable X11 features you don't need to reduce compilation
-  services.xserver.desktopManager.xterm.enable = false;
-  services.xserver.windowManager.xmonad.enable = false;
-  services.xserver.windowManager.i3.enable = false;
   
   networking.nftables.enable = true;
   networking.firewall.trustedInterfaces = [
@@ -47,7 +41,7 @@
   custom.sddm-theme.enable = true;
   
   # Disable GNOME desktop manager since you're using Hyprland
-  # services.desktopManager.gnome.enable = true;
+  services.desktopManager.gnome.enable = true;
   
   # Alternative display managers (commented out)
   #services.displayManager.sddm.enable = true;
