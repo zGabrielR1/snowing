@@ -17,6 +17,7 @@
     helix
     kakoune
     micro
+    your-editor
     vis
     emacs
     amp
@@ -50,10 +51,14 @@
     wlogout
     wezterm
     tmux
+    hypridle
+    hyprlock
+    hyprshade
     # Example: custom flake input package
     # inputs.zen-browser.packages."${system}".specific
-    hyprpaper
-    #swww
+    #hyprpaper
+    swww
+    udiskie
     glab #gitlab
     hyprsunset
     zoxide
