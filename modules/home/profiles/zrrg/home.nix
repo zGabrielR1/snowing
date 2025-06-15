@@ -95,7 +95,9 @@
     wl-clipboard
     slurp
     grim
-    swappy
+    swap
+    
+    pywal16
 
     # Other utilities
     udiskie
