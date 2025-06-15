@@ -15,8 +15,10 @@
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.kernelPackages = pkgs.linuxPackages_testing;
-  boot.readOnlyStore = false;
+  # Use stable kernel to avoid compilation - testing kernel often needs building
+  # boot.kernelPackages = pkgs.linuxPackages_testing;
+  boot.kernelPackages = pkgs.linuxPackages_latest;
+  #boot.readOnlyStore = false;
 
   networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -28,8 +30,13 @@
   # Enable networking
   networking.networkmanager.enable = true;
 
-  # Enable the X11 windowing system.
+  # Enable the X11 windowing system - but minimize what gets pulled in
   services.xserver.enable = true;
+  # Disable X11 features you don't need to reduce compilation
+  services.xserver.desktopManager.xterm.enable = false;
+  services.xserver.windowManager.xmonad.enable = false;
+  services.xserver.windowManager.i3.enable = false;
+  
   networking.nftables.enable = true;
   networking.firewall.trustedInterfaces = [
     "incusbr0" 
@@ -39,9 +46,8 @@
   # Enable SDDM with Makima theme
   custom.sddm-theme.enable = true;
   
-  # Disable GDM and GNOME desktop manager since we're using SDDM
-  # services.displayManager.gdm.enable = true;
-  services.desktopManager.gnome.enable = true;
+  # Disable GNOME desktop manager since you're using Hyprland
+  # services.desktopManager.gnome.enable = true;
   
   # Alternative display managers (commented out)
   #services.displayManager.sddm.enable = true;

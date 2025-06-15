@@ -24,15 +24,15 @@
   programs.zsh = {
     enable = true;
     enableCompletion = true;
-    enableAutosuggestions = true;
-    enableSyntaxHighlighting = true;
+    autosuggestion.enable = true;
+    syntaxHighlighting.enable = true;
     history = {
       size = 10000;
       path = "$HOME/.zsh_history";
       save = 10000;
     };
     # Source the dotfiles zshrc
-    initExtra = ''
+    initContent = ''
       # Source the dotfiles zshrc
       if [ -f ${config.home.homeDirectory}/.zshrc ]; then
         source ${config.home.homeDirectory}/.zshrc
@@ -55,16 +55,6 @@
   # Vim configuration
   programs.vim = {
     enable = true;
-    settings = {
-      number = true;
-      ignorecase = true;
-      smartcase = true;
-      expandtab = true;
-      tabstop = 4;
-      softtabstop = 4;
-      shiftwidth = 4;
-      clipboard = "unnamedplus";
-    };
     # The vimrc will be sourced from the dotfiles
   };
 
@@ -77,23 +67,7 @@
     withPython3 = true;
     withRuby = true;
   };
-
-  # Git configuration with delta themes
-  programs.git = {
-    enable = true;
-    userName = "zGabrielR1";
-    userEmail = "gabrielrenostro581@gmail.com";
-    extraConfig = {
-      init.defaultBranch = "main";
-      core.editor = "nvim";
-      delta = {
-        navigate = true;
-        light = false;
-        side-by-side = true;
-      };
-    };
-  };
-
+  /*
   # GTK configuration
   gtk = {
     enable = true;
@@ -108,7 +82,7 @@
       gtk-application-prefer-dark-theme = true;
     };
   };
-
+  */
   # XDG configuration
   xdg = {
     enable = true;

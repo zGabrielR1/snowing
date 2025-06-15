@@ -95,7 +95,7 @@
     wl-clipboard
     slurp
     grim
-    swap
+    swappy
     
     pywal16
 
@@ -110,14 +110,12 @@
     nerd-fonts.jetbrains-mono
     nerd-fonts.symbols-only
     noto-fonts
-    noto-fonts-cjk
+    noto-fonts-cjk-sans
     noto-fonts-emoji
 
     # Tmux plugins (for tpm)
     tmuxPlugins.sensible
     tmuxPlugins.vim-tmux-navigator
-    tmuxPlugins.fzf
-    tmuxPlugins.nova
 
     # Shell enhancements
     zsh-syntax-highlighting
@@ -129,7 +127,7 @@
     ripgrep
     fd
     bat
-    exa
+    eza
     lsd
     tree
     htop
@@ -151,25 +149,11 @@
     xq
     htmlq
     pup
-    xsv
     csvkit
     miller
     q
     rush
-    xsv
     tuc
-    visidata
-    xlsx2csv
-    in2csv
-    csvcut
-    csvjoin
-    csvlook
-    csvsort
-    csvstat
-    csvstack
-    csvformat
-    csvgrep
-    csvclean
   ];
 
   programs.zen-browser = {
@@ -196,7 +180,7 @@
     http = "xh";
     https = "xh";
   };
-
+  /*
   # GTK Theming
   gtk = {
     enable = true;
@@ -208,7 +192,7 @@
     # iconTheme.name = "Papirus-Dark";
     # cursorTheme.name = "McMojave-cursors";
   };
-
+  */
   # Git configuration
   programs.git = {
     enable = true;
