@@ -19,7 +19,7 @@
     #windsurf
     git
     gh
-    runc
+    #runc
     #cri-o
     distrobox
     distroshelf
@@ -34,7 +34,6 @@
     awesome
     niri
     flatpak
-    rofi-wayland
     bottles
     wineWowPackages.stagingFull
     jetbrains-toolbox
