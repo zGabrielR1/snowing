@@ -18,31 +18,46 @@ in
   # Enable Flatpak service
   services.flatpak.enable = true;
 
-  # Add Flathub repository
-  system.activationScripts.flatpak = lib.mkIf config.services.flatpak.enable ''
-    ${pkgs.flatpak}/bin/flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-  '';
-
   # Enable portal
   xdg.portal.enable = true;
 
-  # Install Flatpak applications
-  system.activationScripts.flatpakApps = lib.mkIf config.services.flatpak.enable ''
-    # Install Zen Browser
-    #if ! ${pkgs.flatpak}/bin/flatpak list --app | grep -q "app.zen_browser.zen"; then
-    #  ${pkgs.flatpak}/bin/flatpak install --noninteractive flathub app.zen_browser.zen
-    #fi
+  # Systemd service to add Flathub repository after networking is available
+  systemd.services.flatpak-setup = lib.mkIf config.services.flatpak.enable {
+    description = "Setup Flatpak repositories and applications";
+    wantedBy = [ "multi-user.target" ];
+    after = [ "network-online.target" ];
+    wants = [ "network-online.target" ];
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+      ExecStart = "${pkgs.bash}/bin/bash -c '${pkgs.flatpak}/bin/flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo'";
+      ExecStartPost = "${pkgs.bash}/bin/bash -c '${pkgs.flatpak}/bin/flatpak update --appstream'";
+      ExecStartPost = "${pkgs.bash}/bin/bash -c '${pkgs.flatpak}/bin/flatpak remote-modify --enable flathub'";
+    };
+  };
 
-    # Install Kontainer
-    if ! ${pkgs.flatpak}/bin/flatpak list --app | grep -q "io.github.DenysMb.Kontainer"; then
-      ${pkgs.flatpak}/bin/flatpak install --noninteractive flathub io.github.DenysMb.Kontainer
-    fi
+  # Systemd service to install Flatpak applications after repository setup
+  systemd.services.flatpak-apps = lib.mkIf config.services.flatpak.enable {
+    description = "Install Flatpak applications";
+    wantedBy = [ "multi-user.target" ];
+    after = [ "flatpak-setup.service" ];
+    requires = [ "flatpak-setup.service" ];
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+      ExecStart = "${pkgs.bash}/bin/bash -c '
+        # Install Kontainer
+        if ! ${pkgs.flatpak}/bin/flatpak list --app | grep -q \"io.github.DenysMb.Kontainer\"; then
+          ${pkgs.flatpak}/bin/flatpak install --noninteractive flathub io.github.DenysMb.Kontainer || echo \"Failed to install Kontainer\"
+        fi
 
-    # Install Flatseal
-    if ! ${pkgs.flatpak}/bin/flatpak list --app | grep -q "com.github.tchx84.Flatseal"; then
-      ${pkgs.flatpak}/bin/flatpak install --noninteractive flathub com.github.tchx84.Flatseal
-    fi
-  '';
+        # Install Flatseal
+        if ! ${pkgs.flatpak}/bin/flatpak list --app | grep -q \"com.github.tchx84.Flatseal\"; then
+          ${pkgs.flatpak}/bin/flatpak install --noninteractive flathub com.github.tchx84.Flatseal || echo \"Failed to install Flatseal\"
+        fi
+      '";
+    };
+  };
 
   # Enable software centers through system packages
   environment.systemPackages = with pkgs; [
