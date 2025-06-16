@@ -45,7 +45,7 @@
   #services.displayManager.sddm.enable = true;
   #services.desktopManager.plasma6.enable = true;
   services.xserver.desktopManager.xfce.enable = true;
-  services.displayManager.lightdm.enable = true;
+  services.xserver.displayManager.lightdm.enable = true;
   #services.desktopManager.cinnamon.enable = true;
   
 
