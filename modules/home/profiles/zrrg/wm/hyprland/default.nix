@@ -7,6 +7,13 @@
     enable = true;
     xwayland.enable = true;
 
+    # Minimal configuration to satisfy the warning
+    # The actual configuration is handled through xdg.configFile copying
+    extraConfig = ''
+      # Configuration is managed through dotfiles
+      # See ~/.config/hypr/hyprland.conf for the main configuration
+    '';
+
     # Plugins from hyprland-plugins flake
     # plugins = [
     #   inputs.hyprland-plugins.packages.${pkgs.system}.hyprbars
