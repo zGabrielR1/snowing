@@ -16,6 +16,7 @@
     pcmanfm
     lf
     ctpv
+    vesktop
 
     # Terminal and shells
     kitty
