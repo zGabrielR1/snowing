@@ -14,7 +14,7 @@
       buildInputs = oldAttrs.buildInputs ++ [ pkgs.krb5 ];
     }))
     */
-    vim
+    #vim
     nano
     code-cursor
     #windsurf

@@ -38,15 +38,14 @@
 ];
 
   # Enable SDDM with Makima theme
-  custom.sddm-theme.enable = true;
-  
-  # Disable GNOME desktop manager since you're using Hyprland
-  services.desktopManager.gnome.enable = true;
-  
+  #custom.sddm-theme.enable = true;
+
+  #services.desktopManager.gnome.enable = true;
   # Alternative display managers (commented out)
   #services.displayManager.sddm.enable = true;
   #services.desktopManager.plasma6.enable = true;
-  #services.displayManager.lightdm.enable = true;
+  services.xserver.desktopManager.xfce.enable = true;
+  services.displayManager.lightdm.enable = true;
   #services.desktopManager.cinnamon.enable = true;
   
 
