@@ -40,12 +40,13 @@
   # Enable SDDM with Makima theme
   #custom.sddm-theme.enable = true;
 
-  #services.desktopManager.gnome.enable = true;
+  services.desktopManager.gnome.enable = true;
+  services.displayManager.gdm.enable = true;
   # Alternative display managers (commented out)
   #services.displayManager.sddm.enable = true;
   #services.desktopManager.plasma6.enable = true;
-  services.xserver.desktopManager.xfce.enable = true;
-  services.xserver.displayManager.lightdm.enable = true;
+  #services.xserver.desktopManager.xfce.enable = true;
+  #services.xserver.displayManager.lightdm.enable = true;
   #services.desktopManager.cinnamon.enable = true;
   
 

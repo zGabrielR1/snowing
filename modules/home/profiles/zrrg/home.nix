@@ -159,7 +159,7 @@
   # Shell aliases
   home.shellAliases = {
     ll = "ls -l";
-    update = "nh os switch --flake ~/Dev/nixland";
+    update = "nh os switch --flake ~/Snow/snowing";
     # Additional aliases from dotfiles
     ls = "lsd";
     cat = "bat";

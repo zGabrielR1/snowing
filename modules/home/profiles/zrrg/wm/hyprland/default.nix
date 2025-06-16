@@ -5,7 +5,6 @@
   # Enable Hyprland through Home Manager
   wayland.windowManager.hyprland = {
     enable = true;
-    # package = inputs.hyprland.packages.${pkgs.system}.hyprland; # Use Hyprland from flake input
     xwayland.enable = true;
 
     # Plugins from hyprland-plugins flake
