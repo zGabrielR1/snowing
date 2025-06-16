@@ -7,7 +7,6 @@
     enable = true;
     # package = inputs.hyprland.packages.${pkgs.system}.hyprland; # Use Hyprland from flake input
     xwayland.enable = true;
-    # systemd.enable = true; # If you want Hyprland to be a systemd user service
 
     # Plugins from hyprland-plugins flake
     # plugins = [
