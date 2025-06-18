@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 image_dir="$HOME/wallpaper/"
 images=("$image_dir"/*)

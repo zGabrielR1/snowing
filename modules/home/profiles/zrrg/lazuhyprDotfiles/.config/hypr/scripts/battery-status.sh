@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Path to your icons
 ICON_PATH="$HOME/.config/hypr/scripts/icons"

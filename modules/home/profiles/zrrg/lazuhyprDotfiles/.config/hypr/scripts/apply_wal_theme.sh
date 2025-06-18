@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 THEME_FILE="/tmp/theme_variant"
 wal_arguments=""

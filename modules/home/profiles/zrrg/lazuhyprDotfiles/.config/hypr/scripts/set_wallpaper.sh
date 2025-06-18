@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 wallpaper_path=~/wallpaper/wallpaper.png
 

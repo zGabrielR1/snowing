@@ -1,4 +1,4 @@
-#!/bin/env bash
+#!/usr/bin/env bash
 
 # Path to the icons for notifications
 ICON_PATH="$HOME/.config/hypr/scripts/icons"
