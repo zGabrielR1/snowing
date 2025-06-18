@@ -10,6 +10,8 @@
       ./hardware-configuration.nix
       ../../modules/nixos/hyprland.nix
       ../../modules/nixos/nix-settings.nix
+      ../../modules/nixos/flatpak.nix
+      ../../modules/home/flatpak-apps.nix
     ];
 
   # Bootloader.
