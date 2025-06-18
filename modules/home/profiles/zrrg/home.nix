@@ -210,4 +210,8 @@
 
   # Home Manager state version
   home.stateVersion = "25.11";
+
+  imports = [
+    ../flatpak-apps.nix
+  ];
 }

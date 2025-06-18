@@ -13,64 +13,80 @@ let
   # Determine which software center to enable
   enableGnomeSoftware = isDesktopEnabled "gnome" || (!isDesktopEnabled "kde");
   enableKdeDiscover = isDesktopEnabled "kde";
-in
-{
-  # Enable Flatpak service
-  services.flatpak.enable = true;
 
-  # Enable portal
-  xdg.portal.enable = true;
-
-  # Systemd service to add Flathub repository after networking is available
-  systemd.services.flatpak-setup = lib.mkIf config.services.flatpak.enable {
-    description = "Setup Flatpak repositories and applications";
-    wantedBy = [ "multi-user.target" ];
-    after = [ "network-online.target" ];
-    wants = [ "network-online.target" ];
-    serviceConfig = {
-      Type = "oneshot";
-      RemainAfterExit = true;
-      ExecStart = "${pkgs.bash}/bin/bash -c '
-        ${pkgs.flatpak}/bin/flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-        ${pkgs.flatpak}/bin/flatpak update --appstream
-        ${pkgs.flatpak}/bin/flatpak remote-modify --enable flathub
-      '";
-    };
-  };
-
-  # Systemd service to install Flatpak applications after repository setup
-  systemd.services.flatpak-apps = lib.mkIf config.services.flatpak.enable {
-    description = "Install Flatpak applications";
-    wantedBy = [ "multi-user.target" ];
-    after = [ "flatpak-setup.service" ];
-    requires = [ "flatpak-setup.service" ];
-    serviceConfig = {
-      Type = "oneshot";
-      RemainAfterExit = true;
-      ExecStart = "${pkgs.bash}/bin/bash -c '
-        # Install Kontainer
-        if ! ${pkgs.flatpak}/bin/flatpak list --app | grep -q \"io.github.DenysMb.Kontainer\"; then
-          ${pkgs.flatpak}/bin/flatpak install --noninteractive flathub io.github.DenysMb.Kontainer || echo \"Failed to install Kontainer\"
-        fi
-
-        # Install Flatseal
-        if ! ${pkgs.flatpak}/bin/flatpak list --app | grep -q \"com.github.tchx84.Flatseal\"; then
-          ${pkgs.flatpak}/bin/flatpak install --noninteractive flathub com.github.tchx84.Flatseal || echo \"Failed to install Flatseal\"
-        fi
-      '";
-    };
-  };
-
-  # Enable software centers through system packages
-  environment.systemPackages = with pkgs; [
-    (lib.mkIf enableGnomeSoftware gnome-software)
-    (lib.mkIf enableKdeDiscover kdePackages.discover)
+  # List of Flatpak apps to manage as options
+  flatpakAppDefs = [
+    { option = "refine";      id = "page.tesk.Refine";           description = "Enable pre-installation of the Refine Flatpak app."; }
+    { option = "flatseal";    id = "com.github.tchx84.Flatseal"; description = "Enable pre-installation of the Flatseal Flatpak app."; }
+    { option = "kontainer";   id = "io.github.DenysMb.Kontainer"; description = "Enable pre-installation of the Kontainer Flatpak app."; }
+    { option = "zen_browser"; id = "app.zen_browser.zen";        description = "Enable pre-installation of the Zen Browser Flatpak app."; }
   ];
 
-  # Additional KDE Connect requirement for Discover
-  #programs.kdeconnect.enable = enableKdeDiscover;
-  programs.kdeconnect = {
+  # Generate options for each app
+  flatpakAppOptions = lib.listToAttrs (map (app: {
+    name = app.option;
+    value = {
+      enable = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = app.description;
+      };
+    };
+  }) flatpakAppDefs);
+
+  # Get enabled apps and generate install commands
+  enabledFlatpakApps = lib.filter (app: config.services.flatpak-apps.${app.option}.enable) flatpakAppDefs;
+  installCmds = lib.concatStringsSep "\n" (map (app: ''
+    if ! ${pkgs.flatpak}/bin/flatpak list --app | grep -q "${app.id}"; then
+      ${pkgs.flatpak}/bin/flatpak install --noninteractive flathub ${app.id} || echo "Failed to install ${app.id}"
+    fi
+  '') enabledFlatpakApps);
+in
+{
+  options = {
+    services.flatpak-apps = flatpakAppOptions;
+  };
+
+  config = {
+    services.flatpak.enable = true;
+    xdg.portal.enable = true;
+
+    systemd.services.flatpak-setup = lib.mkIf config.services.flatpak.enable {
+      description = "Setup Flatpak repositories and applications";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network-online.target" ];
+      wants = [ "network-online.target" ];
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+        ExecStart = "${pkgs.bash}/bin/bash -c '
+          ${pkgs.flatpak}/bin/flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+          ${pkgs.flatpak}/bin/flatpak update --appstream
+          ${pkgs.flatpak}/bin/flatpak remote-modify --enable flathub
+        '";
+      };
+    };
+
+    systemd.services.flatpak-apps = lib.mkIf (config.services.flatpak.enable && enabledFlatpakApps != []) {
+      description = "Install Flatpak applications";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "flatpak-setup.service" ];
+      requires = [ "flatpak-setup.service" ];
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+        ExecStart = "${pkgs.bash}/bin/bash -c '\n${installCmds}\n'";
+      };
+    };
+
+    environment.systemPackages = with pkgs; [
+      (lib.mkIf enableGnomeSoftware gnome-software)
+      (lib.mkIf enableKdeDiscover kdePackages.discover)
+    ];
+
+    programs.kdeconnect = {
       enable = enableKdeDiscover;
       package = pkgs.gnomeExtensions.gsconnect;
+    };
   };
 }
