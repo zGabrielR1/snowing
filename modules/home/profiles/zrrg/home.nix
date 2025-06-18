@@ -62,7 +62,8 @@
     pavucontrol
     networkmanagerapplet
     polkit_gnome
-    gnome-tweaks
+    refine
+    #gnome-tweaks
 
     #hyprstellar
     ctpv
