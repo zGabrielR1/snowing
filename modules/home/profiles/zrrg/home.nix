@@ -11,6 +11,10 @@ let
   shell-tools = with pkgs; [
     # Shells & Prompts
     zsh
+    zsh-syntax-highlighting
+    zsh-autosuggestions
+    zsh-autocomplete
+    zsh-completions
     fish
     oh-my-zsh
     oh-my-posh
@@ -19,8 +23,13 @@ let
     tmux
     tmuxPlugins.sensible
     tmuxPlugins.vim-tmux-navigator
+    sesh
+    kitty
+    wezterm
 
     # Core Utilities
+    optipng
+    jpegoptim
     zoxide
     fzf
     bat
@@ -43,11 +52,26 @@ let
     pfetch
     du-dust
     procs
+    hyperfine
     
     # Network Tools
     gping
     dog
     bandwhich
+
+    # xh
+    # curlie
+    # as-tree
+    # choose
+    # jq
+    # yq
+    # htmlq
+    # pup
+    # csvkit
+    # miller
+    # q
+    # rush
+    # tuc
   ];
 
   dev-tools = with pkgs; [
@@ -65,6 +89,10 @@ let
     micro
     emacs
     lapce
+    your-editor
+    amp
+    ad
+    vis
     lite-xl
     zed-editor
     jetbrains-toolbox
@@ -77,16 +105,24 @@ let
   gui-apps = with pkgs; [
     # Browser
     (inputs.zen-browser.packages."${system}".default)
+    programs.zen-browser = {
+      enable = true;
+    };
 
     # File Managers
     pcmanfm
     nautilus
-    
+    lf
+    ctpv
+
     # Utilities
     bottles
     refine
-    kdePackages.kate # For 'your-editor', it seems you want kate
+    #gnome-tweaks
+    kdePackages.kate
     vesktop
+    mpv
+    dunst
   ];
 
   hyprland-ecosystem = with pkgs; [
@@ -124,7 +160,8 @@ let
   
   fonts = with pkgs; [
     # Nerd Fonts
-    (nerd-fonts.override { fonts = [ "JetBrainsMono" "FiraCode" "Meslo" ]; })
+    nerd-fonts.jetbrains-mono
+    #(nerd-fonts.override { fonts = [ "JetBrainsMono" "FiraCode" "Meslo" ]; })
     nerd-fonts.symbols-only
     
     # Standard Fonts
@@ -150,6 +187,26 @@ in
 
   # --- State Version ---
   home.stateVersion = "25.11"; # Set to your current version
+
+  home.shellAliases = {
+  ll = "ls -l";
+  update = "nh os switch --flake ~/Snow/snowing";
+  # Additional aliases from dotfiles
+  ls = "lsd";
+  cat = "bat";
+  grep = "rg";
+  find = "fd";
+  top = "btm";
+  ps = "procs";
+  du = "dust";
+  df = "duf";
+  ping = "gping";
+  dig = "dog";
+  curl = "xh";
+  wget = "xh";
+  http = "xh";
+  https = "xh";
+};
 
   # --- Program Configurations ---
   programs.home-manager.enable = true;
@@ -178,7 +235,7 @@ in
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
     history.size = 10000;
-    # Source our beautiful, modular zshrc from the dotfiles
+    # Source our beautiful, modular   rc from the dotfiles
     initExtra = "source ${config.xdg.configHome}/zshrc/20-customization";
   };
   
