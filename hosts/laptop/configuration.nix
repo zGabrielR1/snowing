@@ -11,7 +11,6 @@
       ../../modules/nixos/hyprland.nix
       ../../modules/nixos/nix-settings.nix
       ../../modules/nixos/flatpak.nix
-      ../../modules/home/flatpak-apps.nix
     ];
 
   # Bootloader.
@@ -128,6 +127,12 @@
   # Enable AppImage support with binfmt
   programs.appimage.enable = true;
   programs.appimage.binfmt = true;
+
+  services.flatpak-apps = {
+  flatseal.enable = true;
+  kontainer.enable = true;
+  zen_browser.enable = true;
+};
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
