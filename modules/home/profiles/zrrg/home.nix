@@ -105,9 +105,6 @@ let
   gui-apps = with pkgs; [
     # Browser
     (inputs.zen-browser.packages."${system}".default)
-    programs.zen-browser = {
-      enable = true;
-    };
 
     # File Managers
     pcmanfm
@@ -210,6 +207,10 @@ in
 
   # --- Program Configurations ---
   programs.home-manager.enable = true;
+
+  programs.zen-browser = {
+    enable = true;
+  };
 
   programs.git = {
     enable = true;
