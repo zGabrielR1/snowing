@@ -104,7 +104,7 @@ let
 
   gui-apps = with pkgs; [
     # Browser
-    (inputs.zen-browser.packages."${system}".default)
+    #(inputs.zen-browser.packages."${system}".default)
 
     # File Managers
     pcmanfm
@@ -208,9 +208,9 @@ in
   # --- Program Configurations ---
   programs.home-manager.enable = true;
 
-  programs.zen-browser = {
-    enable = true;
-  };
+  #programs.zen-browser = {
+  #  enable = true;
+  #};
 
   programs.git = {
     enable = true;
@@ -237,7 +237,7 @@ in
     syntaxHighlighting.enable = true;
     history.size = 10000;
     # Source our beautiful, modular   rc from the dotfiles
-    initExtra = "source ${config.xdg.configHome}/zshrc/20-customization";
+    initContent = "source ${config.xdg.configHome}/zshrc/20-customization";
   };
   
   programs.tmux = {
@@ -286,7 +286,7 @@ in
   # Also import other modules for this user
   imports = [
     ./wm/hyprland/default.nix
-    inputs.zen-browser.homeModules.beta
+    #inputs.zen-browser.homeModules.beta
     inputs.nix-index-db.hmModules.nix-index
   ];
 }
