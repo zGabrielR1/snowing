@@ -50,6 +50,8 @@ in
   config = {
     services.flatpak.enable = true;
     xdg.portal.enable = true;
+    xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+    xdg.portal.config.common.default = "gtk";
 
     systemd.services.flatpak-setup = lib.mkIf config.services.flatpak.enable {
       description = "Setup Flatpak repositories and applications";
