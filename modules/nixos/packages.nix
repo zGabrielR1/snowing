@@ -36,6 +36,7 @@
     bottles
     wineWowPackages.stagingFull
     jetbrains-toolbox
+    #gparted
     
   ];
 }
