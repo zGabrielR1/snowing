@@ -4,6 +4,7 @@
 {
   imports = [
     ./audio.nix
+    ./bluetooth.nix
     ./fonts.nix       
     ./flatpak.nix     
     ./gnome.nix
