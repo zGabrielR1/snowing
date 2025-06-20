@@ -63,7 +63,7 @@
   # Enable CUPS to print documents.
   services.printing.enable = true;
   
-
+  services.envfs.enable = true;
   # Enable sound with pipewire.
 
   # Enable touchpad support (enabled default in most desktopManager).
