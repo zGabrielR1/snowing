@@ -88,6 +88,8 @@ let
   ];
 
   gui-apps = with pkgs; [
+    # Browser
+    (inputs.zen-browser.packages."${system}".default)
     # File Managers
     pcmanfm
     nautilus
@@ -189,6 +191,10 @@ in
   # --- Program Configurations ---
   programs.home-manager.enable = true;
 
+  programs.zen-browser = {
+    enable = true;
+  };
+
   programs.git = {
     enable = true;
     userName = "zGabrielR1";
@@ -268,6 +274,7 @@ in
   # Also import other modules for this user
   imports = [
     ./wm/hyprland/default.nix
+    inputs.zen-browser.homeModules.beta
     inputs.nix-index-db.hmModules.nix-index
   ];
 }
