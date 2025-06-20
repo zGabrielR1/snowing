@@ -58,6 +58,8 @@ in
     # Extra options - optimized for speed
     extraOptions = ''
       warn-dirty = false
+      max-jobs = auto
+      cores = 0
     '';
 
     settings = {

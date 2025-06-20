@@ -13,7 +13,6 @@ let
     zsh
     zsh-syntax-highlighting
     zsh-autosuggestions
-    zsh-autocomplete
     zsh-completions
     fish
     oh-my-zsh
@@ -58,20 +57,6 @@ let
     gping
     dog
     bandwhich
-
-    # xh
-    # curlie
-    # as-tree
-    # choose
-    # jq
-    # yq
-    # htmlq
-    # pup
-    # csvkit
-    # miller
-    # q
-    # rush
-    # tuc
   ];
 
   dev-tools = with pkgs; [
@@ -103,9 +88,6 @@ let
   ];
 
   gui-apps = with pkgs; [
-    # Browser
-    #(inputs.zen-browser.packages."${system}".default)
-
     # File Managers
     pcmanfm
     nautilus
@@ -115,7 +97,6 @@ let
     # Utilities
     bottles
     refine
-    #gnome-tweaks
     kdePackages.kate
     vesktop
     mpv
@@ -158,7 +139,6 @@ let
   fonts = with pkgs; [
     # Nerd Fonts
     nerd-fonts.jetbrains-mono
-    #(nerd-fonts.override { fonts = [ "JetBrainsMono" "FiraCode" "Meslo" ]; })
     nerd-fonts.symbols-only
     
     # Standard Fonts
@@ -183,34 +163,31 @@ in
     fonts;
 
   # --- State Version ---
-  home.stateVersion = "25.11"; # Set to your current version
+  home.stateVersion = "25.11";
 
+  # --- Shell Aliases ---
   home.shellAliases = {
-  ll = "ls -l";
-  update = "nh os switch --flake ~/Snow/snowing";
-  # Additional aliases from dotfiles
-  ls = "lsd";
-  cat = "bat";
-  grep = "rg";
-  find = "fd";
-  top = "btm";
-  ps = "procs";
-  du = "dust";
-  df = "duf";
-  ping = "gping";
-  dig = "dog";
-  curl = "xh";
-  wget = "xh";
-  http = "xh";
-  https = "xh";
-};
+    ll = "ls -l";
+    update = "nh os switch --flake ~/Snow/snowing";
+    # Modern replacements
+    ls = "lsd";
+    cat = "bat";
+    grep = "rg";
+    find = "fd";
+    top = "btm";
+    ps = "procs";
+    du = "dust";
+    df = "duf";
+    ping = "gping";
+    dig = "dog";
+    curl = "xh";
+    wget = "xh";
+    http = "xh";
+    https = "xh";
+  };
 
   # --- Program Configurations ---
   programs.home-manager.enable = true;
-
-  #programs.zen-browser = {
-  #  enable = true;
-  #};
 
   programs.git = {
     enable = true;
@@ -219,6 +196,8 @@ in
     extraConfig = {
       init.defaultBranch = "main";
       core.editor = "nvim";
+      pull.rebase = true;
+      push.autoSetupRemote = true;
     };
     delta = {
       enable = true;
@@ -235,8 +214,12 @@ in
     enableCompletion = true;
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
-    history.size = 10000;
-    # Source our beautiful, modular   rc from the dotfiles
+    history = {
+      size = 10000;
+      save = 10000;
+      share = true;
+    };
+    # Source our beautiful, modular rc from the dotfiles
     initContent = "source ${config.xdg.configHome}/zshrc/20-customization";
   };
   
@@ -248,7 +231,6 @@ in
 
   # --- Dotfile Management ---
   # This section links your dotfiles from the *single source* into the correct locations.
-  # Note the updated path to lazuhyprDotfiles.
   xdg.configFile = {
     "zshrc".source = ../../lazuhyprDotfiles/.config/zshrc;
     "hypr".source = ../../lazuhyprDotfiles/.config/hypr;
@@ -286,7 +268,6 @@ in
   # Also import other modules for this user
   imports = [
     ./wm/hyprland/default.nix
-    #inputs.zen-browser.homeModules.beta
     inputs.nix-index-db.hmModules.nix-index
   ];
 }

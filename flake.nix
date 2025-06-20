@@ -73,7 +73,7 @@
     #zen-browser = {
     #url = "github:0xc000022070/zen-browser-flake";
     #inputs.nixpkgs.follows = "nixpkgs";
-  #};
+    #};
 
     # --- Windsurf IDE ---
     windsurf = {
@@ -91,28 +91,33 @@
   outputs = { self, nixpkgs, home-manager, flake-parts, chaotic, ... }@inputs:
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = [ "x86_64-linux" ];
+      
       perSystem = { config, pkgs, system, lib, ... }: {
-        # Example: Expose custom font packages if they are defined locally
-        # packages = {
-        #   SF-Pro = pkgs.callPackage ./pkgs/fonts/sf-pro.nix {};
-        #   SF-Pro-mono = pkgs.callPackage ./pkgs/fonts/sf-pro-mono.nix {};
-        # };
-        # For now, assuming SF fonts are handled differently or placeholder
-        
-        # Expose Windsurf package
+        # Expose custom packages
         packages = {
           windsurf = inputs.windsurf.packages.${system}.windsurf;
         };
+        
+        # Development shell
+        devShells.default = pkgs.mkShell {
+          buildInputs = with pkgs; [
+            nixpkgs-fmt
+            statix
+            deadnix
+            alejandra
+          ];
+        };
       };
+      
       flake = {
         # NixOS Configurations
         nixosConfigurations.laptop = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
-          specialArgs = { inherit inputs self; }; # Pass all inputs and self
+          specialArgs = { inherit inputs self; };
           modules = [
             # Core Modules
             home-manager.nixosModules.home-manager
-              {
+            {
               home-manager.useGlobalPkgs = true;
               home-manager.backupFileExtension = "HMBackup";
               home-manager.useUserPackages = true;
@@ -123,8 +128,8 @@
             }
             chaotic.nixosModules.default # Chaotic Nyx Module
 
-            # Custom NixOS Modules (Import the top-level module directly)
-            ./modules/nixos/default.nix # This should import nix-settings.nix among others
+            # Custom NixOS Modules
+            ./modules/nixos/default.nix
 
             # Host specific config
             ./hosts/laptop/configuration.nix
@@ -139,6 +144,7 @@
             # and removed. Configuration happens in home-manager.users.<name>
           ];
         };
+
         # Add other hosts here if needed
         # "desktop" = nixpkgs.lib.nixosSystem { ... };
 
