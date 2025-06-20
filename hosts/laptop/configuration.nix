@@ -45,11 +45,13 @@
   services.displayManager.gdm.enable = true;
   # Alternative display managers (commented out)
   #services.displayManager.sddm.enable = true;
+
+  # Alternative desktop managers (commented out)
   #services.desktopManager.plasma6.enable = true;
   #services.xserver.desktopManager.xfce.enable = true;
   #services.xserver.displayManager.lightdm.enable = true;
   #services.desktopManager.cinnamon.enable = true;
-  
+  #services.xserver.desktopManager.budgie.enable = true;
 
   # Configure keymap in X11
   services.xserver.xkb = {
