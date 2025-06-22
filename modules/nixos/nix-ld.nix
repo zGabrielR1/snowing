@@ -1,10 +1,14 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, inputs, ... }:
 
 with lib;
 
 let
   cfg = config.custom.nix-ld;
 in {
+  imports = [
+    inputs.nix-ld.nixosModules.nix-ld
+  ];
+
   options.custom.nix-ld = {
     enable = mkEnableOption "nix-ld support";
     libraries = mkOption {
@@ -56,9 +60,9 @@ in {
   };
 
   config = mkIf cfg.enable {
-    # Enable the built-in nix-ld module
-    programs.nix-ld.enable = true;
+    # Enable the nix-ld flake module (dev version to avoid collision with built-in)
+    programs.nix-ld.dev.enable = true;
     # Set the libraries
-    programs.nix-ld.libraries = cfg.libraries;
+    programs.nix-ld.dev.libraries = cfg.libraries;
   };
 } 
