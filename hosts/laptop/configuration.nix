@@ -30,7 +30,7 @@
   networking.networkmanager.enable = true;
 
   # Enable the X11 windowing system - but minimize what gets pulled in
-  services.xserver.enable = true;
+  #services.xserver.enable = true;
   
   networking.nftables.enable = true;
   networking.firewall.trustedInterfaces = [
