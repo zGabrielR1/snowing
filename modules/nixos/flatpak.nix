@@ -61,11 +61,12 @@ in
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;
-        ExecStart = "${pkgs.bash}/bin/bash -c '
-          ${pkgs.flatpak}/bin/flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-          ${pkgs.flatpak}/bin/flatpak update --appstream
-          ${pkgs.flatpak}/bin/flatpak remote-modify --enable flathub
-        '";
+        ExecStart =
+          (pkgs.writeShellScript "flatpak-setup" ''
+            ${pkgs.flatpak}/bin/flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+            ${pkgs.flatpak}/bin/flatpak update --appstream
+            ${pkgs.flatpak}/bin/flatpak remote-modify --enable flathub
+          '');
       };
     };
 
@@ -77,7 +78,10 @@ in
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;
-        ExecStart = "${pkgs.bash}/bin/bash -c '\n${installCmds}\n'";
+        ExecStart =
+          (pkgs.writeShellScript "flatpak-apps-install" ''
+            ${installCmds}
+          '');
       };
     };
 
