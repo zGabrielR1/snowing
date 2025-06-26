@@ -81,7 +81,7 @@ let
     lite-xl
     zed-editor
     jetbrains-toolbox
-    (inputs.windsurf.packages."${system}".windsurf)
+    #(inputs.windsurf.packages."${system}".windsurf)
 
     # Programming Language Support
     tokei # code stats
