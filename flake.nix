@@ -82,10 +82,10 @@
     };
 
     # --- Windsurf IDE ---
-    windsurf = {
-      url = "path:./pkgs/windsurf";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    #windsurf = {
+    #  url = "path:./pkgs/windsurf";
+    #  inputs.nixpkgs.follows = "nixpkgs";
+    #};
 
     # --- Compatibility ---
     flake-compat.url = "github:edolstra/flake-compat";
@@ -100,9 +100,9 @@
       
       perSystem = { config, pkgs, system, lib, ... }: {
         # Expose custom packages
-        packages = {
-          windsurf = inputs.windsurf.packages.${system}.windsurf;
-        };
+        #packages = {
+        #  windsurf = inputs.windsurf.packages.${system}.windsurf;
+        #};
         
         # Development shell
         devShells.default = pkgs.mkShell {
