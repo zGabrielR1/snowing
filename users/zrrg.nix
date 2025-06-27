@@ -42,7 +42,7 @@ in {
 
       # X11 and GTK configurations
       ".gtkrc-2.0".source = ../../modules/home/lazuhyprDotfiles/.gtkrc-2.0;
-      ".Xresources".source = ../../modules/home/lazuhyprDotfiles/.Xresources;
+      # ".Xresources".source = ../../modules/home/lazuhyprDotfiles/.Xresources;
 
       # Git delta themes
       ".delta-themes.gitconfig".source = ../../modules/home/lazuhyprDotfiles/.delta-themes.gitconfig;
