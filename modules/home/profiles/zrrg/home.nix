@@ -1,7 +1,8 @@
 # modules/home/profiles/zrrg/home.nix
 #
 # This is the primary Home Manager configuration for the user 'zrrg'.
-# It defines packages, aliases, dotfiles, and program settings.
+# It defines packages, aliases, and program settings.
+# Note: Dotfiles are now managed by Hjem in users/zrrg.nix
 #
 { config, pkgs, system, inputs, ... }:
 
@@ -233,42 +234,6 @@ in
     enable = true;
     # Let the dotfile handle the full configuration
     extraConfig = "source-file ${config.home.homeDirectory}/.tmux.conf";
-  };
-
-  # --- Dotfile Management ---
-  # This section links your dotfiles from the *single source* into the correct locations.
-  xdg.configFile = {
-    "zshrc".source = ../../lazuhyprDotfiles/.config/zshrc;
-    "hypr".source = ../../lazuhyprDotfiles/.config/hypr;
-    "waybar".source = ../../lazuhyprDotfiles/.config/waybar;
-    "rofi".source = ../../lazuhyprDotfiles/.config/rofi;
-    "swaync".source = ../../lazuhyprDotfiles/.config/swaync;
-    "wlogout".source = ../../lazuhyprDotfiles/.config/wlogout;
-    "wezterm".source = ../../lazuhyprDotfiles/.config/wezterm;
-    "btop".source = ../../lazuhyprDotfiles/.config/btop;
-    "lf".source = ../../lazuhyprDotfiles/.config/lf;
-    "ctpv".source = ../../lazuhyprDotfiles/.config/ctpv;
-    "mpv".source = ../../lazuhyprDotfiles/.config/mpv;
-    "fastfetch".source = ../../lazuhyprDotfiles/.config/fastfetch;
-    "lsd".source = ../../lazuhyprDotfiles/.config/lsd;
-    "spicetify".source = ../../lazuhyprDotfiles/.config/spicetify;
-    "nvim".source = ../../lazuhyprDotfiles/.config/nvim;
-    "ohmyposh".source = ../../lazuhyprDotfiles/.config/ohmyposh;
-    "fish".source = ../../lazuhyprDotfiles/.config/fish;
-    "bashrc".source = ../../lazuhyprDotfiles/.config/bashrc;
-  };
-  
-  home.file = {
-    # Note the updated path to lazuhyprDotfiles.
-    ".zshrc".source = ../../lazuhyprDotfiles/.zshrc;
-    ".tmux.conf".source = ../../lazuhyprDotfiles/.tmux.conf;
-    ".vimrc".source = ../../lazuhyprDotfiles/.vimrc;
-    ".bashrc".source = ../../lazuhyprDotfiles/.bashrc;
-    ".gtkrc-2.0".source = ../../lazuhyprDotfiles/.gtkrc-2.0;
-    ".Xresources".source = ../../lazuhyprDotfiles/.Xresources;
-    ".ideavimrc".source = ../../lazuhyprDotfiles/.ideavimrc;
-    ".delta-themes.gitconfig".source = ../../lazuhyprDotfiles/.delta-themes.gitconfig;
-    ".stow-local-ignore".source = ../../lazuhyprDotfiles/.stow-local-ignore;
   };
 
   # Also import other modules for this user

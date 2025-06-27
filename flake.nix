@@ -20,6 +20,12 @@
     };
     systems.url = "github:nix-systems/default-linux";
 
+    # --- Dotfile Management ---
+    hjem = {
+      url = "github:feel-co/hjem";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # --- Theming ---
     nix-colors.url = "github:misterio77/nix-colors";
     matugen.url = "github:InioX/matugen";
@@ -119,7 +125,10 @@
         # NixOS Configurations
         nixosConfigurations.laptop = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
-          specialArgs = { inherit inputs self; };
+          specialArgs = { 
+            inherit inputs self; 
+            users = ["zrrg"];
+          };
           modules = [
             # Core Modules
             home-manager.nixosModules.home-manager
