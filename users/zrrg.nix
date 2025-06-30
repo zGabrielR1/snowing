@@ -71,4 +71,7 @@ in {
       ".config/bashrc".source = ../modules/home/lazuhyprDotfiles/.config/bashrc;
     };
   };
+
+  # Restore Home Manager for this user
+  home-manager.users.${username} = import ../modules/home/profiles/zrrg/default.nix;
 } 
