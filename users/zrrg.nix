@@ -19,6 +19,7 @@ in {
       pkgs.bat
       pkgs.delta
       pkgs.btop
+      pkgs.eza
     ];
   };
 
