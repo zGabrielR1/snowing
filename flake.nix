@@ -5,7 +5,6 @@
   inputs = {
     # --- Core ---
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
-    #nixpkgs.url = "https://channels.nixos.org/nixpkgs-unstable/nixexprs.tar.xz";
     chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -45,7 +44,6 @@
     #  url = "github:KZDKM/Hyprspace";
     #  inputs.hyprland.follows = "hyprland";
     #};
-    mcmojave-hyprcursor.url = "github:libadoxon/mcmojave-hyprcursor";
 
     # --- Niri ---
     niri = {
@@ -159,13 +157,6 @@
             # and removed. Configuration happens in home-manager.users.<name>
           ];
         };
-
-        # Add other hosts here if needed
-        # "desktop" = nixpkgs.lib.nixosSystem { ... };
-
-        # Expose Home Manager modules if you want to reference them like self.homeManagerModules.myProfile
-        # homeManagerModules.zrrgBase = ./modules/home/profiles/zrrg/default.nix;
-        # homeManagerModules.zrrgHyprland = ./modules/home/profiles/zrrg/wm/hyprland/default.nix;
       };
     };
 }
