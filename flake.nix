@@ -45,11 +45,6 @@
     #  inputs.hyprland.follows = "hyprland";
     #};
 
-    # --- Niri ---
-    niri = {
-      url = "github:sodiboo/niri-flake";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
 
     # --- Bars / Launchers / Widgets ---
     #ags.url = "github:Aylur/ags/v1";
