@@ -73,9 +73,9 @@ in {
   };
 
   # Restore Home Manager for this user
-  home-manager.users.${username} = {
-    imports = [
-      ../modules/home/profiles/zrrg/default.nix
-    ];
-  };
+  # home-manager.users.${username} = {
+  #   imports = [
+  #     ../modules/home/profiles/zrrg/default.nix
+  #   ];
+  # };
 } 
