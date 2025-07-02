@@ -15,9 +15,15 @@
       ../../users
     ];
 
-  # Bootloader.
+  # ============================================================================
+  # BOOT CONFIGURATION
+  # ============================================================================
+  
+  # Bootloader configuration
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  
+  # Use testing kernel for latest features
   boot.kernelPackages = pkgs.linuxPackages_testing;
   # boot.readOnlyNixStore = false;
 
@@ -79,96 +85,93 @@
   users.users.zrrg = {
     isNormalUser = true;
     description = "Gabriel Renostro";
-    extraGroups = [ "networkmanager" "wheel" "incus-admin" "podman" "docker" ];
-    /*
+    extraGroups = [ 
+      "networkmanager" 
+      "wheel" 
+      "incus-admin" 
+      "podman" 
+      "docker" 
+      "video"
+      "audio"
+      "input"
+      "kvm"
+      "libvirtd"
+    ];
+    # Enable subuid/subgid for containers
     subGidRanges = [
-        {
-            count = 65536;
-            startGid = 1000;
-        }
+      {
+        count = 65536;
+        startGid = 1000;
+      }
     ];
     subUidRanges = [
-        {
-            count = 65536;
-            startUid = 1000;
-        }
+      {
+        count = 65536;
+        startUid = 1000;
+      }
     ];
-    */
-    # System-level packages for user are less common with HM, keep this minimal or empty
-    # packages = with pkgs; [ ];
   };
 
-  # Define Home Manager configuration for the user 'zrrg'
+  # ============================================================================
+  # HOME MANAGER CONFIGURATION
+  # ============================================================================
+  
   home-manager = {
-    # This is where you list users managed by Home Manager
     users.zrrg = {
       imports = [
-        # This is the main entry point for zrrg's Home Manager config
         ../../modules/home/profiles/zrrg/default.nix
       ];
-      # You can also set Home Manager options directly here if needed, e.g.:
-      # home.username = "zrrg";
-      # home.homeDirectory = "/home/zrrg";
     };
 
-    # Pass special arguments to all Home Manager modules for all users
     extraSpecialArgs = {
-      inherit inputs; # This passes the 'inputs' from your flake to your HM modules
-      system = "x86_64-linux"; # Pass the system architecture
-      # You could also pass 'self' from the flake if needed:
-      # self = inputs.self; # Assuming 'self' was passed to specialArgs in flake.nix
-                           # Your flake.nix does: specialArgs = { inherit inputs self; }
-                           # So you could do:
-      # inherit inputs self;
+      inherit inputs;
+      system = "x86_64-linux";
     };
   };
 
-  # Install firefox.
+  # ============================================================================
+  # PROGRAMS & PACKAGES
+  # ============================================================================
+  
+  # Enable Firefox
   programs.firefox.enable = true;
-
+  
   # Enable nix-ld with all necessary libraries
   custom.nix-ld.enable = true;
-
-  # Enable AppImage support with binfmt
+  
+  # Enable AppImage support
   programs.appimage.enable = true;
   programs.appimage.binfmt = true;
-
+  
+  # Enable Flatpak apps
   services.flatpak-apps = {
-  flatseal.enable = true;
-  kontainer.enable = true;
-};
+    flatseal.enable = true;
+    kontainer.enable = true;
+  };
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
+  # ============================================================================
+  # NIX CONFIGURATION
+  # ============================================================================
+  
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  
+  # Enable garbage collection
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than 30d";
+  };
+  
+  # Optimize store
+  nix.optimise.automatic = true;
 
-
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
-
-  # List services that you want to enable:
-
-  # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
-
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
-
-  # This value determines the NixOS release from which the default
-  # settings for stateful data, like file locations and database versions
-  # on your system were taken. It's perfectly fine and recommended to leave
-  # this value at the release version of the first install of this system.
-  # Before changing this value read the documentation for this option
-  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "25.05"; # Did you read the comment?
+  # ============================================================================
+  # SYSTEM CONFIGURATION
+  # ============================================================================
+  
+  system.stateVersion = "25.05";
+  
+  # Auto upgrade configuration
   system.autoUpgrade = {
     enable = true;
     flake = inputs.self.outPath;

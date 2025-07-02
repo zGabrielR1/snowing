@@ -170,10 +170,17 @@ in
 
   # --- Shell Aliases ---
   home.shellAliases = {
+    # Basic aliases
     ll = "ls -l";
-    update = "nh os switch --flake ~/Snow/snowing";
+    la = "ls -la";
+    l = "ls -CF";
+    
+    # System management
+    update = "nh os switch --flake ~/Documentos/snowing";
+    rebuild = "sudo nixos-rebuild switch --flake ~/Documentos/snowing";
+    
     # Modern replacements
-    ls = "lsd";
+    ls = "eza --icons --group-directories-first";
     cat = "bat";
     grep = "rg";
     find = "fd";
@@ -187,15 +194,39 @@ in
     wget = "xh";
     http = "xh";
     https = "xh";
+    
+    # Development shortcuts
+    g = "git";
+    ga = "git add";
+    gc = "git commit";
+    gp = "git push";
+    gl = "git pull";
+    gs = "git status";
+    gd = "git diff";
+    gco = "git checkout";
+    gcb = "git checkout -b";
+    
+    # Directory navigation
+    .. = "cd ..";
+    ... = "cd ../..";
+    .... = "cd ../../..";
+    
+    # Quick access
+    config = "cd ~/Documentos/snowing";
+    docs = "cd ~/Documents";
+    dl = "cd ~/Downloads";
+    dt = "cd ~/Desktop";
   };
 
   # --- Program Configurations ---
   programs.home-manager.enable = true;
 
+  # Browser configuration
   programs.zen-browser = {
     enable = true;
   };
 
+  # Git configuration
   programs.git = {
     enable = true;
     userName = "zGabrielR1";
@@ -205,6 +236,10 @@ in
       core.editor = "nvim";
       pull.rebase = true;
       push.autoSetupRemote = true;
+      credential.helper = "store";
+      color.ui = "auto";
+      color.branch = "auto";
+      color.status = "auto";
     };
     delta = {
       enable = true;
@@ -212,10 +247,12 @@ in
         navigate = true;
         light = false;
         side-by-side = true;
+        line-numbers = true;
       };
     };
   };
 
+  # Zsh configuration
   programs.zsh = {
     enable = true;
     enableCompletion = true;
@@ -225,11 +262,14 @@ in
       size = 10000;
       save = 10000;
       share = true;
+      ignoreDups = true;
+      ignoreSpace = true;
     };
     # Source our beautiful, modular rc from the dotfiles
     initContent = "source ${config.xdg.configHome}/zshrc/20-customization";
   };
   
+  # Tmux configuration
   programs.tmux = {
     enable = true;
     # Let the dotfile handle the full configuration
