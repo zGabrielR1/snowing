@@ -207,9 +207,9 @@ in
     gcb = "git checkout -b";
     
     # Directory navigation
-    .. = "cd ..";
-    ... = "cd ../..";
-    .... = "cd ../../..";
+    # .. = "cd ..";
+    # ... = "cd ../..";
+    # .... = "cd ../../..";
     
     # Quick access
     config = "cd ~/Documentos/snowing";
