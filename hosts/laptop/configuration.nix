@@ -149,38 +149,4 @@
     kontainer.enable = true;
   };
 
-  # ============================================================================
-  # NIX CONFIGURATION
-  # ============================================================================
-  
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
-  
-  # Enable garbage collection
-  nix.gc = {
-    automatic = true;
-    dates = "weekly";
-    options = "--delete-older-than 30d";
-  };
-  
-  # Optimize store
-  nix.optimise.automatic = true;
-
-  # ============================================================================
-  # SYSTEM CONFIGURATION
-  # ============================================================================
-  
-  system.stateVersion = "25.05";
-  
-  # Auto upgrade configuration
-  system.autoUpgrade = {
-    enable = true;
-    flake = inputs.self.outPath;
-    flags = [
-      "--update-input"
-      "nixpkgs"
-      "-L" # print build logs
-    ];
-    dates = "02:00";
-    randomizedDelaySec = "45min";
-  };
 }
