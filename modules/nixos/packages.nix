@@ -16,7 +16,7 @@
     */
     #vim
     nano
-    code-cursor
+    #code-cursor
     #windsurf
     git
     gh
@@ -27,7 +27,7 @@
     #boxbuddy
     toolbox
     podman
-    pods
+    #pods
     github-desktop
     kitty
     awesome
