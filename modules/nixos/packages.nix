@@ -21,7 +21,7 @@
     git
     gh
     runc
-    cri-o
+    #cri-o
     distrobox
     distroshelf
     #boxbuddy
