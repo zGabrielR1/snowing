@@ -226,7 +226,31 @@ in
     enable = true;
   };
 
-  # Git configuration
+  # Zsh configuration - DISABLED: Managed by Hjem to avoid file conflicts
+  # programs.zsh = {
+  #   enable = true;
+  #   enableCompletion = true;
+  #   autosuggestion.enable = true;
+  #   syntaxHighlighting.enable = true;
+  #   history = {
+  #     size = 10000;
+  #     save = 10000;
+  #     share = true;
+  #     ignoreDups = true;
+  #     ignoreSpace = true;
+  #   };
+  #   # Source our beautiful, modular rc from the dotfiles
+  #   initContent = "source ${config.xdg.configHome}/zshrc/20-customization";
+  # };
+  
+  # Tmux configuration - DISABLED: Managed by Hjem to avoid file conflicts
+  # programs.tmux = {
+  #   enable = true;
+  #   # Let the dotfile handle the full configuration
+  #   extraConfig = "source-file ${config.home.homeDirectory}/.tmux.conf";
+  # };
+
+  # Git delta configuration - DISABLED: Managed by Hjem to avoid file conflicts
   programs.git = {
     enable = true;
     userName = "zGabrielR1";
@@ -241,39 +265,15 @@ in
       color.branch = "auto";
       color.status = "auto";
     };
-    delta = {
-      enable = true;
-      options = {
-        navigate = true;
-        light = false;
-        side-by-side = true;
-        line-numbers = true;
-      };
-    };
-  };
-
-  # Zsh configuration
-  programs.zsh = {
-    enable = true;
-    enableCompletion = true;
-    autosuggestion.enable = true;
-    syntaxHighlighting.enable = true;
-    history = {
-      size = 10000;
-      save = 10000;
-      share = true;
-      ignoreDups = true;
-      ignoreSpace = true;
-    };
-    # Source our beautiful, modular rc from the dotfiles
-    initContent = "source ${config.xdg.configHome}/zshrc/20-customization";
-  };
-  
-  # Tmux configuration
-  programs.tmux = {
-    enable = true;
-    # Let the dotfile handle the full configuration
-    extraConfig = "source-file ${config.home.homeDirectory}/.tmux.conf";
+    # delta = {
+    #   enable = true;
+    #   options = {
+    #     navigate = true;
+    #     light = false;
+    #     side-by-side = true;
+    #     line-numbers = true;
+    #   };
+    # };
   };
 
   # Also import other modules for this user
