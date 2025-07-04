@@ -27,7 +27,7 @@
 
     # --- Theming ---
     nix-colors.url = "github:misterio77/nix-colors";
-    matugen.url = "github:InioX/matugen";
+    # matugen.url = "github:InioX/matugen";
 
     # --- Hyprland Ecosystem ---
     #hyprland = {
