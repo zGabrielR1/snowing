@@ -20,7 +20,7 @@
     #windsurf
     git
     gh
-    runc
+    #runc
     #cri-o
     distrobox
     distroshelf
