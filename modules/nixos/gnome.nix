@@ -1,6 +1,6 @@
 { config, lib, pkgs, ... }:
 
-{
+lib.mkIf (!config.services.desktopManager.gnome.enable) {
   # Enable GNOME services
   services.gnome = {
     # Enable GNOME keyring for secure storage

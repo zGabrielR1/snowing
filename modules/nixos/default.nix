@@ -7,6 +7,7 @@
     ./bluetooth.nix
     ./fonts.nix       
     ./flatpak.nix     
+    ./gnome.nix
     ./locale.nix
     ./networking.nix
     ./nix-ld.nix     
@@ -18,8 +19,6 @@
     ./hyprland.nix
     ./utils.nix
     # ./programs.nix
-  ] ++ lib.optionals (!config.services.desktopManager.gnome.enable) [
-    ./gnome.nix
   ];
 
   /*
