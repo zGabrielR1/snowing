@@ -149,5 +149,8 @@
     kontainer.enable = true;
   };
 
+  #Enable Tailscale
+  services.tailscale.enable = true;
+
   system.stateVersion = "25.11";
 }
