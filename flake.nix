@@ -142,14 +142,6 @@
             # Host specific config
             ./hosts/laptop/configuration.nix
 
-            # Hyprland Module (if needed system-wide for XDG portals etc.)
-            #inputs.hyprland.nixosModules.default
-
-            # Niri module (if you plan to use Niri system-wide for portals etc.)
-            # inputs.niri.nixosModules.niri # Or .default, check niri-flake docs
-
-            # Note: home-manager.useGlobalPkgs and useUserPackages are deprecated
-            # and removed. Configuration happens in home-manager.users.<name>
           ];
         };
       };
