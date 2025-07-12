@@ -142,6 +142,11 @@ in
     
     users.groups.libvirtd.members = mkIf (cfg.type == "virt-manager" || cfg.type == "both") [ cfg.username ];
     
+    # Add user to additional groups for VFIO/VM management
+    users.users.${cfg.username}.extraGroups = mkIf cfg.vfio.enable [
+      "qemu-libvirtd" "libvirtd" "disk"
+    ];
+    
     virtualisation.spiceUSBRedirection.enable = mkIf (cfg.type == "virt-manager" || cfg.type == "both") cfg.libvirt.enableSpice;
     
     # VirtualBox configuration
@@ -187,19 +192,33 @@ in
     boot.blacklistedKernelModules = mkIf (cfg.vfio.enable && cfg.vfio.blacklistGraphics) 
       (cfg.vfio.blacklistedDrivers ++ [ "amdgpu" "radeon" "nouveau" ]);
     
-    # Enhanced libvirt configuration with OVMF
-    virtualisation.libvirtd.enable = mkIf (cfg.type == "virt-manager" || cfg.type == "both") true;
+    # Extra modprobe config for VFIO-PCI IDs
+    boot.extraModprobeConfig = mkIf cfg.vfio.enable (
+      lib.optionalString (cfg.vfio.gpuIds != [])
+        ("options vfio-pci ids=" + lib.concatStringsSep "," cfg.vfio.gpuIds)
+    );
     
-    virtualisation.libvirtd.qemu = mkIf ((cfg.type == "virt-manager" || cfg.type == "both") && cfg.libvirt.enableOvmf) {
-      package = pkgs.qemu_kvm;
-      runAsRoot = true;
-      swtpm.enable = cfg.libvirt.enableTpm;
-      ovmf = {
-        enable = true;
-        packages = [(pkgs.OVMF.override {
-          secureBoot = cfg.libvirt.enableSecureBoot;
-          tpmSupport = cfg.libvirt.enableTpm;
-        }).fd];
+    # Enhanced libvirt configuration with OVMF
+    virtualisation.libvirtd = mkIf (cfg.type == "virt-manager" || cfg.type == "both") {
+      enable = true;
+      onBoot = "ignore";
+      onShutdown = "shutdown";
+      qemuOvmf = true;
+      qemuRunAsRoot = true;
+      qemu = {
+        package = pkgs.qemu_kvm;
+        verbatimConfig = ''
+          namespaces = []
+          user = "${cfg.username}"
+        '';
+        swtpm.enable = cfg.libvirt.enableTpm;
+        ovmf = mkIf cfg.libvirt.enableOvmf {
+          enable = true;
+          packages = [(pkgs.OVMF.override {
+            secureBoot = cfg.libvirt.enableSecureBoot;
+            tpmSupport = cfg.libvirt.enableTpm;
+          }).fd];
+        };
       };
     };
     
