@@ -142,8 +142,6 @@ in
     
     users.groups.libvirtd.members = mkIf (cfg.type == "virt-manager" || cfg.type == "both") [ cfg.username ];
     
-    virtualisation.libvirtd.enable = mkIf (cfg.type == "virt-manager" || cfg.type == "both") true;
-    
     virtualisation.spiceUSBRedirection.enable = mkIf (cfg.type == "virt-manager" || cfg.type == "both") cfg.libvirt.enableSpice;
     
     # VirtualBox configuration
@@ -191,20 +189,25 @@ in
     };
     
     # Enhanced libvirt configuration with OVMF
-    virtualisation.libvirtd = mkIf (cfg.type == "virt-manager" || cfg.type == "both") {
-      qemu = mkIf cfg.libvirt.enableOvmf {
-        package = pkgs.qemu_kvm;
-        runAsRoot = true;
-        swtpm.enable = cfg.libvirt.enableTpm;
-        ovmf = {
-          enable = true;
-          packages = [(pkgs.OVMF.override {
-            secureBoot = cfg.libvirt.enableSecureBoot;
-            tpmSupport = cfg.libvirt.enableTpm;
-          }).fd];
+    virtualisation.libvirtd = mkIf (cfg.type == "virt-manager" || cfg.type == "both") (mkMerge [
+      {
+        enable = true;
+      }
+      (mkIf cfg.libvirt.enableOvmf {
+        qemu = {
+          package = pkgs.qemu_kvm;
+          runAsRoot = true;
+          swtpm.enable = cfg.libvirt.enableTpm;
+          ovmf = {
+            enable = true;
+            packages = [(pkgs.OVMF.override {
+              secureBoot = cfg.libvirt.enableSecureBoot;
+              tpmSupport = cfg.libvirt.enableTpm;
+            }).fd];
+          };
         };
-      };
-    };
+      })
+    ]);
     
     # Hardware support
     hardware.opengl.enable = mkIf cfg.vfio.enable true;
