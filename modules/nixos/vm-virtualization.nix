@@ -152,41 +152,40 @@ in
     virtualisation.virtualbox.host.enableExtensionPack = mkIf (cfg.type == "virtualbox" || cfg.type == "both") true;
     
     # VFIO/GPU Passthrough Configuration
-    boot = mkIf cfg.vfio.enable {
-      initrd.kernelModules = vfioModules ++ 
-        (lib.optionals cfg.vfio.loadGraphicsAfterVfio cfg.vfio.graphicsDrivers);
-      
-      kernelParams = 
-        # IOMMU platform selection
-        (lib.optionals (cfg.vfio.platform == "intel") [ "intel_iommu=on" ]) ++
-        (lib.optionals (cfg.vfio.platform == "amd") [ "amd_iommu=on" ]) ++
-        # GPU passthrough IDs
-        (lib.optionals (cfg.vfio.gpuIds != []) 
-          [ ("vfio-pci.ids=" + lib.concatStringsSep "," cfg.vfio.gpuIds) ]) ++
-        # Graphics driver parameters to prevent conflicts
-        (lib.optionals cfg.vfio.blacklistGraphics [
-          "radeon.runpm=0"
-          "radeon.modeset=0"
-          "amdgpu.runpm=0"
-          "amdgpu.modeset=0"
-          "nouveau.runpm=0"
-          "nouveau.modeset=0"
-        ]) ++
-        # Single GPU passthrough specific configurations
-        (lib.optionals cfg.vfio.singleGpuPassthrough [
-          "video=efifb:off"
-          "video=vesafb:off"
-          "video=simplefb:off"
-          "vga=off"
-        ]) ++
-        # VGA switcheroo configuration for single GPU passthrough
-        (lib.optionals (cfg.vfio.singleGpuPassthrough && cfg.vfio.enableVgaSwitcheroo) [
-          "vga_switcheroo=1"
-        ]);
-      
-      blacklistedKernelModules = lib.optionals cfg.vfio.blacklistGraphics 
-        (cfg.vfio.blacklistedDrivers ++ [ "amdgpu" "radeon" "nouveau" ]);
-    };
+    boot.initrd.kernelModules = mkIf cfg.vfio.enable (vfioModules ++ 
+      (lib.optionals cfg.vfio.loadGraphicsAfterVfio cfg.vfio.graphicsDrivers));
+    
+    boot.kernelParams = mkIf cfg.vfio.enable (
+      # IOMMU platform selection
+      (lib.optionals (cfg.vfio.platform == "intel") [ "intel_iommu=on" ]) ++
+      (lib.optionals (cfg.vfio.platform == "amd") [ "amd_iommu=on" ]) ++
+      # GPU passthrough IDs
+      (lib.optionals (cfg.vfio.gpuIds != []) 
+        [ ("vfio-pci.ids=" + lib.concatStringsSep "," cfg.vfio.gpuIds) ]) ++
+      # Graphics driver parameters to prevent conflicts
+      (lib.optionals cfg.vfio.blacklistGraphics [
+        "radeon.runpm=0"
+        "radeon.modeset=0"
+        "amdgpu.runpm=0"
+        "amdgpu.modeset=0"
+        "nouveau.runpm=0"
+        "nouveau.modeset=0"
+      ]) ++
+      # Single GPU passthrough specific configurations
+      (lib.optionals cfg.vfio.singleGpuPassthrough [
+        "video=efifb:off"
+        "video=vesafb:off"
+        "video=simplefb:off"
+        "vga=off"
+      ]) ++
+      # VGA switcheroo configuration for single GPU passthrough
+      (lib.optionals (cfg.vfio.singleGpuPassthrough && cfg.vfio.enableVgaSwitcheroo) [
+        "vga_switcheroo=1"
+      ])
+    );
+    
+    boot.blacklistedKernelModules = mkIf (cfg.vfio.enable && cfg.vfio.blacklistGraphics) 
+      (cfg.vfio.blacklistedDrivers ++ [ "amdgpu" "radeon" "nouveau" ]);
     
     # Enhanced libvirt configuration with OVMF
     virtualisation.libvirtd = mkIf (cfg.type == "virt-manager" || cfg.type == "both") {
