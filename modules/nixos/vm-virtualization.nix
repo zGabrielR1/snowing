@@ -140,14 +140,14 @@ in
     # Basic virtualization setup
     programs.virt-manager.enable = mkIf (cfg.type == "virt-manager" || cfg.type == "both") true;
     
-    users.groups.libvirtd.members = mkIf (cfg.type == "virt-manager" || cfg.type == "both") [ cfg.username ];
+    users.groups.libvirtd.members = mkIf (cfg.type == "virt-manager" || cfg.type == "both") (lib.mkBefore [ cfg.username ]);
     
     virtualisation.spiceUSBRedirection.enable = mkIf (cfg.type == "virt-manager" || cfg.type == "both") cfg.libvirt.enableSpice;
     
     # VirtualBox configuration
     virtualisation.virtualbox.host.enable = mkIf (cfg.type == "virtualbox" || cfg.type == "both") true;
     
-    users.extraGroups.vboxusers.members = mkIf (cfg.type == "virtualbox" || cfg.type == "both") [ cfg.username ];
+    users.extraGroups.vboxusers.members = mkIf (cfg.type == "virtualbox" || cfg.type == "both") (lib.mkBefore [ cfg.username ]);
     
     virtualisation.virtualbox.host.enableExtensionPack = mkIf (cfg.type == "virtualbox" || cfg.type == "both") true;
     
