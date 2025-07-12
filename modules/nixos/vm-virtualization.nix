@@ -173,18 +173,21 @@ in
           "amdgpu.modeset=0"
           "nouveau.runpm=0"
           "nouveau.modeset=0"
+        ]) ++
+        # Single GPU passthrough specific configurations
+        (lib.optionals cfg.vfio.singleGpuPassthrough [
+          "video=efifb:off"
+          "video=vesafb:off"
+          "video=simplefb:off"
+          "vga=off"
+        ]) ++
+        # VGA switcheroo configuration for single GPU passthrough
+        (lib.optionals (cfg.vfio.singleGpuPassthrough && cfg.vfio.enableVgaSwitcheroo) [
+          "vga_switcheroo=1"
         ]);
       
       blacklistedKernelModules = lib.optionals cfg.vfio.blacklistGraphics 
         (cfg.vfio.blacklistedDrivers ++ [ "amdgpu" "radeon" "nouveau" ]);
-      
-      # Single GPU passthrough specific configurations
-      kernelParams = mkIf cfg.vfio.singleGpuPassthrough (lib.mkBefore [
-        "video=efifb:off"
-        "video=vesafb:off"
-        "video=simplefb:off"
-        "vga=off"
-      ]);
     };
     
     # Enhanced libvirt configuration with OVMF
@@ -254,11 +257,6 @@ in
             ;;
         esac
       '')
-    ];
-    
-    # VGA switcheroo configuration for single GPU passthrough
-    boot.kernelParams = mkIf (cfg.vfio.enable && cfg.vfio.singleGpuPassthrough && cfg.vfio.enableVgaSwitcheroo) [
-      "vga_switcheroo=1"
     ];
   };
 } 
