@@ -15,7 +15,7 @@
     ./packages.nix
     ./sddm-theme.nix
     ./virtualization.nix
-    #./vm-virtualization.nix  
+    ./vm-virtualization.nix  
     ./hyprland.nix
     ./utils.nix
     # ./programs.nix
