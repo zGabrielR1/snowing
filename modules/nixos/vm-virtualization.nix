@@ -221,8 +221,6 @@ in
         '')
       ])
       (mkIf cfg.vfio.singleGpuPassthrough [
-        # Single GPU passthrough utilities
-        pkgs.vga-switcheroo
         # Script to handle single GPU passthrough
         (pkgs.writeShellScriptBin "single-gpu-passthrough" ''
           #!/bin/bash
