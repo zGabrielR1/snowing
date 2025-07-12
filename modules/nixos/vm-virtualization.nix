@@ -13,7 +13,7 @@ let
     "vfio_pci"
     "vfio"
     "vfio_iommu_type1"
-    "vfio_virqfd"
+    # "vfio_virqfd"  # Not available in all kernel versions
   ];
   
   # Common graphics drivers that might conflict with VFIO
@@ -204,7 +204,7 @@ in
     };
     
     # Hardware support
-    hardware.opengl.enable = mkIf cfg.vfio.enable true;
+    hardware.graphics.enable = mkIf cfg.vfio.enable true;
     
     # Additional packages for VFIO/GPU passthrough
     environment.systemPackages = mkMerge [
