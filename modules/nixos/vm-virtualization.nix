@@ -86,6 +86,26 @@ in
         description = "Graphics drivers to load after VFIO modules";
         example = [ "i915" "nvidia" "nvidia_modeset" ];
       };
+      
+      # Single GPU Passthrough Options
+      singleGpuPassthrough = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Enable single GPU passthrough (host becomes headless when VM is running)";
+      };
+      
+      hostGraphicsDriver = mkOption {
+        type = types.str;
+        default = "i915";
+        description = "Graphics driver to use for host when VM is not running";
+        example = "i915";
+      };
+      
+      enableVgaSwitcheroo = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Enable VGA switcheroo for dynamic GPU switching";
+      };
     };
     
     # Advanced libvirt options
@@ -157,6 +177,14 @@ in
       
       blacklistedKernelModules = lib.optionals cfg.vfio.blacklistGraphics 
         (cfg.vfio.blacklistedDrivers ++ [ "amdgpu" "radeon" "nouveau" ]);
+      
+      # Single GPU passthrough specific configurations
+      kernelParams = mkIf cfg.vfio.singleGpuPassthrough (lib.mkBefore [
+        "video=efifb:off"
+        "video=vesafb:off"
+        "video=simplefb:off"
+        "vga=off"
+      ]);
     };
     
     # Enhanced libvirt configuration with OVMF
@@ -190,6 +218,47 @@ in
         -bios ${pkgs.OVMF.fd}/FV/OVMF.fd \
         "$@"
       '')
+    ] ++ lib.optionals cfg.vfio.singleGpuPassthrough [
+      # Single GPU passthrough utilities
+      pkgs.vga-switcheroo
+      # Script to handle single GPU passthrough
+      (pkgs.writeShellScriptBin "single-gpu-passthrough" ''
+        #!/bin/bash
+        # Single GPU passthrough helper script
+        
+        case "$1" in
+          "start")
+            echo "Preparing for single GPU passthrough..."
+            # Unbind GPU from host
+            echo 0000:01:00.0 > /sys/bus/pci/devices/0000:01:00.0/driver/unbind 2>/dev/null || true
+            echo 0000:01:00.1 > /sys/bus/pci/devices/0000:01:00.1/driver/unbind 2>/dev/null || true
+            # Bind to vfio-pci
+            echo 0000:01:00.0 > /sys/bus/pci/drivers/vfio-pci/bind 2>/dev/null || true
+            echo 0000:01:00.1 > /sys/bus/pci/drivers/vfio-pci/bind 2>/dev/null || true
+            echo "GPU bound to vfio-pci"
+            ;;
+          "stop")
+            echo "Restoring GPU to host..."
+            # Unbind from vfio-pci
+            echo 0000:01:00.0 > /sys/bus/pci/drivers/vfio-pci/unbind 2>/dev/null || true
+            echo 0000:01:00.1 > /sys/bus/pci/drivers/vfio-pci/unbind 2>/dev/null || true
+            # Rebind to host driver
+            echo 0000:01:00.0 > /sys/bus/pci/drivers/${cfg.vfio.hostGraphicsDriver}/bind 2>/dev/null || true
+            echo 0000:01:00.1 > /sys/bus/pci/drivers/${cfg.vfio.hostGraphicsDriver}/bind 2>/dev/null || true
+            echo "GPU restored to host"
+            ;;
+          *)
+            echo "Usage: single-gpu-passthrough {start|stop}"
+            echo "  start: Prepare GPU for passthrough"
+            echo "  stop:  Restore GPU to host"
+            ;;
+        esac
+      '')
+    ];
+    
+    # VGA switcheroo configuration for single GPU passthrough
+    boot.kernelParams = mkIf (cfg.vfio.enable && cfg.vfio.singleGpuPassthrough && cfg.vfio.enableVgaSwitcheroo) [
+      "vga_switcheroo=1"
     ];
   };
 } 

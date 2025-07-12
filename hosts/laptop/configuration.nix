@@ -152,5 +152,34 @@
   #Enable Tailscale
   services.tailscale.enable = true;
 
+  # ============================================================================
+  # VIRTUALIZATION CONFIGURATION
+  # ============================================================================
+  
+  # Enable basic virt-manager with QEMU/KVM and IOMMU
+  virtualisation.vm = {
+    enable = true;
+    type = "virt-manager";
+    username = "zrrg";
+    
+    # Enable VFIO for IOMMU support with single GPU passthrough
+    vfio = {
+      enable = true;
+      platform = "intel";  # Change to "amd" if you have an AMD CPU
+      singleGpuPassthrough = true;  # Enable single GPU passthrough
+      hostGraphicsDriver = "i915";  # Intel iGPU for host when VM is not running
+      enableVgaSwitcheroo = true;   # Enable dynamic GPU switching
+      # No gpuIds specified - will be configured dynamically
+    };
+    
+    # Basic libvirt configuration
+    libvirt = {
+      enableOvmf = true;
+      enableSecureBoot = true;
+      enableTpm = true;
+      enableSpice = true;
+    };
+  };
+
   system.stateVersion = "25.11";
 }

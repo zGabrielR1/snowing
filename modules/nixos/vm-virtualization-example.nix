@@ -166,4 +166,83 @@
     };
   };
   */
+
+  # ============================================================================
+  # SCENARIO 9: Single GPU Passthrough (NVIDIA)
+  # ============================================================================
+  /*
+  virtualisation.vm = {
+    enable = true;
+    type = "virt-manager";
+    username = "zrrg";
+    
+    vfio = {
+      enable = true;
+      platform = "intel";
+      singleGpuPassthrough = true;
+      hostGraphicsDriver = "i915";  # Intel iGPU for host
+      enableVgaSwitcheroo = true;
+      # No gpuIds needed - handled dynamically
+    };
+    
+    libvirt = {
+      enableOvmf = true;
+      enableSecureBoot = true;
+      enableTpm = true;
+      enableSpice = true;
+    };
+  };
+  */
+
+  # ============================================================================
+  # SCENARIO 10: Single GPU Passthrough (AMD)
+  # ============================================================================
+  /*
+  virtualisation.vm = {
+    enable = true;
+    type = "virt-manager";
+    username = "zrrg";
+    
+    vfio = {
+      enable = true;
+      platform = "amd";
+      singleGpuPassthrough = true;
+      hostGraphicsDriver = "amdgpu";  # AMD iGPU for host
+      enableVgaSwitcheroo = true;
+    };
+    
+    libvirt = {
+      enableOvmf = true;
+      enableSecureBoot = true;
+      enableTpm = true;
+      enableSpice = true;
+    };
+  };
+  */
+
+  # ============================================================================
+  # SCENARIO 11: Single GPU Passthrough with Manual Control
+  # ============================================================================
+  /*
+  virtualisation.vm = {
+    enable = true;
+    type = "virt-manager";
+    username = "zrrg";
+    
+    vfio = {
+      enable = true;
+      platform = "intel";
+      singleGpuPassthrough = true;
+      hostGraphicsDriver = "i915";
+      enableVgaSwitcheroo = false;  # Manual control only
+    };
+    
+    libvirt = {
+      enableOvmf = true;
+      enableSecureBoot = true;
+      enableTpm = true;
+      enableSpice = true;
+    };
+  };
+  */
 } 
