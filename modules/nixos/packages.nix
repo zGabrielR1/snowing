@@ -29,13 +29,14 @@
     podman
     #pods
     github-desktop
-    kitty
+    kitty 
     awesome
     niri
     flatpak
     bottles
     wineWowPackages.stagingFull
     jetbrains-toolbox
+    nix-index
     #gparted
     
   ];
