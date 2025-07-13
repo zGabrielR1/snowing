@@ -25,7 +25,7 @@
     distrobox
     distroshelf
     #boxbuddy
-    toolbox
+    #toolbox
     podman
     #pods
     github-desktop
