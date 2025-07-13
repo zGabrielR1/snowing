@@ -203,8 +203,8 @@ in
       enable = true;
       onBoot = "ignore";
       onShutdown = "shutdown";
-      qemuOvmf = true;
-      qemuRunAsRoot = true;
+      qemu.ovmf.enable = true;
+      qemu.runAsRoot = true;
       qemu = {
         package = pkgs.qemu_kvm;
         verbatimConfig = ''
