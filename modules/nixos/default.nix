@@ -2,6 +2,10 @@
 # Auto-imports all .nix modules in this directory except itself for easier modularity.
 { ... }:
 {
-  imports = builtins.filter (f: f != ./default.nix)
-    (map (n: ./. + "/${n}") (builtins.attrNames (builtins.readDir ./.)));
+  imports = 
+  let
+    isNixFile = name: builtins.match ".*\\.nix$" name != null && name != "default.nix";
+    files = builtins.attrNames (builtins.readDir ./.);
+  in
+    map (n: ./. + "/${n}") (builtins.filter isNixFile files);
 }
