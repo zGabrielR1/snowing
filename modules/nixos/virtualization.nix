@@ -9,16 +9,15 @@
       dockerCompat = true;
       defaultNetwork.settings.dns_enabled = true;
     };
-    /*
-    docker = {
-      enable = true;
-      rootless = {
-      enable = true;
-      setSocketVariable = true;
-    };
-  };
-    }
-    incus.enable = true;
-    */
+    
+    # Alternative container runtimes (disabled):
+    # docker = {
+    #   enable = true;
+    #   rootless = {
+    #     enable = true;
+    #     setSocketVariable = true;
+    #   };
+    # };
+    # incus.enable = true;
   };
 }

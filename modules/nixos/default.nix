@@ -21,11 +21,5 @@
     # ./programs.nix
   ];
 
-  /*
-  virtualisation.vm = {
-    enable = true;
-    type = "virt-manager";
-    username = "zrrg"; 
-  };
-  */
+  # VM configuration moved to host-specific config
 }

@@ -6,12 +6,12 @@
 }: let
   # Generic packages that are useful on any host
   generic = [
-    # Terminal and shell tools
+    # === Terminal and Shell Tools ===
     pkgs.foot
     pkgs.zsh
     pkgs.fish
     
-    # System utilities
+    # === System Utilities ===
     pkgs.btop
     pkgs.htop
     pkgs.eza
@@ -21,22 +21,22 @@
     pkgs.fzf
     pkgs.zoxide
     
-    # Development tools
+    # === Development Tools ===
     pkgs.git
     pkgs.delta
     pkgs.lazygit
     
-    # Entertainment
+    # === Entertainment ===
     pkgs.cbonsai
     pkgs.cowsay
     pkgs.mpv
     
-    # Network tools
+    # === Network Tools ===
     pkgs.curl
     pkgs.wget
     pkgs.nmap
     
-    # File management
+    # === File Management ===
     pkgs.unzip
     pkgs.p7zip
     pkgs.rsync

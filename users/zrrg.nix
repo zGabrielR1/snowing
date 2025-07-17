@@ -27,18 +27,8 @@ in {
       "scanner"
     ];
     
-    # Common packages for all hosts
-    packages = [
-      pkgs.git
-      pkgs.bat
-      pkgs.delta
-      pkgs.btop
-      pkgs.eza
-      pkgs.ripgrep
-      pkgs.fd
-      pkgs.fzf
-      pkgs.zoxide
-    ];
+    # Common packages for all hosts - moved to user-configuration.nix to avoid duplication
+    packages = [ ];
   };
 
   # Hjem configuration for dotfile management
