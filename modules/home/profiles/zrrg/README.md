@@ -1,3 +1,5 @@
+/*
+
 # zrrg Home-Manager Profile
 
 ## Modularization
@@ -125,3 +127,5 @@ The configuration is modular and can be easily customized:
 - GTK applications are configured for dark theme preference
 - Fonts include Nerd Fonts for icons and Noto fonts for text
 - The setup includes comprehensive aliases for modern CLI tools 
+
+*/
