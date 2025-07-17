@@ -1,25 +1,7 @@
 # modules/nixos/default.nix
-{ config, pkgs, lib, inputs, ... }:
-
+# Auto-imports all .nix modules in this directory except itself for easier modularity.
+{ ... }:
 {
-  imports = [
-    ./audio.nix
-    ./bluetooth.nix
-    ./fonts.nix       
-    ./flatpak.nix     
-    ./gnome.nix
-    ./locale.nix
-    ./networking.nix
-    ./nix-ld.nix     
-    ./nix-settings.nix
-    ./packages.nix
-    ./sddm-theme.nix
-    ./virtualization.nix
-    ./vm-virtualization.nix  
-    ./hyprland.nix
-    ./utils.nix
-    # ./programs.nix
-  ];
-
-  # VM configuration moved to host-specific config
+  imports = builtins.filter (f: f != ./default.nix)
+    (map (n: ./. + "/${n}") (builtins.attrNames (builtins.readDir ./.)));
 }

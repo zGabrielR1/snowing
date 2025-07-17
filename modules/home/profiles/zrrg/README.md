@@ -1,3 +1,13 @@
+# zrrg Home-Manager Profile
+
+## Modularization
+
+All `.nix` files in this directory (except `default.nix`) are automatically imported. To add new configuration modules (e.g., `programs.nix`, `shell.nix`, `devtools.nix`), simply add them here and they will be included automatically.
+
+- Place window manager configs in the `wm/` subdirectory and import them from a module here if needed.
+
+---
+
 # ZRRG Home Manager Profile
 
 This profile integrates the lazuhyprDotfiles with home-manager for a complete desktop environment setup.
