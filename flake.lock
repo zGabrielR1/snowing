@@ -244,26 +244,6 @@
         "type": "github"
       }
     },
-    "nix-index-db": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1751170039,
-        "narHash": "sha256-3EKpUmyGmHYA/RuhZjINTZPU+OFWko0eDwazUOW64nw=",
-        "owner": "Mic92",
-        "repo": "nix-index-database",
-        "rev": "9c932ae632d6b5150515e5749b198c175d8565db",
-        "type": "github"
-      },
-      "original": {
-        "owner": "Mic92",
-        "repo": "nix-index-database",
-        "type": "github"
-      }
-    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1751271578,
@@ -340,7 +320,6 @@
         "hjem": "hjem",
         "home-manager": "home-manager_2",
         "nix-gaming": "nix-gaming",
-        "nix-index-db": "nix-index-db",
         "nixpkgs": "nixpkgs_2",
         "nur": "nur",
         "systems": "systems_2",
