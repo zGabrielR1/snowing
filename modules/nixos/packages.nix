@@ -38,6 +38,7 @@
     jetbrains-toolbox
     nix-index
     quickemu
+    quickgui
     #gparted
     
   ];
