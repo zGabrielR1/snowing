@@ -30,13 +30,14 @@
     #pods
     github-desktop
     kitty 
-    awesome
+    #awesome
     niri
     flatpak
     bottles
     wineWowPackages.stagingFull
     jetbrains-toolbox
     nix-index
+    quickemu
     #gparted
     
   ];
