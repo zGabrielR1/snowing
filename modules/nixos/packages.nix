@@ -34,7 +34,7 @@
     niri
     flatpak
     bottles
-    wineWowPackages.stagingFull
+    wineWow64Packages.stagingFull
     jetbrains-toolbox
     nix-index
     quickemu
