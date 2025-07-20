@@ -31,7 +31,7 @@
     github-desktop
     kitty 
     #awesome
-    niri
+    #niri
     flatpak
     bottles
     wineWow64Packages.stagingFull
