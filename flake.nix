@@ -64,6 +64,7 @@
     #   url = "github:Mic92/nix-index-database";
     #   inputs.nixpkgs.follows = "nixpkgs";
     # };
+    /*
     nix-gaming = {
       url = "github:fufexan/nix-gaming";
       inputs = {
@@ -71,6 +72,7 @@
         flake-parts.follows = "flake-parts";
       };
     };
+    */
     # nix-ld = {
     #   url = "github:Mic92/nix-ld";
     #   inputs.nixpkgs.follows = "nixpkgs";
