@@ -87,7 +87,7 @@
     #};
 
     # --- Compatibility ---
-    flake-compat.url = "github:edolstra/flake-compat";
+    #flake-compat.url = "github:edolstra/flake-compat";
 
     # --- Community Repos ---
     nur.url = "github:nix-community/NUR";
