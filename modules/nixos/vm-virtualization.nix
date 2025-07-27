@@ -297,16 +297,16 @@ in
               if [[ "$current_driver" == "$driver_name" ]]; then
                 echo "$pci_id" > "/sys/bus/pci/devices/$pci_id/driver/unbind" 2>/dev/null
                 if [[ $? -eq 0 ]]; then
-                  echo -e "${GREEN}✓${NC} Unbound $pci_id from $driver_name"
+                  echo -e "$${GREEN}✓$${NC} Unbound $pci_id from $driver_name"
                 else
-                  echo -e "${RED}✗${NC} Failed to unbind $pci_id from $driver_name"
+                  echo -e "$${RED}✗$${NC} Failed to unbind $pci_id from $driver_name"
                   return 1
                 fi
               else
-                echo -e "${YELLOW}⚠${NC} $pci_id is bound to $current_driver, not $driver_name"
+                echo -e "$${YELLOW}⚠$${NC} $pci_id is bound to $current_driver, not $driver_name"
               fi
             else
-              echo -e "${BLUE}ℹ${NC} $pci_id is not bound to any driver"
+              echo -e "$${BLUE}ℹ$${NC} $pci_id is not bound to any driver"
             fi
           }
           
@@ -317,26 +317,26 @@ in
             
             echo "$pci_id" > "/sys/bus/pci/drivers/$driver_name/bind" 2>/dev/null
             if [[ $? -eq 0 ]]; then
-              echo -e "${GREEN}✓${NC} Bound $pci_id to $driver_name"
+              echo -e "$${GREEN}✓$${NC} Bound $pci_id to $driver_name"
             else
-              echo -e "${RED}✗${NC} Failed to bind $pci_id to $driver_name"
+              echo -e "$${RED}✗$${NC} Failed to bind $pci_id to $driver_name"
               return 1
             fi
           }
           
           case "$1" in
             "start")
-              echo -e "${BLUE}🚀 Preparing for single GPU passthrough...${NC}"
+              echo -e "$${BLUE}🚀 Preparing for single GPU passthrough...$${NC}"
               echo
               
               # Show current GPU information
-              echo -e "${YELLOW}Current GPU devices:${NC}"
+              echo -e "$${YELLOW}Current GPU devices:$${NC}"
               get_gpu_info | while read line; do
                 echo "  $line"
               done
               echo
               
-              echo -e "${YELLOW}Current audio devices:${NC}"
+              echo -e "$${YELLOW}Current audio devices:$${NC}"
               get_audio_info | while read line; do
                 echo "  $line"
               done
@@ -345,7 +345,7 @@ in
               # Process GPU devices
               local gpu_error=false
               for gpu in $(get_gpu_pci_ids); do
-                echo -e "${BLUE}Processing GPU: $gpu${NC}"
+                echo -e "$${BLUE}Processing GPU: $gpu$${NC}"
                 if ! safe_unbind "$gpu" "${cfg.vfio.hostGraphicsDriver}"; then
                   gpu_error=true
                 fi
@@ -357,7 +357,7 @@ in
               
               # Process audio devices
               for audio in $(get_audio_pci_ids); do
-                echo -e "${BLUE}Processing audio: $audio${NC}"
+                echo -e "$${BLUE}Processing audio: $audio$${NC}"
                 if ! safe_unbind "$audio" "${cfg.vfio.hostGraphicsDriver}"; then
                   gpu_error=true
                 fi
@@ -368,22 +368,22 @@ in
               done
               
               if [[ "$gpu_error" == "true" ]]; then
-                echo -e "${RED}❌ Some devices failed to bind to vfio-pci${NC}"
-                echo -e "${YELLOW}You may need to check your configuration or reboot${NC}"
+                echo -e "$${RED}❌ Some devices failed to bind to vfio-pci$${NC}"
+                echo -e "$${YELLOW}You may need to check your configuration or reboot$${NC}"
                 exit 1
               else
-                echo -e "${GREEN}✅ All GPUs successfully bound to vfio-pci${NC}"
+                echo -e "$${GREEN}✅ All GPUs successfully bound to vfio-pci$${NC}"
               fi
               ;;
               
             "stop")
-              echo -e "${BLUE}🔄 Restoring GPU to host...${NC}"
+              echo -e "$${BLUE}🔄 Restoring GPU to host...$${NC}"
               echo
               
               # Process GPU devices
               local gpu_error=false
               for gpu in $(get_gpu_pci_ids); do
-                echo -e "${BLUE}Processing GPU: $gpu${NC}"
+                echo -e "$${BLUE}Processing GPU: $gpu$${NC}"
                 if ! safe_unbind "$gpu" "vfio-pci"; then
                   gpu_error=true
                 fi
@@ -395,7 +395,7 @@ in
               
               # Process audio devices
               for audio in $(get_audio_pci_ids); do
-                echo -e "${BLUE}Processing audio: $audio${NC}"
+                echo -e "$${BLUE}Processing audio: $audio$${NC}"
                 if ! safe_unbind "$audio" "vfio-pci"; then
                   gpu_error=true
                 fi
@@ -406,56 +406,56 @@ in
               done
               
               if [[ "$gpu_error" == "true" ]]; then
-                echo -e "${RED}❌ Some devices failed to restore to host${NC}"
-                echo -e "${YELLOW}You may need to check your configuration or reboot${NC}"
+                echo -e "$${RED}❌ Some devices failed to restore to host$${NC}"
+                echo -e "$${YELLOW}You may need to check your configuration or reboot$${NC}"
                 exit 1
               else
-                echo -e "${GREEN}✅ All GPUs successfully restored to host${NC}"
+                echo -e "$${GREEN}✅ All GPUs successfully restored to host$${NC}"
               fi
               ;;
               
             "status")
-              echo -e "${BLUE}📊 GPU Passthrough Status${NC}"
+              echo -e "$${BLUE}📊 GPU Passthrough Status$${NC}"
               echo
               
-              echo -e "${YELLOW}GPU devices:${NC}"
+              echo -e "$${YELLOW}GPU devices:$${NC}"
               for gpu in $(get_gpu_pci_ids); do
                 local driver=$(get_current_driver "$gpu")
-                local status_color=$([[ "$driver" == "vfio-pci" ]] && echo "$GREEN" || echo "$RED")
-                echo -e "  $gpu: ${status_color}$driver${NC}"
+                local status_color=$$([[ "$driver" == "vfio-pci" ]] && echo "$${GREEN}" || echo "$${RED}")
+                echo -e "  $gpu: $${status_color}$driver$${NC}"
               done
               
-              echo -e "${YELLOW}Audio devices:${NC}"
+              echo -e "$${YELLOW}Audio devices:$${NC}"
               for audio in $(get_audio_pci_ids); do
                 local driver=$(get_current_driver "$audio")
-                local status_color=$([[ "$driver" == "vfio-pci" ]] && echo "$GREEN" || echo "$RED")
-                echo -e "  $audio: ${status_color}$driver${NC}"
+                local status_color=$$([[ "$driver" == "vfio-pci" ]] && echo "$${GREEN}" || echo "$${RED}")
+                echo -e "  $audio: $${status_color}$driver$${NC}"
               done
               ;;
               
             "info")
-              echo -e "${BLUE}ℹ GPU Information${NC}"
+              echo -e "$${BLUE}ℹ GPU Information$${NC}"
               echo
-              echo -e "${YELLOW}GPU devices:${NC}"
+              echo -e "$${YELLOW}GPU devices:$${NC}"
               get_gpu_info
               echo
-              echo -e "${YELLOW}Audio devices:${NC}"
+              echo -e "$${YELLOW}Audio devices:$${NC}"
               get_audio_info
               echo
-              echo -e "${YELLOW}IOMMU groups:${NC}"
+              echo -e "$${YELLOW}IOMMU groups:$${NC}"
               find /sys/kernel/iommu_groups/ -type l 2>/dev/null | head -20
               ;;
               
             *)
-              echo -e "${BLUE}Single GPU Passthrough Helper Script${NC}"
+              echo -e "$${BLUE}Single GPU Passthrough Helper Script$${NC}"
               echo
               echo "Usage: single-gpu-passthrough {start|stop|status|info}"
               echo
               echo "Commands:"
-              echo -e "  ${GREEN}start${NC}  - Prepare GPU for passthrough (bind to vfio-pci)"
-              echo -e "  ${RED}stop${NC}   - Restore GPU to host (bind to ${cfg.vfio.hostGraphicsDriver})"
-              echo -e "  ${BLUE}status${NC} - Show current binding status"
-              echo -e "  ${YELLOW}info${NC}   - Show detailed GPU and IOMMU information"
+              echo -e "  $${GREEN}start$${NC}  - Prepare GPU for passthrough (bind to vfio-pci)"
+              echo -e "  $${RED}stop$${NC}   - Restore GPU to host (bind to ${cfg.vfio.hostGraphicsDriver})"
+              echo -e "  $${BLUE}status$${NC} - Show current binding status"
+              echo -e "  $${YELLOW}info$${NC}   - Show detailed GPU and IOMMU information"
               echo
               echo "This script dynamically detects GPU and audio devices and handles"
               echo "binding/unbinding them for single GPU passthrough scenarios."
