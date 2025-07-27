@@ -35,7 +35,7 @@
     flatpak
     bottles
     wineWow64Packages.stagingFull
-    jetbrains-toolbox
+    #jetbrains-toolbox
     nix-index
     quickemu
     quickgui
