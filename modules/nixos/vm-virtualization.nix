@@ -392,9 +392,16 @@ in
         onBoot = "ignore";
         onShutdown = "shutdown";
         
-        # Use KVM by default
+        # Use KVM by default with performance optimizations
         qemu = {
-          package = pkgs.qemu_kvm;
+          package = if cfg.libvirt.cpuPinning.enable then
+            (pkgs.qemu_kvm.override {
+              smbdSupport = true;
+              seccompSupport = true;
+            })
+          else
+            pkgs.qemu_kvm;
+            
           runAsRoot = true;
           
           # Performance optimizations
@@ -403,12 +410,6 @@ in
               "${pkgs.OVMF}/FV/OVMF.fd:${pkgs.OVMF}/FV/OVMF_VARS.fd"
             ]
           '';
-          
-          # CPU pinning
-          package = mkIf (cfg.libvirt.cpuPinning.enable) (pkgs.qemu_kvm.override {
-            smbdSupport = true;
-            seccompSupport = true;
-          });
         };
         
         # Network configuration
