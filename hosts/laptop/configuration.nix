@@ -162,22 +162,48 @@
     type = "virt-manager";
     username = "zrrg";
     
-    # Enable VFIO for IOMMU support with single GPU passthrough
+    # VFIO/GPU Passthrough configuration
     vfio = {
       enable = true;
-      platform = "intel";  # Change to "amd" if you have an AMD CPU
+      platform = "intel";  # Intel CPU with IOMMU
       singleGpuPassthrough = true;  # Enable single GPU passthrough
       hostGraphicsDriver = "i915";  # Intel iGPU for host when VM is not running
       enableVgaSwitcheroo = true;   # Enable dynamic GPU switching
-      # No gpuIds specified - will be configured dynamically
+      blacklistGraphics = true;      # Blacklist conflicting graphics drivers
+      
+      # HugePages for better performance
+      hugepages = {
+        enable = true;
+        size = "1G";
+        count = 8;
+      };
+      
+      # Looking Glass support for better VM display performance
+      lookingGlass = {
+        enable = true;
+        user = "zrrg";
+      };
     };
     
-    # Basic libvirt configuration
+    # Libvirt configuration
     libvirt = {
-      enableOvmf = true;
-      enableSecureBoot = true;
-      enableTpm = true;
-      enableSpice = true;
+      enableOvmf = true;       # UEFI firmware support
+      enableSecureBoot = true; # Secure Boot in OVMF
+      enableTpm = true;        # TPM 2.0 emulation
+      enableSpice = true;      # SPICE protocol for better VM display
+    };
+    
+    # Performance tuning
+    performance = {
+      enable = true;
+      cpu = {
+        enable = true;
+        governor = "performance";
+      };
+      network = {
+        enable = true;
+        tcpFastOpen = true;
+      };
     };
   };
 
