@@ -420,15 +420,17 @@ in
       networking.firewall.checkReversePath = false;
       
       # SPICE configuration
-      environment.etc = mkIf cfg.libvirt.enableSpice {
-        "polkit-1/rules.d/50-libvirt.rules".text = ''
-          polkit.addRule(function(action, subject) {
-            if (action.id == "org.libvirt.unix.manage" &&
-                subject.isInGroup("libvirt")) {
-              return polkit.Result.YES;
-            }
-          });
-        '';
+      environment.etc = {
+        "polkit-1/rules.d/50-libvirt.rules" = mkIf cfg.libvirt.enableSpice {
+          text = ''
+            polkit.addRule(function(action, subject) {
+              if (action.id == "org.libvirt.unix.manage" &&
+                  subject.isInGroup("libvirt")) {
+                return polkit.Result.YES;
+              }
+            });
+          '';
+        };
       };
     })
     
