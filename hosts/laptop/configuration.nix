@@ -146,7 +146,6 @@
   # Enable Flatpak apps
   services.flatpak-apps = {
     flatseal.enable = true;
-    kontainer.enable = true;
   };
 
   #Enable Tailscale
