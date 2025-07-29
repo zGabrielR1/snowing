@@ -490,55 +490,56 @@ in
       # Hardware support
       hardware.graphics.enable = mkIf cfg.vfio.enable true;
     
-    # Additional packages for VFIO/GPU passthrough
-    environment.systemPackages = mkMerge [
-      (mkIf (cfg.vfio.enable && (cfg.type == "virt-manager" || cfg.type == "both")) [
-        pkgs.OVMF
-        pkgs.qemu
-        pkgs.dnsmasq
-        pkgs.edk2
-        # Convenience script for QEMU with UEFI
-        (pkgs.writeShellScriptBin "qemu-system-x86_64-uefi" ''
-          qemu-system-x86_64 \
-          -bios ${pkgs.OVMF.fd}/FV/OVMF.fd \
-          "$@"
-        '')
-      ])
-      (mkIf cfg.vfio.singleGpuPassthrough [
-        # Script to handle single GPU passthrough
-        (pkgs.writeShellScriptBin "single-gpu-passthrough" ''
-          #!/bin/bash
-          # Single GPU passthrough helper script
-          
-          case "$1" in
-            "start")
-              echo "Preparing for single GPU passthrough..."
-              # Unbind GPU from host
-              echo 0000:01:00.0 > /sys/bus/pci/devices/0000:01:00.0/driver/unbind 2>/dev/null || true
-              echo 0000:01:00.1 > /sys/bus/pci/devices/0000:01:00.1/driver/unbind 2>/dev/null || true
-              # Bind to vfio-pci
-              echo 0000:01:00.0 > /sys/bus/pci/drivers/vfio-pci/bind 2>/dev/null || true
-              echo 0000:01:00.1 > /sys/bus/pci/drivers/vfio-pci/bind 2>/dev/null || true
-              echo "GPU bound to vfio-pci"
-              ;;
-            "stop")
-              echo "Restoring GPU to host..."
-              # Unbind from vfio-pci
-              echo 0000:01:00.0 > /sys/bus/pci/drivers/vfio-pci/unbind 2>/dev/null || true
-              echo 0000:01:00.1 > /sys/bus/pci/drivers/vfio-pci/unbind 2>/dev/null || true
-              # Rebind to host driver
-              echo 0000:01:00.0 > /sys/bus/pci/drivers/${cfg.vfio.hostGraphicsDriver}/bind 2>/dev/null || true
-              echo 0000:01:00.1 > /sys/bus/pci/drivers/${cfg.vfio.hostGraphicsDriver}/bind 2>/dev/null || true
-              echo "GPU restored to host"
-              ;;
-            *)
-              echo "Usage: single-gpu-passthrough {start|stop}"
-              echo "  start: Prepare GPU for passthrough"
-              echo "  stop:  Restore GPU to host"
-              ;;
-          esac
-        '')
-      ])
-    ];
-  };
+      # Additional packages for VFIO/GPU passthrough
+      environment.systemPackages = mkMerge [
+        (mkIf (cfg.vfio.enable) [
+          pkgs.OVMF
+          pkgs.qemu
+          pkgs.dnsmasq
+          pkgs.edk2
+          # Convenience script for QEMU with UEFI
+          (pkgs.writeShellScriptBin "qemu-system-x86_64-uefi" ''
+            qemu-system-x86_64 \
+            -bios ${pkgs.OVMF.fd}/FV/OVMF.fd \
+            "$@"
+          '')
+        ])
+        (mkIf (cfg.vfio.enable && cfg.vfio.singleGpuPassthrough) [
+          # Script to handle single GPU passthrough
+          (pkgs.writeShellScriptBin "single-gpu-passthrough" ''
+            #!/bin/bash
+            # Single GPU passthrough helper script
+            
+            case "$1" in
+              "start")
+                echo "Preparing for single GPU passthrough..."
+                # Unbind GPU from host
+                echo 0000:01:00.0 > /sys/bus/pci/devices/0000:01:00.0/driver/unbind 2>/dev/null || true
+                echo 0000:01:00.1 > /sys/bus/pci/devices/0000:01:00.1/driver/unbind 2>/dev/null || true
+                # Bind to vfio-pci
+                echo 0000:01:00.0 > /sys/bus/pci/drivers/vfio-pci/bind 2>/dev/null || true
+                echo 0000:01:00.1 > /sys/bus/pci/drivers/vfio-pci/bind 2>/dev/null || true
+                echo "GPU bound to vfio-pci"
+                ;;
+              "stop")
+                echo "Restoring GPU to host..."
+                # Unbind from vfio-pci
+                echo 0000:01:00.0 > /sys/bus/pci/drivers/vfio-pci/unbind 2>/dev/null || true
+                echo 0000:01:00.1 > /sys/bus/pci/drivers/vfio-pci/unbind 2>/dev/null || true
+                # Rebind to host driver
+                echo 0000:01:00.0 > /sys/bus/pci/drivers/${cfg.vfio.hostGraphicsDriver}/bind 2>/dev/null || true
+                echo 0000:01:00.1 > /sys/bus/pci/drivers/${cfg.vfio.hostGraphicsDriver}/bind 2>/dev/null || true
+                echo "GPU restored to host"
+                ;;
+              *)
+                echo "Usage: single-gpu-passthrough {start|stop}"
+                echo "  start: Prepare GPU for passthrough"
+                echo "  stop:  Restore GPU to host"
+                ;;
+            esac
+          '')
+        ])
+      ];
+    };
+  });
 } 
