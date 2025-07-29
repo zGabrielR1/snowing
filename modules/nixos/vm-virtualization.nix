@@ -327,11 +327,27 @@ in
         "vm.nr_hugepages_mempolicy" = cfg.vfio.hugepages.count;
       } else {}));
       
-      # Looking Glass setup
-      environment.systemPackages = mkIf cfg.vfio.lookingGlass.enable [
-        pkgs.looking-glass-client
-        pkgs.spice-gtk
-      ];
+      # System packages for VFIO features
+      environment.systemPackages = with pkgs; (
+        # Looking Glass packages
+        (optionals cfg.vfio.lookingGlass.enable [
+          looking-glass-client
+          spice-gtk
+        ]) ++
+        # IOMMU group validation script
+        (optionals cfg.libvirt.iommuGroups.enable [
+          (writeScriptBin "check-iommu'' ''
+            #!${runtimeShell}
+            shopt -s nullglob
+            for g in /sys/kernel/iommu_groups/*; do
+                echo "IOMMU Group $ {g##*:}:"
+                for d in $g/devices/*; do
+                    echo -e '\t'$(lspci -nns "$ {d##*/}")
+                done;
+            done;
+          '')
+        ])
+      );
       
       # udev rules for Looking Glass
       services.udev.extraRules = mkIf cfg.vfio.lookingGlass.enable ''
@@ -343,7 +359,7 @@ in
       services.tpm2.enable = mkIf cfg.libvirt.enableTpm true;
       
       # OVMF firmware
-      virtualisation.libvirtd = mkIf (cfg.type == "virt-manager" || cfg.type == "both") {
+      virtualisation.libvirtd = mkIf (cfg.type == "virt-manager") {
         enable = true;
         qemu = {
           package = pkgs.qemu_kvm;
@@ -364,20 +380,6 @@ in
       # CPU performance governor
       powerManagement.cpuFreqGovernor = mkIf (cfg.performance.enable && cfg.performance.cpu.enable) 
         (mkForce cfg.performance.cpu.governor);
-      
-      # IOMMU group validation script
-      environment.systemPackages = mkIf (cfg.libvirt.iommuGroups.enable) [
-        (pkgs.writeScriptBin "check-iommu" ''
-          #!${pkgs.runtimeShell}
-          shopt -s nullglob
-          for g in /sys/kernel/iommu_groups/*; do
-              echo "IOMMU Group $ {g##*:}:"
-              for d in $g/devices/*; do
-                  echo -e '\t'$(lspci -nns "$ {d##*/}")
-              done;
-          done;
-        '')
-      ];
     })
     
     # Libvirt configuration for QEMU/KVM
