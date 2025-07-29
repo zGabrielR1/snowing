@@ -336,15 +336,15 @@ in
         ]) ++
         # IOMMU group validation script
         (optionals cfg.libvirt.iommuGroups.enable [
-          (writeScriptBin "check-iommu'' ''
-            #!${runtimeShell}
+          (writeScriptBin "check-iommu" ''
+            #!${pkgs.runtimeShell}
             shopt -s nullglob
             for g in /sys/kernel/iommu_groups/*; do
-                echo "IOMMU Group $ {g##*:}:"
-                for d in $g/devices/*; do
-                    echo -e '\t'$(lspci -nns "$ {d##*/}")
-                done;
-            done;
+                echo "IOMMU Group ''${g##*:}:"
+                for d in "$g"/devices/*; do
+                    echo -e "\t"$(lspci -nns "''${d##*/}")
+                done
+            done
           '')
         ])
       );
