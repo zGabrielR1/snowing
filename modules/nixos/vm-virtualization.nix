@@ -461,26 +461,29 @@ in
       # CPU performance tuning
       powerManagement.cpuFreqGovernor = mkIf cfg.performance.cpu.enable 
         (mkForce cfg.performance.cpu.governor);
-    })
-  ]);
-      enable = true;
-      onBoot = "ignore";
-      onShutdown = "shutdown";
-      #qemu.ovmf.enable = true;
-      qemu.runAsRoot = true;
-      qemu = {
-        package = pkgs.qemu_kvm;
-        verbatimConfig = ''
-          namespaces = []
-          user = "${cfg.username}"
-        '';
-        swtpm.enable = cfg.libvirt.enableTpm;
-        ovmf = mkIf cfg.libvirt.enableOvmf {
-          enable = true;
-          packages = [(pkgs.OVMF.override {
-            secureBoot = cfg.libvirt.enableSecureBoot;
-            tpmSupport = cfg.libvirt.enableTpm;
-          }).fd];
+      
+      # Libvirt daemon configuration
+      virtualisation.libvirtd = {
+        enable = true;
+        onBoot = "ignore";
+        onShutdown = "shutdown";
+        
+        # QEMU configuration
+        qemu = {
+          package = pkgs.qemu_kvm;
+          runAsRoot = true;
+          verbatimConfig = ''
+            namespaces = []
+            user = "${cfg.username}"
+          '';
+          swtpm.enable = cfg.libvirt.enableTpm;
+          ovmf = mkIf cfg.libvirt.enableOvmf {
+            enable = true;
+            packages = [(pkgs.OVMF.override {
+              secureBoot = cfg.libvirt.enableSecureBoot;
+              tpmSupport = cfg.libvirt.enableTpm;
+            }).fd];
+          };
         };
       };
     };
