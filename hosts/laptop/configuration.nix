@@ -156,7 +156,7 @@
   # ============================================================================
 
   programs.virt-manager.enable = true;
-  virtualization.libvirtd.enable = true;
+  virtualisation.libvirtd.enable = true;
   
   # Enable basic virt-manager with QEMU/KVM and IOMMU
   virtualisation.vm = {
