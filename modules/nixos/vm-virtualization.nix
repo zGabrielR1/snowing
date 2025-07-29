@@ -5,201 +5,459 @@ with lib;
 let
   cfg = config.virtualisation.vm;
   
-  vmType = types.enum [ "virt-manager" "virtualbox" "both" ];
-  vfioType = types.enum [ "intel" "amd" "none" ];
+  # Type definition for virtualization type
+  vmType = mkOptionType {
+    name = "vmType";
+    description = "Virtualization type (only QEMU/KVM with virt-manager is supported)";
+    check = x: x == "virt-manager";
+    merge = mergeOneOption;
+  };
   
-  # Common VFIO kernel modules
+  vfioType = mkOptionType {
+    name = "vfioType";
+    description = "CPU platform type for VFIO";
+    check = x: elem x [ "intel" "amd" "none" ];
+    merge = mergeOneOption;
+  };
+  
+  pciIdType = types.strMatching "[0-9a-fA-F]{4}:[0-9a-fA-F]{4}";
+  
+  # Common VFIO kernel modules with better compatibility
   vfioModules = [
     "vfio_pci"
     "vfio"
     "vfio_iommu_type1"
-    # "vfio_virqfd"  # Not available in all kernel versions
+    #"vfio_virqfd"
+    "kvmgt"
   ];
   
   # Common graphics drivers that might conflict with VFIO
   graphicsDrivers = [
-    "i915"      # Intel
-    "amdgpu"    # AMD
-    "radeon"    # AMD legacy
-    "nvidia"    # NVIDIA
-    "nvidia_modeset"
-    "nvidia_uvm"
-    "nvidia_drm"
-    "nouveau"   # NVIDIA open source
+    "i915"           # Intel
+    "amdgpu"         # AMD
+    "radeon"         # AMD legacy
+    "nvidia"         # NVIDIA
+    "nvidia_drm"     # NVIDIA DRM
+    "nvidia_modeset" # NVIDIA Modesetting
+    "nvidia_uvm"     # NVIDIA Unified Memory
+    "nouveau"        # NVIDIA open source
   ];
+  
+  # Helper functions for VFIO configuration
+  vfioModprobeConfig = gpuIds:
+    "options vfio-pci ids=${concatStringsSep "," gpuIds} disable_vga=1";
+  
+  vfioKernelParams = vfioCfg: (
+    # IOMMU platform selection
+    (optional (vfioCfg.platform == "intel") "intel_iommu=on iommu=pt")
+    ++ optional (vfioCfg.platform == "amd") "amd_iommu=on"
+    # GPU passthrough IDs
+    ++ optional (vfioCfg.gpuIds != []) 
+       ("vfio-pci.ids=" + concatStringsSep "," vfioCfg.gpuIds)
+    # Graphics driver parameters to prevent conflicts
+    ++ optionals vfioCfg.blacklistGraphics [
+      "rd.driver.blacklist=${concatStringsSep "," (graphicsDrivers ++ vfioCfg.blacklistedDrivers)}"
+      "modprobe.blacklist=${concatStringsSep "," (graphicsDrivers ++ vfioCfg.blacklistedDrivers)}"
+    ]
+    # Single GPU passthrough specific configurations
+    ++ optionals vfioCfg.singleGpuPassthrough [
+      "video=efifb:off"
+      "video=vesafb:off"
+      "video=simplefb:off"
+      "vga=off"
+    ]
+  );
 in
 
 {
-  options.virtualisation.vm = {
-    enable = mkEnableOption "virtual machine virtualization";
+  options.virtualisation.vm = mkOption {
+    type = types.submodule {
+      options = {
+        enable = mkEnableOption "virtual machine virtualization";
+        
+        type = mkOption {
+          type = vmType;
+          default = "virt-manager";
+          description = "Enable QEMU/KVM with libvirt (virt-manager) for virtualization";
+          readOnly = true;  # Since there's only one option now
+        };
+        
+        username = mkOption {
+          type = types.str;
+          description = "Username to add to virtualization groups";
+          example = "alice";
+        };
     
-    type = mkOption {
-      type = vmType;
-      default = "virt-manager";
-      description = "Type of virtualization to enable: virt-manager (libvirt), virtualbox, or both";
-    };
-    
-    username = mkOption {
-      type = types.str;
-      description = "Username to add to virtualization groups";
-    };
-    
-    # VFIO/GPU Passthrough Options
-    vfio = {
-      enable = mkEnableOption "VFIO/GPU passthrough support";
-      
-      platform = mkOption {
-        type = vfioType;
-        default = "none";
-        description = "CPU platform for IOMMU: intel, amd, or none";
-      };
-      
-      gpuIds = mkOption {
-        type = types.listOf types.str;
-        default = [];
-        description = "List of GPU PCI IDs to passthrough (format: vendor:device)";
-        example = [ "10de:2482" "10de:228b" "1002:67b0" "1002:aac8" ];
-      };
-      
-      blacklistGraphics = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Whether to blacklist graphics drivers to prevent conflicts";
-      };
-      
-      blacklistedDrivers = mkOption {
-        type = types.listOf types.str;
-        default = [];
-        description = "Additional graphics drivers to blacklist";
-        example = [ "amdgpu" "radeon" "nvidia" ];
-      };
-      
-      loadGraphicsAfterVfio = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Whether to load graphics drivers after VFIO modules";
-      };
-      
-      graphicsDrivers = mkOption {
-        type = types.listOf types.str;
-        default = [];
-        description = "Graphics drivers to load after VFIO modules";
-        example = [ "i915" "nvidia" "nvidia_modeset" ];
-      };
-      
-      # Single GPU Passthrough Options
-      singleGpuPassthrough = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Enable single GPU passthrough (host becomes headless when VM is running)";
-      };
-      
-      hostGraphicsDriver = mkOption {
-        type = types.str;
-        default = "i915";
-        description = "Graphics driver to use for host when VM is not running";
-        example = "i915";
-      };
-      
-      enableVgaSwitcheroo = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Enable VGA switcheroo for dynamic GPU switching";
-      };
-    };
-    
-    # Advanced libvirt options
-    libvirt = {
-      enableOvmf = mkOption {
-        type = types.bool;
-        default = true;
-        description = "Enable OVMF (UEFI firmware) support";
-      };
-      
-      enableSecureBoot = mkOption {
-        type = types.bool;
-        default = true;
-        description = "Enable Secure Boot in OVMF";
-      };
-      
-      enableTpm = mkOption {
-        type = types.bool;
-        default = true;
-        description = "Enable TPM emulation";
-      };
-      
-      enableSpice = mkOption {
-        type = types.bool;
-        default = true;
-        description = "Enable SPICE USB redirection";
-      };
-    };
+        # VFIO/GPU Passthrough Options
+        vfio = {
+          enable = mkEnableOption "VFIO/GPU passthrough support";
+          
+          platform = mkOption {
+            type = vfioType;
+            default = "none";
+            description = "CPU platform for IOMMU: intel, amd, or none";
+            example = "intel";
+          };
+          
+          gpuIds = mkOption {
+            type = types.listOf pciIdType;
+            default = [];
+            description = "List of GPU PCI IDs to passthrough (format: vendor:device)";
+            example = [ "10de:2482" "10de:228b" "1002:67b0" "1002:aac8" ];
+          };
+          
+          blacklistGraphics = mkOption {
+            type = types.bool;
+            default = false;
+            description = "Whether to blacklist graphics drivers to prevent conflicts";
+          };
+          
+          blacklistedDrivers = mkOption {
+            type = types.listOf types.str;
+            default = [];
+            description = "Additional graphics drivers to blacklist";
+            example = [ "amdgpu" "radeon" "nvidia" ];
+          };
+          
+          loadGraphicsAfterVfio = mkOption {
+            type = types.bool;
+            default = false;
+            description = "Whether to load graphics drivers after VFIO modules";
+          };
+          
+          graphicsDrivers = mkOption {
+            type = types.listOf types.str;
+            default = [];
+            description = "Graphics drivers to load after VFIO modules";
+            example = [ "i915" "nvidia" "nvidia_modeset" ];
+          };
+          
+          singleGpuPassthrough = mkOption {
+            type = types.bool;
+            default = false;
+            description = "Enable single GPU passthrough (host becomes headless when VM is running)";
+          };
+          
+          hostGraphicsDriver = mkOption {
+            type = types.str;
+            default = "i915";
+            description = "Graphics driver to use for host when VM is not running";
+            example = "i915";
+          };
+          
+          enableVgaSwitcheroo = mkOption {
+            type = types.bool;
+            default = false;
+            description = "Enable VGA switcheroo for dynamic GPU switching";
+          };
+          
+          # New: HugePages configuration
+          hugepages = {
+            enable = mkEnableOption "HugePages for better performance";
+            size = mkOption {
+              type = types.str;
+              default = "1G";
+              description = "Size of HugePages to allocate (e.g., 2M, 1G)";
+            };
+            count = mkOption {
+              type = types.int;
+              default = 8;
+              description = "Number of HugePages to allocate";
+            };
+          };
+          
+          # New: Looking Glass support
+          lookingGlass = {
+            enable = mkEnableOption "Looking Glass for low-latency display";
+            user = mkOption {
+              type = types.str;
+              default = cfg.username;
+              description = "User that will run the Looking Glass client";
+            };
+          };
+        };
+        
+        # Advanced libvirt options
+        libvirt = {
+          enableOvmf = mkOption {
+            type = types.bool;
+            default = true;
+            description = "Enable OVMF (UEFI firmware) support";
+          };
+          
+          enableSecureBoot = mkOption {
+            type = types.bool;
+            default = true;
+            description = "Enable Secure Boot in OVMF";
+          };
+          
+          enableTpm = mkOption {
+            type = types.bool;
+            default = true;
+            description = "Enable TPM 2.0 emulation";
+          };
+          
+          enableSpice = mkOption {
+            type = types.bool;
+            default = true;
+            description = "Enable SPICE USB redirection";
+          };
+          
+          # New: CPU pinning
+          cpuPinning = {
+            enable = mkEnableOption "CPU pinning for better performance";
+            cpuset = mkOption {
+              type = types.str;
+              default = "0-7";
+              description = "CPUs to pin the VM to (e.g., 0-7,8-15)";
+            };
+          };
+          
+          # New: IOMMU groups
+          iommuGroups = {
+            enable = mkEnableOption "IOMMU group validation";
+            check = mkEnableOption "Verify IOMMU groups at boot";
+          };
+        };
+        
+        # New: Performance tuning
+        performance = {
+          enable = mkEnableOption "Performance tuning options";
+          
+          cpu = {
+            enable = mkEnableOption "CPU performance tuning";
+            governor = mkOption {
+              type = types.str;
+              default = "performance";
+              description = "CPU frequency governor";
+            };
+          };
+          
+          network = {
+            enable = mkEnableOption "Network performance tuning";
+            virtioNet = mkEnableOption "Use virtio-net for better network performance";
+          };
+          
+          storage = {
+            enable = mkEnableOption "Storage performance tuning";
+            ioUring = mkEnableOption "Enable io_uring for better disk I/O";
+          };
+        };
   };
 
-  config = mkIf cfg.enable {
+  config = mkIf cfg.enable (mkMerge [
     # Basic virtualization setup
-    programs.virt-manager.enable = mkIf (cfg.type == "virt-manager" || cfg.type == "both") true;
-    
-    users.groups.libvirtd.members = mkIf (cfg.type == "virt-manager" || cfg.type == "both") [ cfg.username ];
-    
-    # Add user to additional groups for VFIO/VM management
-    users.users.${cfg.username}.extraGroups = mkIf cfg.vfio.enable [
-      "qemu-libvirtd" "libvirtd" "disk"
-    ];
-    
-    virtualisation.spiceUSBRedirection.enable = mkIf (cfg.type == "virt-manager" || cfg.type == "both") cfg.libvirt.enableSpice;
-    
-    # VirtualBox configuration
-    virtualisation.virtualbox.host.enable = mkIf (cfg.type == "virtualbox" || cfg.type == "both") true;
-    
-    users.extraGroups.vboxusers.members = mkIf (cfg.type == "virtualbox" || cfg.type == "both") [ cfg.username ];
-    
-    virtualisation.virtualbox.host.enableExtensionPack = mkIf (cfg.type == "virtualbox" || cfg.type == "both") true;
+    {
+      # Documentation
+      documentation.nixos.includeAllModules = true;
+      
+      # Libvirt configuration
+      programs.virt-manager.enable = mkIf (cfg.type == "virt-manager" || cfg.type == "both") true;
+      
+      # User and group configuration
+      users.groups = {
+        libvirtd.members = mkIf (cfg.type == "virt-manager" || cfg.type == "both") [ cfg.username ];
+        kvm.members = mkIf (cfg.type == "virt-manager" || cfg.type == "both") [ cfg.username ];
+      };
+      
+      # Add user to additional groups for VFIO/VM management
+      users.users.${cfg.username} = {
+        extraGroups = mkIf cfg.vfio.enable [
+          "qemu-libvirtd"
+          "libvirtd"
+          "disk"
+          "kvm"
+          "input"
+          "video"
+        ] ++ optional cfg.vfio.lookingGlass.enable "kvm";
+      };
+      
+      # Virtualization configuration
+      virtualisation = {
+        spiceUSBRedirection.enable = cfg.libvirt.enableSpice;
+        
+        # Container runtimes (kept as they're lightweight and useful with KVM)
+        lxd.enable = false;  # Explicitly disabled, can be enabled separately if needed
+        podman.enable = false;  # Explicitly disabled, can be enabled separately if needed
+        docker.enable = false;  # Explicitly disabled, can be enabled separately if needed
+      };
+      
+      # Performance tuning
+      powerManagement.cpuFreqGovernor = mkIf cfg.performance.enable (mkDefault "performance");
+      
+      # Kernel tuning for better VM performance
+      boot.kernel.sysctl = mkIf (cfg.performance.enable) {
+        # Network performance
+        "net.core.rmem_max" = 16777216;
+        "net.core.wmem_max" = 16777216;
+        "net.ipv4.tcp_rmem" = "4096 87380 16777216";
+        "net.ipv4.tcp_wmem" = "4096 16384 16777216";
+        # VM performance
+        "vm.swappiness" = 10;
+        "vm.dirty_ratio" = 10;
+        "vm.dirty_background_ratio" = 5;
+      };
+    }
     
     # VFIO/GPU Passthrough Configuration
-    boot.initrd.kernelModules = mkIf cfg.vfio.enable (vfioModules ++ 
-      (lib.optionals cfg.vfio.loadGraphicsAfterVfio cfg.vfio.graphicsDrivers));
+    (mkIf cfg.vfio.enable {
+      # Required kernel modules
+      boot.initrd.kernelModules = vfioModules
+        ++ optionals cfg.vfio.loadGraphicsAfterVfio cfg.vfio.graphicsDrivers
+        ++ optionals cfg.vfio.lookingGlass.enable [ "kvmfr" ];
+      
+      # Kernel parameters
+      boot.kernelParams = vfioKernelParams cfg.vfio;
+      
+      # Blacklist conflicting drivers
+      boot.blacklistedKernelModules = 
+        if cfg.vfio.blacklistGraphics then
+          (graphicsDrivers ++ cfg.vfio.blacklistedDrivers)
+        else
+          cfg.vfio.blacklistedDrivers;
+      
+      # Modprobe configuration
+      boot.extraModprobeConfig = vfioModprobeConfig cfg.vfio.gpuIds;
+      
+      # HugePages configuration
+      boot.kernel.sysctl = mkIf cfg.vfio.hugepages.enable ({
+        "vm.nr_hugepages" = cfg.vfio.hugepages.count;
+        "vm.hugetlb_shm_group" = config.users.groups.kvm.gid;
+      } // (if cfg.vfio.hugepages.size == "1G" then {
+        "vm.nr_hugepages_mempolicy" = cfg.vfio.hugepages.count;
+      } else {}));
+      
+      # Looking Glass setup
+      environment.systemPackages = mkIf cfg.vfio.lookingGlass.enable [
+        pkgs.looking-glass-client
+        pkgs.spice-gtk
+      ];
+      
+      # udev rules for Looking Glass
+      services.udev.extraRules = mkIf cfg.vfio.lookingGlass.enable ''
+        # Looking Glass
+        SUBSYSTEM=="kvmfr", OWNER="${cfg.vfio.lookingGlass.user}", GROUP="kvm", MODE="0660"
+      '';
+      
+      # TPM 2.0 support
+      services.tpm2.enable = mkIf cfg.libvirt.enableTpm true;
+      
+      # OVMF firmware
+      virtualisation.libvirtd = mkIf (cfg.type == "virt-manager" || cfg.type == "both") {
+        enable = true;
+        qemu = {
+          package = pkgs.qemu_kvm;
+          runAsRoot = true;
+          swtpm.enable = cfg.libvirt.enableTpm;
+          ovmf = {
+            enable = cfg.libvirt.enableOvmf;
+            packages = [
+              (pkgs.OVMF.override {
+                secureBoot = cfg.libvirt.enableSecureBoot;
+                tpmSupport = cfg.libvirt.enableTpm;
+              })
+            ];
+          };
+        };
+      };
+      
+      # CPU performance governor
+      powerManagement.cpuFreqGovernor = mkIf (cfg.performance.enable && cfg.performance.cpu.enable) 
+        (mkForce cfg.performance.cpu.governor);
+      
+      # IOMMU group validation script
+      environment.systemPackages = mkIf (cfg.libvirt.iommuGroups.enable) [
+        (pkgs.writeScriptBin "check-iommu" ''
+          #!${pkgs.runtimeShell}
+          shopt -s nullglob
+          for g in /sys/kernel/iommu_groups/*; do
+              echo "IOMMU Group $ {g##*:}:"
+              for d in $g/devices/*; do
+                  echo -e '\t'$(lspci -nns "$ {d##*/}")
+              done;
+          done;
+        '')
+      ];
+    })
     
-    boot.kernelParams = mkIf cfg.vfio.enable (
-      # IOMMU platform selection
-      (lib.optionals (cfg.vfio.platform == "intel") [ "intel_iommu=on" ]) ++
-      (lib.optionals (cfg.vfio.platform == "amd") [ "amd_iommu=on" ]) ++
-      # GPU passthrough IDs
-      (lib.optionals (cfg.vfio.gpuIds != []) 
-        [ ("vfio-pci.ids=" + lib.concatStringsSep "," cfg.vfio.gpuIds) ]) ++
-      # Graphics driver parameters to prevent conflicts
-      (lib.optionals cfg.vfio.blacklistGraphics [
-        "radeon.runpm=0"
-        "radeon.modeset=0"
-        "amdgpu.runpm=0"
-        "amdgpu.modeset=0"
-        "nouveau.runpm=0"
-        "nouveau.modeset=0"
-      ]) ++
-      # Single GPU passthrough specific configurations
-      (lib.optionals cfg.vfio.singleGpuPassthrough [
-        "video=efifb:off"
-        "video=vesafb:off"
-        "video=simplefb:off"
-        "vga=off"
-      ]) ++
-      # VGA switcheroo configuration for single GPU passthrough
-      (lib.optionals (cfg.vfio.singleGpuPassthrough && cfg.vfio.enableVgaSwitcheroo) [
-        "vga_switcheroo=1"
-      ])
-    );
+    # Libvirt configuration for QEMU/KVM
+    (mkIf (cfg.type == "virt-manager") {
+      # QEMU/KVM with libvirt daemon configuration
+      virtualisation.libvirtd = {
+        enable = true;
+        
+        # Performance optimizations
+        onBoot = "ignore";
+        onShutdown = "shutdown";
+        
+        # Use KVM by default
+        qemu = {
+          package = pkgs.qemu_kvm;
+          runAsRoot = true;
+          
+          # Performance optimizations
+          verbatimConfig = ''
+            nvram = [
+              "${pkgs.OVMF}/FV/OVMF.fd:${pkgs.OVMF}/FV/OVMF_VARS.fd"
+            ]
+          '';
+          
+          # CPU pinning
+          package = mkIf (cfg.libvirt.cpuPinning.enable) (pkgs.qemu_kvm.override {
+            smbdSupport = true;
+            seccompSupport = true;
+          });
+        };
+        
+        # Network configuration
+        allowedBridges = [ "virbr0" "virbr1" ];
+      };
+      
+      # Firewall rules for libvirt
+      networking.firewall.checkReversePath = false;
+      
+      # SPICE configuration
+      environment.etc = mkIf cfg.libvirt.enableSpice {
+        "polkit-1/rules.d/50-libvirt.rules".text = ''
+          polkit.addRule(function(action, subject) {
+            if (action.id == "org.libvirt.unix.manage" &&
+                subject.isInGroup("libvirt")) {
+              return polkit.Result.YES;
+            }
+          });
+        '';
+      };
+    })
     
-    boot.blacklistedKernelModules = mkIf (cfg.vfio.enable && cfg.vfio.blacklistGraphics) 
-      (cfg.vfio.blacklistedDrivers ++ [ "amdgpu" "radeon" "nouveau" ]);
-    
-    # Extra modprobe config for VFIO-PCI IDs
-    boot.extraModprobeConfig = mkIf cfg.vfio.enable (
-      lib.optionalString (cfg.vfio.gpuIds != [])
-        ("options vfio-pci ids=" + lib.concatStringsSep "," cfg.vfio.gpuIds)
-    );
-    
-    # Enhanced libvirt configuration with OVMF
-    virtualisation.libvirtd = mkIf (cfg.type == "virt-manager" || cfg.type == "both") {
+    # Performance tuning
+    (mkIf cfg.performance.enable {
+      # Network performance tuning
+      boot.kernel.sysctl = mkIf cfg.performance.network.enable {
+        # Increase TCP buffer sizes
+        "net.core.rmem_max" = 16777216;
+        "net.core.wmem_max" = 16777216;
+        "net.ipv4.tcp_rmem" = "4096 87380 16777216";
+        "net.ipv4.tcp_wmem" = "4096 16384 16777216";
+        # Reduce latency
+        "net.ipv4.tcp_low_latency" = 1;
+        "net.core.netdev_max_backlog" = 300000;
+      };
+      
+      # Storage performance tuning
+      boot.kernelParams = mkIf cfg.performance.storage.enable [
+        "elevator=none"
+        "scsi_mod.use_blk_mq=1"
+        "scsi_mod.default_dev_flags=0"
+      ] ++ optionals cfg.performance.storage.ioUring [
+        "scsi_mod.default_dev_flags=0"
+        "scsi_mod.use_blk_mq=1"
+      ];
+      
+      # CPU performance tuning
+      powerManagement.cpuFreqGovernor = mkIf cfg.performance.cpu.enable 
+        (mkForce cfg.performance.cpu.governor);
+    })
+  ]);
       enable = true;
       onBoot = "ignore";
       onShutdown = "shutdown";
