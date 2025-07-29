@@ -81,7 +81,7 @@ let
     vis
     lite-xl
     zed-editor
-    jetbrains-toolbox
+    #jetbrains-toolbox
     #(inputs.windsurf.packages."${system}".windsurf)
 
     # Programming Language Support
@@ -114,7 +114,7 @@ let
     hypridle
     hyprshade
     hyprsunset
-    
+    hyprshot
     # Bar & Launchers
     waybar
     rofi-wayland
