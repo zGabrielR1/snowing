@@ -252,12 +252,12 @@ in
       documentation.nixos.includeAllModules = true;
       
       # Libvirt configuration
-      programs.virt-manager.enable = mkIf (cfg.type == "virt-manager" || cfg.type == "both") true;
+      programs.virt-manager.enable = true;
       
       # User and group configuration
       users.groups = {
-        libvirtd.members = mkIf (cfg.type == "virt-manager" || cfg.type == "both") [ cfg.username ];
-        kvm.members = mkIf (cfg.type == "virt-manager" || cfg.type == "both") [ cfg.username ];
+        libvirtd.members = [ cfg.username ];
+        kvm.members = [ cfg.username ];
       };
       
       # Add user to additional groups for VFIO/VM management
@@ -540,6 +540,6 @@ in
           '')
         ])
       ];
-    };
-  });
+    }
+  ]);
 } 
