@@ -151,6 +151,11 @@
   #Enable Tailscale
   services.tailscale.enable = true;
 
+  hardware.bluetooth.powerOnBoot = mkForce false;
+
+  # disable network manager wait online service (+6 seconds to boot time!!!!)
+  systemd.services.NetworkManager-wait-online.enable = false;
+
   # ============================================================================
   # VIRTUALIZATION CONFIGURATION
   # ============================================================================
