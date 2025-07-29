@@ -486,7 +486,7 @@ in
           };
         };
       };
-    };
+    });
     
     # Hardware support
     hardware.graphics.enable = mkIf cfg.vfio.enable true;
