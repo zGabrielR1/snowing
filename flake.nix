@@ -90,7 +90,7 @@
     #flake-compat.url = "github:edolstra/flake-compat";
 
     # --- Community Repos ---
-    nur.url = "github:nix-community/NUR";
+    #nur.url = "github:nix-community/NUR";
   };
 
   outputs = { self, nixpkgs, home-manager, flake-parts, chaotic, ... }@inputs:
