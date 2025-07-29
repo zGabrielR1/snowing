@@ -486,10 +486,9 @@ in
           };
         };
       };
-    });
-    
-    # Hardware support
-    hardware.graphics.enable = mkIf cfg.vfio.enable true;
+      
+      # Hardware support
+      hardware.graphics.enable = mkIf cfg.vfio.enable true;
     
     # Additional packages for VFIO/GPU passthrough
     environment.systemPackages = mkMerge [
