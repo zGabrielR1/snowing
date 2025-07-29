@@ -13,6 +13,9 @@ let
     merge = mergeOneOption;
   };
   
+  # Helper function to create PCI device list
+  pciDevices = devices: concatStringsSep " " devices;
+  
   vfioType = mkOptionType {
     name = "vfioType";
     description = "CPU platform type for VFIO";
@@ -245,20 +248,46 @@ in
         };
   };
 
-  config = mkIf cfg.enable (mkMerge [
+  config = mkIf cfg.enable {
     # Basic virtualization setup
-    {
-      # Documentation
-      documentation.nixos.includeAllModules = true;
+    virtualisation.libvirtd = {
+      enable = true;
+      onBoot = "ignore";
+      onShutdown = "shutdown";
       
-      # Libvirt configuration
-      programs.virt-manager.enable = true;
-      
-      # User and group configuration
-      users.groups = {
-        libvirtd.members = [ cfg.username ];
-        kvm.members = [ cfg.username ];
+      # QEMU configuration
+      qemu = {
+        package = if cfg.libvirt.cpuPinning.enable then
+          (pkgs.qemu_kvm.override {
+            smbdSupport = true;
+            seccompSupport = true;
+          })
+        else
+          pkgs.qemu_kvm;
+          
+        runAsRoot = true;
+        swtpm.enable = cfg.libvirt.enableTpm;
+        ovmf = mkIf cfg.libvirt.enableOvmf {
+          enable = true;
+          packages = [(pkgs.OVMF.override {
+            secureBoot = cfg.libvirt.enableSecureBoot;
+            tpmSupport = cfg.libvirt.enableTpm;
+          }).fd];
+        };
       };
+    };
+    
+    # Documentation
+    documentation.nixos.includeAllModules = true;
+    
+    # Libvirt configuration
+    programs.virt-manager.enable = true;
+    
+    # User and group configuration
+    users.groups = {
+      libvirtd.members = [ cfg.username ];
+      kvm.members = [ cfg.username ];
+    };
       
       # Add user to additional groups for VFIO/VM management
       users.users.${cfg.username} = {
@@ -540,6 +569,5 @@ in
           '')
         ])
       ];
-    }
-  ]);
-} 
+  };
+}
