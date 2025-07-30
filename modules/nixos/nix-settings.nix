@@ -2,12 +2,18 @@
 { config, lib, pkgs, inputs, ... }:
 
 let
-  flakeInputs = lib.filterAttrs (_: v: builtins.isAttrs v && v.type == "flake") inputs;
+  flakeInputs = lib.filterAttrs (_: v: builtins.isAttrs v && v ? type && v.type == "flake") inputs;
   autoGarbageCollector = config.var.autoGarbageCollector or false;
 in
 {
-  # For flakes
-  environment.systemPackages = [ pkgs.git ];
+  # Essential packages for flakes
+  environment.systemPackages = with pkgs; [ 
+    git 
+    curl
+    wget
+    nix-output-monitor # Better build output
+    nvd # Nix version diff tool
+  ];
 
   # Sudo rules for nixos-rebuild
   security.sudo.extraRules = lib.mkIf (config.users.users ? ${config.users.users.mainUser or "root"}) [{
@@ -18,26 +24,30 @@ in
     }];
   }];
 
-  # nh configuration
+  # nh configuration - modern Nix helper
   programs.nh = {
     enable = true;
     clean = {
       enable = true;
-      extraArgs = "--keep-since 7d";
+      extraArgs = "--keep-since 7d --keep 5";
     };
+    flake = "/etc/nixos"; # Adjust path as needed
   };
 
   # nixpkgs configuration
   nixpkgs.config = {
     allowUnfree = true;
-    allowBroken = true;
+    allowBroken = false; # Changed from true for stability
+    allowInsecure = false;
+    allowUnsupportedSystem = false;
   };
 
-  # Faster rebuilding - optimized documentation settings
+  # Optimized documentation settings for faster rebuilding
   documentation = {
     enable = true;
     doc.enable = false;
     man.enable = true;
+    man.generateCaches = true;
     dev.enable = false;
     info.enable = false;
     nixos.enable = false;
@@ -46,77 +56,155 @@ in
   nix = {
     package = lib.mkDefault pkgs.nix;
 
-    # Registry configuration
+    # Registry configuration - pin flake inputs
     registry = lib.mapAttrs (_key: flake: { inherit flake; }) (
-      lib.filterAttrs (name: _: name != "self" && inputs ? ${name} && inputs.${name} ? type && inputs.${name}.type == "flake") inputs
+      lib.filterAttrs (_key: value: value ? outputs) flakeInputs
     );
 
-    # Set the path for channels compat
-    nixPath = lib.mapAttrsToList (key: value: "${key}=flake:${key}") config.nix.registry;
+    # Nix path for legacy compatibility
+    nixPath = lib.mapAttrsToList (key: _value: "${key}=flake:${key}") flakeInputs;
 
+    # Channel configuration
+    channel.enable = false; # We use flakes exclusively
 
-    # Extra options - optimized for speed
-    extraOptions = ''
-      warn-dirty = false
-      max-jobs = auto
-      cores = 0
-    '';
-
+    # Performance and build settings
     settings = {
-      substituters = [
-        "https://cache.nixos.org?priority=10"
-        "https://zgabrielr.cachix.org"
-        "https://hyprland.cachix.org"
-        "https://nix-community.cachix.org"
-        "https://numtide.cachix.org"
-        "https://divnix.cachix.org"
-        "https://nixpkgs-wayland.cachix.org"
-        "https://chaotic-nyx.cachix.org"
-        "https://colmena.cachix.org"
-        "https://nrdxp.cachix.org"
-        "https://anyrun.cachix.org"
-        "https://fufexan.cachix.org"
-        "https://helix.cachix.org"
-        "https://niri.cachix.org"
+      # Build settings
+      max-jobs = "auto";
+      cores = 0; # Use all available cores
+      
+      # Experimental features
+      experimental-features = [
+        "nix-command"
+        "flakes"
+        "ca-derivations"
+        "recursive-nix"
       ];
-
+      
+      # Substituters and caches
+      substituters = [
+        "https://cache.nixos.org/"
+        "https://nix-community.cache.nixos.org"
+        "https://hyprland.cachix.org"
+        "https://chaotic-nyx.cachix.org/"
+      ];
+      
       trusted-public-keys = [
         "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
-        "zgabrielr.cachix.org-1:DNsXs3NCf3sVwby1O2EMD5Ai/uu1Z1uswKSh47A1mvw="
-        "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
         "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-        "numtide.cachix.org-1:2ps1kLBUWjxIneOy1Ik6cQjb41X0iXVXeHigGmycPPE="
-        "divnix.cachix.org-1:U8QPQF411uJGX3mW9E1ojuFu6QLJrrUETcOEjBuBYHg="
-        "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
+        "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
         "chaotic-nyx.cachix.org-1:HfnXSw4pj95iI/n17rIDy40agHj12WfF+Gqk6SonIT8="
-        "colmena.cachix.org-1:7BzpDnjjH8ki2CT3f6GdOk7QAzPOl+1t3LvTLXqYcSg="
-        "nrdxp.cachix.org-1:Fc5PSqY2Jm1TrWfm88l6cvGWwz3s93c6IOifQWnhNW4="
-        "anyrun.cachix.org-1:pqBobmOjI7nKlsUMV25u9QHa9btJK65/C8vnO3p346s="
-        "fufexan.cachix.org-1:LwCDjCJNJQf5XD2BV+yamQIMZfcKWR9ISIFy5curUsY="
-        "helix.cachix.org-1:ejp9KQpR1FBI2onstMQ34yogDm4OgU2ru6lIwPvuCVs="
-        "niri.cachix.org-1:Wv0OmO7PsuocRKzfDoJ3mulSl7Z6oezYhGhR+3W2964="
       ];
 
-      # Performance optimizations
-      auto-optimise-store = true;
+      # Trust settings
+      trusted-users = [ "root" "@wheel" ];
+      allowed-users = [ "@wheel" ];
+
+      # Build optimization
       builders-use-substitutes = true;
-      experimental-features = [ "nix-command" "flakes" ];
-      flake-registry = "/etc/nix/registry.json";
-
-      # for direnv GC roots
-      keep-derivations = true;
+      substitute-on-destination = false;
+      
+      # Sandbox settings
+      sandbox = true;
+      sandbox-fallback = false;
+      
+      # Keep outputs and derivations for development
       keep-outputs = true;
-
-      trusted-users = [ "root" "@wheel" "zrrg" ];
-      accept-flake-config = true;
+      keep-derivations = true;
+      
+      # Auto-optimize store
+      auto-optimise-store = true;
+      
+      # Warn about dirty Git trees
+      warn-dirty = false;
+      
+      # Network settings
+      connect-timeout = 5;
+      stalled-download-timeout = 300;
+      
+      # Build log settings
+      log-lines = 25;
+      
+      # Allow import from derivation (needed for some packages)
+      allow-import-from-derivation = true;
+      
+      # Netrc file for private repositories
+      netrc-file = "/etc/nix/netrc";
     };
 
-    # Optimized garbage collection settings
+    # Garbage collection
     gc = {
-      automatic = autoGarbageCollector;
-      persistent = true;
+      automatic = lib.mkDefault autoGarbageCollector;
       dates = "weekly";
       options = "--delete-older-than 7d";
+      persistent = true;
+    };
+
+    # Automatic store optimization
+    optimise = {
+      automatic = true;
+      dates = [ "03:45" ]; # Run at 3:45 AM
+    };
+
+    # Distributed builds (if you have multiple machines)
+    # buildMachines = [];
+    # distributedBuilds = true;
+  };
+
+  # System-wide environment variables
+  environment.variables = {
+    # Nix-specific variables
+    NIX_PATH = lib.mkForce "nixpkgs=flake:nixpkgs";
+    
+    # Editor for nix edit
+    EDITOR = lib.mkDefault "vim";
+    
+    # Pager settings
+    PAGER = lib.mkDefault "less -R";
+    LESS = lib.mkDefault "-R";
+  };
+
+  # Systemd service for automatic store optimization
+  systemd.services.nix-optimise = {
+    description = "Nix Store Optimiser";
+    # Use the timer instead of running directly
+    enable = false;
+  };
+
+  systemd.timers.nix-optimise = {
+    description = "Nix Store Optimiser Timer";
+    wantedBy = [ "timers.target" ];
+    timerConfig = {
+      OnCalendar = "03:45";
+      Persistent = true;
+      RandomizedDelaySec = "30m";
     };
   };
+
+  # Additional system tweaks for Nix performance
+  boot.kernel.sysctl = {
+    # Increase file descriptor limits for large builds
+    "fs.file-max" = 2097152;
+    "fs.nr_open" = 1048576;
+  };
+
+  # Increase limits for Nix builds
+  systemd.extraConfig = ''
+    DefaultLimitNOFILE=1048576:1048576
+  '';
+
+  security.pam.loginLimits = [
+    {
+      domain = "*";
+      type = "soft";
+      item = "nofile";
+      value = "1048576";
+    }
+    {
+      domain = "*";
+      type = "hard";
+      item = "nofile";
+      value = "1048576";
+    }
+  ];
 }

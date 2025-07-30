@@ -1,6 +1,5 @@
-# modules/home/profiles/zrrg/default.nix
-# Entry point for the 'zrrg' user profile
-# This module auto-imports all .nix files in this directory except itself
+# modules/home/profiles/<username>/default.nix
+# Entry point for the '<username>' user profile
 { config, lib, pkgs, inputs, ... }:
 
 let
@@ -26,8 +25,8 @@ in
   
   # User information
   home = {
-    username = "zrrg";
-    homeDirectory = "/home/zrrg";
+    username = "USERNAME"; # Replace with actual username
+    homeDirectory = "/home/USERNAME"; # Replace with actual username
     stateVersion = "25.11";
   };
   
@@ -59,8 +58,6 @@ in
         "text/html" = "firefox.desktop";
         "x-scheme-handler/http" = "firefox.desktop";
         "x-scheme-handler/https" = "firefox.desktop";
-        "x-scheme-handler/about" = "firefox.desktop";
-        "x-scheme-handler/unknown" = "firefox.desktop";
         "application/pdf" = "org.gnome.Evince.desktop";
         "image/jpeg" = "org.gnome.eog.desktop";
         "image/png" = "org.gnome.eog.desktop";
@@ -74,17 +71,27 @@ in
   home.sessionVariables = {
     # Default applications
     BROWSER = "firefox";
-    TERMINAL = "wezterm";
-    EDITOR = "nvim";
+    TERMINAL = "gnome-terminal";
+    EDITOR = "vim";
     
     # Development
-    MANPAGER = "sh -c 'col -bx | bat -l man -p'";
-    MANROFFOPT = "-c";
+    MANPAGER = "less";
     
     # XDG compliance
     LESSHISTFILE = "$XDG_CACHE_HOME/less/history";
     WGETRC = "$XDG_CONFIG_HOME/wgetrc";
   };
+  
+  # Basic packages
+  home.packages = with pkgs; [
+    # Essential tools
+    firefox
+    git
+    vim
+    htop
+    
+    # Add user-specific packages here
+  ];
   
   # Ensure required directories exist
   home.file = {
