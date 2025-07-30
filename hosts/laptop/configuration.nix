@@ -36,9 +36,6 @@
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
-  # Enable networking
-  networking.networkmanager.enable = true;
-
   # Enable the X11 windowing system - but minimize what gets pulled in
   #services.xserver.enable = true;
   
@@ -161,7 +158,7 @@
   #Enable Tailscale
   services.tailscale.enable = true;
 
-  hardware.bluetooth.powerOnBoot = mkForce false;
+  hardware.bluetooth.powerOnBoot = false;
 
   # disable network manager wait online service (+6 seconds to boot time!!!!)
   systemd.services.NetworkManager-wait-online.enable = false;
@@ -223,23 +220,6 @@
       };
     };
   };
-
-  # ============================================================================
-  # ENVIRONMENT AND VARIABLES
-  # ============================================================================
-  
-  environment = {
-    # System-wide environment variables
-    sessionVariables = {
-      # Wayland
-      NIXOS_OZONE_WL = "1";
-      
-      # XDG directories
-      XDG_CACHE_HOME = "$HOME/.cache";
-      XDG_CONFIG_HOME = "$HOME/.config";
-      XDG_DATA_HOME = "$HOME/.local/share";
-      XDG_STATE_HOME = "$HOME/.local/state";
-    };
 
   system.stateVersion = "25.11";
 }
