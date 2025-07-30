@@ -7,7 +7,14 @@ let
 in
 {
   # For flakes
-  environment.systemPackages = [ pkgs.git ];
+  # Essential packages for flakes
+  environment.systemPackages = with pkgs; [ 
+    git 
+    curl
+    wget
+    nix-output-monitor # Better build output
+    nvd # Nix version diff tool
+  ];
 
   # Sudo rules for nixos-rebuild
   security.sudo.extraRules = lib.mkIf (config.users.users ? ${config.users.users.mainUser or "root"}) [{
@@ -18,19 +25,22 @@ in
     }];
   }];
 
-  # nh configuration
+  # nh configuration - modern Nix helper
   programs.nh = {
     enable = true;
     clean = {
       enable = true;
-      extraArgs = "--keep-since 7d";
+      extraArgs = "--keep-since 7d --keep 5";
     };
+    flake = "/etc/nixos"; # Adjust path as needed
   };
-
+  # nixpkgs configuration
   # nixpkgs configuration
   nixpkgs.config = {
     allowUnfree = true;
-    allowBroken = true;
+    allowBroken = true; # Changed from true for stability
+    allowInsecure = false;
+    allowUnsupportedSystem = false;
   };
 
   # Faster rebuilding - optimized documentation settings
@@ -38,6 +48,7 @@ in
     enable = true;
     doc.enable = false;
     man.enable = true;
+    man.generateCaches = true;
     dev.enable = false;
     info.enable = false;
     nixos.enable = false;
@@ -46,13 +57,13 @@ in
   nix = {
     package = lib.mkDefault pkgs.nix;
 
-    # Registry configuration
+    #Registry configuration - pin flake inputs
     registry = lib.mapAttrs (_key: flake: { inherit flake; }) (
-      lib.filterAttrs (name: _: name != "self" && inputs ? ${name} && inputs.${name} ? type && inputs.${name}.type == "flake") inputs
+      lib.filterAttrs (_key: value: value ? outputs) flakeInputs
     );
 
-    # Set the path for channels compat
-    nixPath = lib.mapAttrsToList (key: value: "${key}=flake:${key}") config.nix.registry;
+    # Nix path for legacy compatibility
+    nixPath = lib.mapAttrsToList (key: _value: "${key}=flake:${key}") flakeInputs;
 
 
     # Extra options - optimized for speed
@@ -73,10 +84,7 @@ in
         "https://nixpkgs-wayland.cachix.org"
         "https://chaotic-nyx.cachix.org"
         "https://colmena.cachix.org"
-        "https://nrdxp.cachix.org"
         "https://anyrun.cachix.org"
-        "https://fufexan.cachix.org"
-        "https://helix.cachix.org"
         "https://niri.cachix.org"
       ];
 
@@ -90,25 +98,49 @@ in
         "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
         "chaotic-nyx.cachix.org-1:HfnXSw4pj95iI/n17rIDy40agHj12WfF+Gqk6SonIT8="
         "colmena.cachix.org-1:7BzpDnjjH8ki2CT3f6GdOk7QAzPOl+1t3LvTLXqYcSg="
-        "nrdxp.cachix.org-1:Fc5PSqY2Jm1TrWfm88l6cvGWwz3s93c6IOifQWnhNW4="
         "anyrun.cachix.org-1:pqBobmOjI7nKlsUMV25u9QHa9btJK65/C8vnO3p346s="
-        "fufexan.cachix.org-1:LwCDjCJNJQf5XD2BV+yamQIMZfcKWR9ISIFy5curUsY="
-        "helix.cachix.org-1:ejp9KQpR1FBI2onstMQ34yogDm4OgU2ru6lIwPvuCVs="
         "niri.cachix.org-1:Wv0OmO7PsuocRKzfDoJ3mulSl7Z6oezYhGhR+3W2964="
       ];
 
       # Performance optimizations
-      auto-optimise-store = true;
-      builders-use-substitutes = true;
       experimental-features = [ "nix-command" "flakes" ];
       flake-registry = "/etc/nix/registry.json";
 
       # for direnv GC roots
-      keep-derivations = true;
-      keep-outputs = true;
 
-      trusted-users = [ "root" "@wheel" "zrrg" ];
-      accept-flake-config = true;
+    trusted-users = [ "root" "@wheel" "zrrg" ];
+    accept-flake-config = true;
+
+    # Build optimization
+      builders-use-substitutes = true;
+      substitute-on-destination = false;
+      
+      # Sandbox settings
+      sandbox = true;
+      sandbox-fallback = false;
+      
+      # Keep outputs and derivations for development
+      keep-outputs = true;
+      keep-derivations = true;
+      
+      # Auto-optimize store
+      auto-optimise-store = true;
+      
+      # Warn about dirty Git trees
+      warn-dirty = false;
+      
+      # Network settings
+      connect-timeout = 5;
+      stalled-download-timeout = 300;
+      
+      # Build log settings
+      log-lines = 25;
+      
+      # Allow import from derivation (needed for some packages)
+      allow-import-from-derivation = true;
+      
+      # Netrc file for private repositories
+      netrc-file = "/etc/nix/netrc";
     };
 
     # Optimized garbage collection settings
