@@ -127,24 +127,6 @@
             '';
           };
           
-          # Specialized shell for system administration
-          admin = pkgs.mkShell {
-            name = "nixos-admin";
-            buildInputs = with pkgs; [
-              nixos-rebuild
-              home-manager
-              git
-              vim
-              htop
-            ];
-            shellHook = ''
-              echo "🛠️  NixOS Administration Shell"
-              echo "Quick commands:"
-              echo "  rebuild-switch: sudo nixos-rebuild switch --flake .#laptop"
-              echo "  rebuild-test: sudo nixos-rebuild test --flake .#laptop"
-              echo "  home-switch: home-manager switch --flake .#zrrg"
-            '';
-          };
         };
         
         # Formatters
