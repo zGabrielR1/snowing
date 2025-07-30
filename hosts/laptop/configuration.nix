@@ -2,18 +2,20 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running 'nixos-help').
 
-{ config, pkgs, inputs, ... }:
+{ config, pkgs, inputs, lib, ... }:
 
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-      ./user-configuration.nix
-      ../../modules/nixos/hyprland.nix
-      ../../modules/nixos/nix-settings.nix
-      ../../modules/nixos/flatpak.nix
-      ../../users
-    ];
+  imports = [
+    # Hardware configuration
+    ./hardware-configuration.nix
+    ./user-configuration.nix
+    
+    # NixOS modules (imported via modules/nixos/default.nix)
+    # Individual modules are auto-imported, no need to specify each one
+    
+    # User configurations
+    ../../users
+  ];
 
   # ============================================================================
   # BOOT CONFIGURATION
@@ -40,11 +42,19 @@
   # Enable the X11 windowing system - but minimize what gets pulled in
   #services.xserver.enable = true;
   
-  networking.nftables.enable = true;
-  networking.firewall.trustedInterfaces = [
-    "incusbr0" 
-    "docker0" 
-];
+  networking = {
+    networkmanager.enable = true;
+    
+    # Modern firewall with nftables
+    nftables.enable = true;
+    firewall = {
+      enable = true;
+      trustedInterfaces = [ "incusbr0" "docker0" ];
+      allowedTCPPorts = [ 22 80 443 8080 ];
+      allowedUDPPorts = [ 53 ];
+    };
+  };
+
 
   # Enable SDDM with Makima theme
   #custom.sddm-theme.enable = true;
@@ -213,6 +223,23 @@
       };
     };
   };
+
+  # ============================================================================
+  # ENVIRONMENT AND VARIABLES
+  # ============================================================================
+  
+  environment = {
+    # System-wide environment variables
+    sessionVariables = {
+      # Wayland
+      NIXOS_OZONE_WL = "1";
+      
+      # XDG directories
+      XDG_CACHE_HOME = "$HOME/.cache";
+      XDG_CONFIG_HOME = "$HOME/.config";
+      XDG_DATA_HOME = "$HOME/.local/share";
+      XDG_STATE_HOME = "$HOME/.local/state";
+    };
 
   system.stateVersion = "25.11";
 }
