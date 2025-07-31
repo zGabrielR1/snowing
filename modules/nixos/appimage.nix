@@ -28,4 +28,4 @@ in {
       magicOrExtension = ''\x7fELF.....\x02\x00\x03\x00\x01\x00\x00\x00'';
     };
   };
-} 
+}
