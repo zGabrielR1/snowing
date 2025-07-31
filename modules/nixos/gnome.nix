@@ -1,6 +1,6 @@
 { config, lib, pkgs, ... }:
 
-lib.mkIf (!config.services.desktopManager.gnome.enable) {
+lib.mkIf (config.services.desktopManager.gnome.enable) {
   # Enable GNOME services
   services.gnome = {
     # Enable GNOME keyring for secure storage
@@ -13,9 +13,9 @@ lib.mkIf (!config.services.desktopManager.gnome.enable) {
   # Enable power management (night light may depend on this)
   services.upower.enable = true;
 
-  # Enable GNOME extensions support
+  # GNOME terminal
   programs.gnome-terminal.enable = true;
   
   # Enable dconf for GNOME settings
   programs.dconf.enable = true;
-} 
+}
