@@ -1,5 +1,6 @@
 { pkgs, config, inputs, ... }:
 {
+  # Centralized networking defaults
   networking.networkmanager.enable = true;
   systemd.services.NetworkManager-wait-online.enable = false;
 
