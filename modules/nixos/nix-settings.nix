@@ -17,8 +17,9 @@ in
   ];
 
   # Sudo rules for nixos-rebuild
-  security.sudo.extraRules = lib.mkIf (config.users.users ? ${config.users.users.mainUser or "root"}) [{
-    users = [ config.users.users.mainUser or "root" ];
+  # Safer: grant NOPASSWD to user zrrg when present
+  security.sudo.extraRules = lib.mkIf (config.users.users ? "zrrg") [{
+    users = [ "zrrg" ];
     commands = [{
       command = "/run/current-system/sw/bin/nixos-rebuild";
       options = [ "NOPASSWD" ];
@@ -107,11 +108,10 @@ in
       flake-registry = "/etc/nix/registry.json";
 
       # for direnv GC roots
+      trusted-users = [ "root" "@wheel" "zrrg" ];
+      accept-flake-config = true;
 
-    trusted-users = [ "root" "@wheel" "zrrg" ];
-    accept-flake-config = true;
-
-    # Build optimization
+      # Build optimization
       builders-use-substitutes = true;
       substitute-on-destination = false;
       

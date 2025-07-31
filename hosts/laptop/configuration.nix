@@ -37,7 +37,6 @@
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
   # Enable networking
-  networking.networkmanager.enable = true;
 
   # Enable the X11 windowing system - but minimize what gets pulled in
   #services.xserver.enable = true;
@@ -122,22 +121,7 @@
     ];
   };
 
-  # ============================================================================
-  # HOME MANAGER CONFIGURATION
-  # ============================================================================
-  
-  home-manager = {
-    users.zrrg = {
-      imports = [
-        ../../modules/home/profiles/zrrg/default.nix
-      ];
-    };
-
-    extraSpecialArgs = {
-      inherit inputs;
-      system = "x86_64-linux";
-    };
-  };
+  # Home Manager configured at flake-level
 
   # ============================================================================
   # PROGRAMS & PACKAGES
@@ -161,7 +145,7 @@
   #Enable Tailscale
   services.tailscale.enable = true;
 
-  hardware.bluetooth.powerOnBoot = mkForce false;
+  hardware.bluetooth.powerOnBoot = false;
 
   # disable network manager wait online service (+6 seconds to boot time!!!!)
   systemd.services.NetworkManager-wait-online.enable = false;
