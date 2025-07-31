@@ -2,7 +2,7 @@
 { config, lib, pkgs, inputs, ... }:
 
 let
-  flakeInputs = lib.filterAttrs (_: v: builtins.isAttrs v && v.type == "flake") inputs;
+  flakeInputs = lib.filterAttrs (_: v: builtins.isAttrs v && v._type == "flake") inputs;
   autoGarbageCollector = config.var.autoGarbageCollector or false;
 in
 {
@@ -113,7 +113,6 @@ in
 
       # Build optimization
       builders-use-substitutes = true;
-      substitute-on-destination = false;
       
       # Sandbox settings
       sandbox = true;

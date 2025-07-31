@@ -36,8 +36,11 @@
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
+<<<<<<< HEAD
   # Enable networking
 
+=======
+>>>>>>> 0c0017cf2131599e97c7b0563ab98834386a1da7
   # Enable the X11 windowing system - but minimize what gets pulled in
   #services.xserver.enable = true;
   
@@ -207,23 +210,6 @@
       };
     };
   };
-
-  # ============================================================================
-  # ENVIRONMENT AND VARIABLES
-  # ============================================================================
-  
-  environment = {
-    # System-wide environment variables
-    sessionVariables = {
-      # Wayland
-      NIXOS_OZONE_WL = "1";
-      
-      # XDG directories
-      XDG_CACHE_HOME = "$HOME/.cache";
-      XDG_CONFIG_HOME = "$HOME/.config";
-      XDG_DATA_HOME = "$HOME/.local/share";
-      XDG_STATE_HOME = "$HOME/.local/state";
-    };
 
   system.stateVersion = "25.11";
 }

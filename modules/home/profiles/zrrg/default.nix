@@ -35,7 +35,7 @@ in
   
   # Enable Home Manager to manage itself
   # programs.home-manager.enable = true;
-  
+  /*
   # XDG directories configuration
   xdg = {
     enable = true;
@@ -94,4 +94,5 @@ in
     ".local/share/.keep".text = "";
     ".local/state/.keep".text = "";
   };
+  */
 }
