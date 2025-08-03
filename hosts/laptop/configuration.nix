@@ -27,7 +27,8 @@
   
   # Use testing kernel for latest features
   boot.kernelPackages = pkgs.linuxPackages_testing;
-  # boot.readOnlyNixStore = false;
+  boot.tmp.cleanOnBoot = true;
+# boot.readOnlyNixStore = false;
 
   networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -36,11 +37,7 @@
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
-<<<<<<< HEAD
   # Enable networking
-
-=======
->>>>>>> 0c0017cf2131599e97c7b0563ab98834386a1da7
   # Enable the X11 windowing system - but minimize what gets pulled in
   #services.xserver.enable = true;
   
