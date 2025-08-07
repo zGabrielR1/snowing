@@ -32,13 +32,7 @@ in
       
       
       
-      # Graphics options
-      graphics = {
-        enable = mkEnableOption "graphics";
-        intel.enable = mkEnableOption "intel graphics";
-        nvidia.enable = mkEnableOption "nvidia graphics";
-        amd.enable = mkEnableOption "amd graphics";
-      };
+      
     };
   };
 }
