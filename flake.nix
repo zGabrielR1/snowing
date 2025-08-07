@@ -100,10 +100,14 @@
   };
 
   outputs = { self, nixpkgs, home-manager, flake-parts, chaotic, ... }@inputs:
+    let
+      system = "x86_64-linux";
+    in
     flake-parts.lib.mkFlake { inherit inputs; } {
-      systems = [ "x86_64-linux" ];
+      inherit system;
+      systems = [ system ];
       
-      perSystem = { config, pkgs, system, lib, ... }: {
+      perSystem = { config, pkgs, lib, ... }: {
         # Custom packages
         packages = {
           # Add custom packages here
@@ -137,7 +141,7 @@
         # NixOS Configurations
         nixosConfigurations = {
           laptop = nixpkgs.lib.nixosSystem {
-            system = "x86_64-linux";
+            inherit system;
             specialArgs = { 
               inherit inputs self; 
               users = ["zrrg"];
