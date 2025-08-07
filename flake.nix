@@ -165,6 +165,9 @@
                   extraSpecialArgs = { inherit inputs; };
                   users.zrrg = import ./modules/home/profiles/zrrg;
                 };
+                
+                # Ensure system is properly set
+                nixpkgs.hostPlatform = "x86_64-linux";
               }
             ];
           };
