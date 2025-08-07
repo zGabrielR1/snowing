@@ -26,12 +26,8 @@ in
       
       # Program options
       programs = {
-        wine = {
-          enable = mkEnableOption "wine";
-          ntsync.enable = mkEnableOption "ntsync kernel module";
-          wayland.enable = mkEnableOption "wine wayland";
-          ge-proton.enable = mkEnableOption "proton ge link";
-        };
+        # wine options moved to wine.nix; keep empty stub to avoid duplicates
+        wine = { };  # defines moved to wine.nix
       };
       
       # Service options
