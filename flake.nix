@@ -177,15 +177,17 @@ outputs = { self, nixpkgs, home-manager, flake-parts, chaotic, ... }@inputs:
 
         
         # Templates for creating new configurations
-        templates = {
-          nixos-host = {
-            path = ./templates/nixos-host;
-            description = "Template for a new NixOS host configuration";
-          };
-          home-user = {
-            path = ./templates/home-user;
-            description = "Template for a new Home Manager user configuration";
-          };
-        };
+      };
+
+    templates = {
+      nixos-host = {
+        path = ./templates/nixos-host;
+        description = "Template for a new NixOS host configuration";
+      };
+      home-user = {
+        path = ./templates/home-user;
+        description = "Template for a new Home Manager user configuration";
+      };
+    };
       };
 }
