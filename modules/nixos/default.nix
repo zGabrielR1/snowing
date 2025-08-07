@@ -30,10 +30,7 @@ in
         wine = { };  # defines moved to wine.nix
       };
       
-      # Service options
-      services = {
-        enable = mkEnableOption "services";
-      };
+      
       
       # Graphics options
       graphics = {
