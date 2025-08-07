@@ -172,9 +172,12 @@
         
         # Home Manager Configurations (standalone)
         homeConfigurations = {
-          zrrg = home-manager.lib.homeManagerConfiguration {
-            pkgs = nixpkgs.legacyPackages.x86_64-linux;
-            extraSpecialArgs = { inherit inputs system; };
+          zrrg = let
+            system = "x86_64-linux";  # Explicitly define the system here
+          in home-manager.lib.homeManagerConfiguration {
+            inherit system;
+            pkgs = nixpkgs.legacyPackages.${system};
+            extraSpecialArgs = { inherit inputs; };
             modules = [
               ./modules/home/profiles/zrrg
             ];
