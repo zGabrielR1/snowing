@@ -189,5 +189,5 @@ outputs = { self, nixpkgs, home-manager, flake-parts, chaotic, ... }@inputs:
         description = "Template for a new Home Manager user configuration";
       };
     };
-      };
+  };
 }
