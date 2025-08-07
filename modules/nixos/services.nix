@@ -30,8 +30,8 @@ in {
         PermitRootLogin = "no";
         PasswordAuthentication = false;
         PubkeyAuthentication = true;
+        allowedUsers = config.snowing.data.users;
       };
-      allowedUsers = config.snowing.data.users;
     };
 
     # Common service configurations
