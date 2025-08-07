@@ -174,7 +174,7 @@
         homeConfigurations = {
           zrrg = home-manager.lib.homeManagerConfiguration {
             pkgs = nixpkgs.legacyPackages.x86_64-linux;
-            extraSpecialArgs = { inherit inputs; };
+            extraSpecialArgs = { inherit inputs system; };
             modules = [
               ./modules/home/profiles/zrrg
             ];
