@@ -16,7 +16,7 @@ in {
 
   config = mkIf cfg.enable {
     # Intel graphics
-    hardware.opengl = {
+    hardware.graphics = {
       enable = true;
       
       extraPackages = with pkgs; (
