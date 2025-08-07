@@ -100,22 +100,10 @@
   };
 
   outputs = { self, nixpkgs, home-manager, flake-parts, chaotic, ... }@inputs:
-    let
-      inherit (nixpkgs) lib;
-      supportedSystems = [ "x86_64-linux" ];
-      forAllSystems = lib.genAttrs supportedSystems;
-      
-      nixpkgsFor = forAllSystems (system: import nixpkgs {
-        inherit system;
-        config.allowUnfree = true;
-      });
-    in
     flake-parts.lib.mkFlake { inherit inputs; } {
-      systems = supportedSystems;
+      systems = [ "x86_64-linux" ];
       
-      perSystem = { config, self', inputs', system, ... }: let
-        pkgs = nixpkgsFor.${system};
-      in {
+      perSystem = { config, pkgs, system, lib, ... }: {
         # Custom packages
         packages = {
           # Add custom packages here
@@ -147,64 +135,51 @@
       
       flake = {
         # NixOS Configurations
-        nixosConfigurations = forAllSystems (system: 
-          let
-            pkgs = nixpkgsFor.${system};
-          in
-          {
-            laptop = nixpkgs.lib.nixosSystem {
-              inherit system;
-              specialArgs = { 
-                inherit inputs self pkgs; 
-                users = ["zrrg"];
-              };
-              modules = [
-                # Core modules
-                home-manager.nixosModules.home-manager
-                chaotic.nixosModules.default
-                
-                # Custom modules
-                ./modules/nixos
-                
-                # Users configuration
-                ./users
-                
-                # Host configuration
-                ./hosts/laptop/configuration.nix
-                
-                # Home Manager integration
-                {
-                  home-manager = {
-                    useGlobalPkgs = true;
-                    useUserPackages = true;
-                    backupFileExtension = "HMBackup";
-                    extraSpecialArgs = { inherit inputs; };
-                    users.zrrg = import ./modules/home/profiles/zrrg;
-                  };
-                  
-                  # Ensure system is properly set
-                  nixpkgs.hostPlatform = "x86_64-linux";
-                }
-              ];
+        nixosConfigurations = {
+          laptop = nixpkgs.lib.nixosSystem {
+            system = "x86_64-linux";
+            specialArgs = { 
+              inherit inputs self; 
+              users = ["zrrg"];
             };
-          }
-        );
+            modules = [
+              # Core modules
+              home-manager.nixosModules.home-manager
+              chaotic.nixosModules.default
+              
+              # Custom modules
+              ./modules/nixos
+              
+              # Users configuration
+              ./users
+              
+              # Host configuration
+              ./hosts/laptop/configuration.nix
+              
+              # Home Manager integration
+              {
+                home-manager = {
+                  useGlobalPkgs = true;
+                  useUserPackages = true;
+                  backupFileExtension = "HMBackup";
+                  extraSpecialArgs = { inherit inputs; };
+                  users.zrrg = import ./modules/home/profiles/zrrg;
+                };
+              }
+            ];
+          };
+        };
         
         # Home Manager Configurations (standalone)
-        homeConfigurations = forAllSystems (system:
-          let
-            pkgs = nixpkgsFor.${system};
-          in
-          {
-            zrrg = home-manager.lib.homeManagerConfiguration {
-              inherit pkgs;
-              extraSpecialArgs = { inherit inputs; };
-              modules = [
-                ./modules/home/profiles/zrrg
-              ];
-            };
-          }
-        );
+        homeConfigurations = {
+          zrrg = home-manager.lib.homeManagerConfiguration {
+            pkgs = nixpkgs.legacyPackages.x86_64-linux;
+            extraSpecialArgs = { inherit inputs; };
+            modules = [
+              ./modules/home/profiles/zrrg
+            ];
+          };
+        };
         
         # Templates for creating new configurations
         templates = {
