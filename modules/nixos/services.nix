@@ -30,7 +30,7 @@ in {
         PermitRootLogin = "no";
         PasswordAuthentication = false;
         PubkeyAuthentication = true;
-        allowedUsers = config.snowing.data.users;
+        allowedUsers = lib.toList (config.snowing.data.users or []);
       };
     };
 
