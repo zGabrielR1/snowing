@@ -20,15 +20,20 @@ in {
       enable = true;
       driSupport = true;
       driSupport32Bit = true;
-    };
 
-    # Intel specific configuration
-    hardware.opengl.extraPackages = mkIf cfg.intel.enable (with pkgs; [
-      intel-media-driver
-      vaapiIntel
-      vaapiVdpau
-      libvdpau-va-gl
-    ]);
+      extraPackages =
+        (mkIf cfg.intel.enable (with pkgs; [
+          intel-media-driver
+          vaapiIntel
+          vaapiVdpau
+          libvdpau-va-gl
+        ]))
+        ++
+        (mkIf cfg.amd.enable (with pkgs; [
+          rocm-opencl-icd
+          rocm-opencl-runtime
+        ]));
+    };
 
     # Nvidia specific configuration
     hardware.nvidia = mkIf cfg.nvidia.enable {
@@ -38,12 +43,6 @@ in {
       nvidiaSettings = true;
       package = config.boot.kernelPackages.nvidiaPackages.stable;
     };
-
-    # AMD specific configuration
-    hardware.opengl.extraPackages = mkIf cfg.amd.enable (with pkgs; [
-      rocm-opencl-icd
-      rocm-opencl-runtime
-    ]);
 
     # Common graphics packages
     environment.systemPackages = with pkgs; [
