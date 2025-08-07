@@ -102,7 +102,6 @@
   outputs = { self, nixpkgs, home-manager, flake-parts, chaotic, ... }@inputs:
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = [ "x86_64-linux" ];
-    }
       perSystem = { config, pkgs, system, lib, ... }: {
         # Custom packages
         packages = {
@@ -132,7 +131,7 @@
         # Formatters
         formatter = pkgs.alejandra;
       };
-      
+
       flake = {
         # NixOS Configurations
         nixosConfigurations = {
@@ -196,5 +195,7 @@
           };
         };
       };
+      
+
     };
 }
