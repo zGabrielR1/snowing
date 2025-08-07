@@ -150,6 +150,9 @@
               # Custom modules
               ./modules/nixos
               
+              # Users configuration
+              ./users
+              
               # Host configuration
               ./hosts/laptop/configuration.nix
               

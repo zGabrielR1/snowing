@@ -8,6 +8,9 @@
   username = "zrrg";
   description = "Gabriel Renostro";
 in {
+  # Add user to snowing data.users list
+  snowing.data.users = [username];
+  
   users.users.${username} = {
     inherit description;
     isNormalUser = true;

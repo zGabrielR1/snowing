@@ -18,6 +18,37 @@
   ];
 
   # ============================================================================
+  # SNOWING CONFIGURATION
+  # ============================================================================
+  
+  # Define users for the snowing system
+  snowing.data.users = ["zrrg"];
+  
+  # Enable wine with all features
+  snowing.programs.wine = {
+    enable = true;
+    ntsync.enable = true;
+    wayland.enable = true;
+    ge-proton.enable = true;
+  };
+  
+  # Enable graphics support
+  snowing.graphics = {
+    enable = true;
+    intel.enable = true;
+  };
+  
+  # Enable services
+  snowing.services = {
+    enable = true;
+    tailscale = {
+      enable = true;
+      exitNode.enable = false;
+    };
+    openssh.enable = true;
+  };
+
+  # ============================================================================
   # BOOT CONFIGURATION
   # ============================================================================
   
