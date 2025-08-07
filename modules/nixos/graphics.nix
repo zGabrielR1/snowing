@@ -18,9 +18,7 @@ in {
     # Intel graphics
     hardware.opengl = {
       enable = true;
-      driSupport = true;
-      driSupport32Bit = true;
-
+      
       extraPackages =
         (mkIf cfg.intel.enable (with pkgs; [
           intel-media-driver
