@@ -4,7 +4,7 @@
   config,
   ...
 }: let
-  inherit (lib) mkEnableOption mkIf;
+  inherit (lib) mkEnableOption mkIf toList;
   cfg = config.snowing.services;
 in {
   options.snowing.services = {
@@ -30,7 +30,7 @@ in {
         PermitRootLogin = "no";
         PasswordAuthentication = false;
         PubkeyAuthentication = true;
-        allowedUsers = lib.toList (config.snowing.data.users or []);
+        allowedUsers = toList (config.snowing.data.users or []);
       };
     };
 
