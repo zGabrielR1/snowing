@@ -132,56 +132,49 @@ outputs = { self, nixpkgs, home-manager, flake-parts, chaotic, ... }@inputs:
         formatter = pkgs.alejandra;
       };
 
-      flake = {
-        # NixOS Configurations
-        nixosConfigurations = {
-          laptop = nixpkgs.lib.nixosSystem {
-            system = "x86_64-linux";
-            specialArgs = { 
-              inherit inputs self; 
-              users = ["zrrg"];
-            };
-            modules = [
-              # Core modules
-              home-manager.nixosModules.home-manager
-              chaotic.nixosModules.default
-              
-              # Custom modules
-              ./modules/nixos
-              
-              # Users configuration
-              ./users
-              
-              # Host configuration
-              ./hosts/laptop/configuration.nix
-              
-              # Home Manager integration
-              {
-                home-manager = {
-                  useGlobalPkgs = true;
-                  useUserPackages = true;
-                  backupFileExtension = "HMBackup";
-                  extraSpecialArgs = { inherit inputs; };
-                  users.zrrg = import ./modules/home/profiles/zrrg;
-                };
-              }
-            ];
+flake = {
+  nixosConfigurations = {
+    laptop = let
+      system = "x86_64-linux";
+    in nixpkgs.lib.nixosSystem {
+      inherit system;
+      specialArgs = {
+        inherit inputs self system;
+        users = [ "zrrg" ];
+      };
+      modules = [
+        home-manager.nixosModules.home-manager
+        chaotic.nixosModules.default
+        ./modules/nixos
+        ./users
+        ./hosts/laptop/configuration.nix
+        {
+          home-manager = {
+            useGlobalPkgs = true;
+            useUserPackages = true;
+            backupFileExtension = "HMBackup";
+            extraSpecialArgs = { inherit inputs system; };
+            users.zrrg = import ./modules/home/profiles/zrrg;
           };
-        };
-        
-        # Home Manager Configurations (standalone)
-        homeConfigurations = {
-          zrrg = let
-            system = "x86_64-linux";  # Explicitly define the system here
-          in home-manager.lib.homeManagerConfiguration {
-            inherit system;
-            pkgs = nixpkgs.legacyPackages.${system};
-            extraSpecialArgs = { inherit inputs; };
-            modules = [
-              ./modules/home/profiles/zrrg
-            ];
-          };
-        };
+        }
+      ];
+    };
+  };
+
+  homeConfigurations = {
+    zrrg = let
+      system = "x86_64-linux";
+    in home-manager.lib.homeManagerConfiguration {
+      inherit system;
+      pkgs = nixpkgs.legacyPackages.${system};
+      extraSpecialArgs = { inherit inputs system; };
+      modules = [
+        ./modules/home/profiles/zrrg
+      ];
+    };
+  };
+};
+
         
         # Templates for creating new configurations
         templates = {
