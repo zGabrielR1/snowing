@@ -100,25 +100,10 @@
   };
 
   outputs = { self, nixpkgs, home-manager, flake-parts, chaotic, ... }@inputs:
-    let
-      # Define supported systems
-      supportedSystems = [ "x86_64-linux" ];
-      
-      # Helper function to generate system-specific attributes
-      forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
-      
-      # Common arguments for nixpkgs
-      nixpkgsFor = forAllSystems (system: import nixpkgs {
-        inherit system;
-        config.allowUnfree = true;
-      });
-    in
     flake-parts.lib.mkFlake { inherit inputs; } {
-      inherit supportedSystems;
+      systems = [ "x86_64-linux" ];
       
-      perSystem = { config, self', inputs', system, ... }: let
-        pkgs = nixpkgsFor.${system};
-      in {
+      perSystem = { config, pkgs, system, lib, ... }: {
         # Custom packages
         packages = {
           # Add custom packages here
@@ -186,16 +171,18 @@
         };
         
         # Home Manager Configurations (standalone)
-        homeConfigurations = forAllSystems (system: {
-          zrrg = home-manager.lib.homeManagerConfiguration {
+        homeConfigurations = {
+          zrrg = let
+            system = "x86_64-linux";  # Explicitly define the system here
+          in home-manager.lib.homeManagerConfiguration {
             inherit system;
-            pkgs = nixpkgsFor.${system};
+            pkgs = nixpkgs.legacyPackages.${system};
             extraSpecialArgs = { inherit inputs; };
             modules = [
               ./modules/home/profiles/zrrg
             ];
           };
-        }).x86_64-linux;
+        };
         
         # Templates for creating new configurations
         templates = {
