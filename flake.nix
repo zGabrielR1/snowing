@@ -147,56 +147,64 @@
       
       flake = {
         # NixOS Configurations
-        nixosConfigurations = forAllSystems (system: let
-          pkgs = nixpkgsFor.${system};
-        in {
-          laptop = nixpkgs.lib.nixosSystem {
-            inherit system;
-            specialArgs = { 
-              inherit inputs self pkgs; 
-              users = ["zrrg"];
-            };
-            modules = [
-              # Core modules
-              home-manager.nixosModules.home-manager
-              chaotic.nixosModules.default
-              
-              # Custom modules
-              ./modules/nixos
-              
-              # Users configuration
-              ./users
-              
-              # Host configuration
-              ./hosts/laptop/configuration.nix
-              
-              # Home Manager integration
-              {
-                home-manager = {
-                  useGlobalPkgs = true;
-                  useUserPackages = true;
-                  backupFileExtension = "HMBackup";
-                  extraSpecialArgs = { inherit inputs; };
-                  users.zrrg = import ./modules/home/profiles/zrrg;
-                };
+        nixosConfigurations = forAllSystems (system: 
+          let
+            pkgs = nixpkgsFor.${system};
+          in
+          {
+            laptop = nixpkgs.lib.nixosSystem {
+              inherit system;
+              specialArgs = { 
+                inherit inputs self pkgs; 
+                users = ["zrrg"];
+              };
+              modules = [
+                # Core modules
+                home-manager.nixosModules.home-manager
+                chaotic.nixosModules.default
                 
-                # Ensure system is properly set
-                nixpkgs.hostPlatform = "x86_64-linux";
-              }
-            ];
-          };
-        };
+                # Custom modules
+                ./modules/nixos
+                
+                # Users configuration
+                ./users
+                
+                # Host configuration
+                ./hosts/laptop/configuration.nix
+                
+                # Home Manager integration
+                {
+                  home-manager = {
+                    useGlobalPkgs = true;
+                    useUserPackages = true;
+                    backupFileExtension = "HMBackup";
+                    extraSpecialArgs = { inherit inputs; };
+                    users.zrrg = import ./modules/home/profiles/zrrg;
+                  };
+                  
+                  # Ensure system is properly set
+                  nixpkgs.hostPlatform = "x86_64-linux";
+                }
+              ];
+            };
+          }
+        );
         
         # Home Manager Configurations (standalone)
-        homeConfigurations = {
-          zrrg = home-manager.lib.homeManagerConfiguration {
-            pkgs = nixpkgs.legacyPackages.x86_64-linux;
-            extraSpecialArgs = { inherit inputs; };
-            modules = [
-              ./modules/home/profiles/zrrg
-            ];
-          };
-        };
+        homeConfigurations = forAllSystems (system:
+          let
+            pkgs = nixpkgsFor.${system};
+          in
+          {
+            zrrg = home-manager.lib.homeManagerConfiguration {
+              inherit pkgs;
+              extraSpecialArgs = { inherit inputs; };
+              modules = [
+                ./modules/home/profiles/zrrg
+              ];
+            };
+          }
+        );
         
         # Templates for creating new configurations
         templates = {
