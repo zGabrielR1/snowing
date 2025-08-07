@@ -42,9 +42,6 @@ in {
       # Bluetooth
       blueman.enable = true;
       
-      # NetworkManager
-      networkmanager.enable = true;
-      
       # Pipewire for audio
       pipewire = {
         enable = true;
@@ -52,5 +49,8 @@ in {
         pulse.enable = true;
       };
     };
+
+    # NetworkManager lives under networking
+    networking.networkmanager.enable = true;
   };
 }
