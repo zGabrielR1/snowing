@@ -19,18 +19,19 @@ in {
     hardware.opengl = {
       enable = true;
       
-      extraPackages =
-        (mkIf cfg.intel.enable (with pkgs; [
+      extraPackages = with pkgs; (
+        (if cfg.intel.enable then [
           intel-media-driver
           vaapiIntel
           vaapiVdpau
           libvdpau-va-gl
-        ]))
+        ] else [])
         ++
-        (mkIf cfg.amd.enable (with pkgs; [
+        (if cfg.amd.enable then [
           rocm-opencl-icd
           rocm-opencl-runtime
-        ]));
+        ] else [])
+      );
     };
 
     # Nvidia specific configuration
