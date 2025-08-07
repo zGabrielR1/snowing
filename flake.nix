@@ -188,7 +188,4 @@ outputs = { self, nixpkgs, home-manager, flake-parts, chaotic, ... }@inputs:
           };
         };
       };
-      
-
-    };
 }
