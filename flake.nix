@@ -103,7 +103,7 @@
     {
       # Per-system development shells
       devShells = forAllSystems (system: let
-        pkgs = nixpkgsFor.${system};
+        pkgs = nixpkgs.${system};
       in {
         default = pkgs.mkShell {
           name = "nixos-config";
@@ -124,7 +124,7 @@
 
       # Per-system formatter
       formatter = forAllSystems (system: let
-        pkgs = nixpkgsFor.${system};
+        pkgs = nixpkgs.${system};
       in pkgs.alejandra);
 
       # NixOS Configurations
@@ -137,7 +137,7 @@
           };
           modules = [
             # Import readOnlyPkgs module to properly handle pkgs
-            { nixpkgs.pkgs = nixpkgsFor.x86_64-linux; }
+            { nixpkgs.pkgs = nixpkgs.x86_64-linux; }
             # Core modules
             home-manager.nixosModules.home-manager
             chaotic.nixosModules.default
@@ -171,7 +171,7 @@
       # Home Manager Configurations (standalone)
       homeConfigurations = {
         zrrg = home-manager.lib.homeManagerConfiguration {
-          pkgs = nixpkgsFor.x86_64-linux;
+          pkgs = nixpkgs.x86_64-linux;
           extraSpecialArgs = { inherit inputs; };
           modules = [
             ./modules/home/profiles/zrrg
