@@ -108,7 +108,7 @@
     {
       # Per-system packages
       packages = forAllSystems (system: 
-        let pkgs = nixpkgs.legacyPackages.${system};
+        let pkgs = nixpkgsFor.${system};
         in {
           # Add custom packages here, e.g. myPkg = pkgs.callPackage ...;
         }
