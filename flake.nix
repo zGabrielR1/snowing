@@ -95,7 +95,6 @@
     #nur.url = "github:nix-community/NUR";
   };
 
-<<<<<<< HEAD
   outputs = { self, nixpkgs, home-manager, chaotic, ... }@inputs:
     let
       inherit (nixpkgs) lib;
@@ -133,15 +132,6 @@
             echo "🔧 NixOS Configuration Development Shell"
             echo "Available tools: nixpkgs-fmt, statix, deadnix, alejandra, nil, nix-tree"
           '';
-=======
-outputs = { self, nixpkgs, home-manager, flake-parts, chaotic, ... }@inputs:
-  flake-parts.lib.mkFlake { inherit inputs; } {
-    systems = [ "x86_64-linux" ];
-      perSystem = { config, pkgs, system, lib, ... }: {
-        # Custom packages
-        packages = {
-          # Add custom packages here
->>>>>>> 0942a878384e2a2ccdddafd466ab9e531447a5b5
         };
       });
 
