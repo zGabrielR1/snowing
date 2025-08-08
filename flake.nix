@@ -137,11 +137,8 @@
             users = [ "zrrg" ];
           };
           modules = [
-<<<<<<< HEAD
             # Import readOnlyPkgs module to properly handle pkgs
             { nixpkgs.pkgs = nixpkgs.x86_64-linux; }
-=======
->>>>>>> parent of a3860ef (.)
             # Core modules
             home-manager.nixosModules.home-manager
             chaotic.nixosModules.default
