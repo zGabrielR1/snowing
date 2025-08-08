@@ -103,7 +103,7 @@
     {
       # Per-system development shells
       devShells = forAllSystems (system: let
-        pkgs = nixpkgs.${system};
+        pkgs = nixpkgs.legacyPackages.${system};
       in {
         default = pkgs.mkShell {
           name = "nixos-config";
@@ -116,16 +116,14 @@
             nix-tree
           ];
           shellHook = ''
-            echo "🔧 NixOS Configuration Development Shell"
+            echo " NixOS Configuration Development Shell"
             echo "Available tools: nixpkgs-fmt, statix, deadnix, alejandra, nil, nix-tree"
           '';
         };
       });
 
       # Per-system formatter
-      formatter = forAllSystems (system: let
-        pkgs = nixpkgs.${system};
-      in pkgs.alejandra);
+      formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.alejandra);
 
       # NixOS Configurations
       nixosConfigurations = {
@@ -133,12 +131,9 @@
           system = "x86_64-linux";
           specialArgs = {
             inherit inputs self;
-            pkgs = nixpkgsFor.x86_64-linux;
             users = [ "zrrg" ];
           };
           modules = [
-            # Import readOnlyPkgs module to properly handle pkgs
-            { nixpkgs.pkgs = nixpkgs.x86_64-linux; }
             # Core modules
             home-manager.nixosModules.home-manager
             chaotic.nixosModules.default
@@ -172,7 +167,7 @@
       # Home Manager Configurations (standalone)
       homeConfigurations = {
         zrrg = home-manager.lib.homeManagerConfiguration {
-          pkgs = nixpkgs.x86_64-linux;
+          pkgs = nixpkgs.legacyPackages.x86_64-linux;
           extraSpecialArgs = { inherit inputs; };
           modules = [
             ./modules/home/profiles/zrrg
