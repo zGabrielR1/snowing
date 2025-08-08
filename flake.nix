@@ -133,11 +133,15 @@
           system = "x86_64-linux";
           specialArgs = {
             inherit inputs self;
+            pkgs = nixpkgsFor.x86_64-linux;
             users = [ "zrrg" ];
           };
           modules = [
+<<<<<<< HEAD
             # Import readOnlyPkgs module to properly handle pkgs
             { nixpkgs.pkgs = nixpkgs.x86_64-linux; }
+=======
+>>>>>>> parent of a3860ef (.)
             # Core modules
             home-manager.nixosModules.home-manager
             chaotic.nixosModules.default
