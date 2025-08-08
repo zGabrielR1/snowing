@@ -30,7 +30,6 @@ in {
         PermitRootLogin = "no";
         PasswordAuthentication = false;
         PubkeyAuthentication = true;
-        allowedUsers = lib.concatStringsSep " " config.snowing.data.users;
       };
     };
 
