@@ -28,7 +28,7 @@
     #toolbox
     podman
     #pods
-    github-desktop
+    #github-desktop
     kitty 
     #awesome
     #niri
