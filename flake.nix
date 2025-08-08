@@ -146,10 +146,11 @@
           system = "x86_64-linux";
           specialArgs = {
             inherit inputs self;
-            pkgs = nixpkgsFor.x86_64-linux;
             users = [ "zrrg" ];
           };
           modules = [
+            # Import readOnlyPkgs module to properly handle pkgs
+            { nixpkgs.pkgs = nixpkgsFor.x86_64-linux; }
             # Core modules
             home-manager.nixosModules.home-manager
             chaotic.nixosModules.default
