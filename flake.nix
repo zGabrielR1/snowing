@@ -1,6 +1,5 @@
-# flake.nix
 {
-  description = "My configs (Refactored with flake-parts)";
+  description = "My configs";
 
   inputs = {
 
@@ -19,10 +18,7 @@
     # Snaps? why?
     #nix-snapd.url = "github:nix-community/nix-snapd";
     #nix-snapd.inputs.nixpkgs.follows = "nixpkgs";
-    flake-parts = {
-      url = "github:hercules-ci/flake-parts";
-      inputs.nixpkgs-lib.follows = "nixpkgs";
-    };
+    # NOTE: Previously used flake-parts; removed as unnecessary
 
     # --- Dotfile Management ---
     hjem = {
@@ -99,6 +95,45 @@
     #nur.url = "github:nix-community/NUR";
   };
 
+<<<<<<< HEAD
+  outputs = { self, nixpkgs, home-manager, chaotic, ... }@inputs:
+    let
+      inherit (nixpkgs) lib;
+      supportedSystems = [ "x86_64-linux" ];
+      forAllSystems = lib.genAttrs supportedSystems;
+
+      nixpkgsFor = forAllSystems (system: import nixpkgs {
+        inherit system;
+        config.allowUnfree = true;
+      });
+    in
+    {
+      # Per-system packages
+      packages = forAllSystems (system: let
+        pkgs = nixpkgsFor.${system};
+      in {
+        # Add custom packages here, e.g. myPkg = pkgs.callPackage ...;
+      });
+
+      # Per-system development shells
+      devShells = forAllSystems (system: let
+        pkgs = nixpkgsFor.${system};
+      in {
+        default = pkgs.mkShell {
+          name = "nixos-config";
+          buildInputs = with pkgs; [
+            nixpkgs-fmt
+            statix
+            deadnix
+            alejandra
+            nil
+            nix-tree
+          ];
+          shellHook = ''
+            echo "🔧 NixOS Configuration Development Shell"
+            echo "Available tools: nixpkgs-fmt, statix, deadnix, alejandra, nil, nix-tree"
+          '';
+=======
 outputs = { self, nixpkgs, home-manager, flake-parts, chaotic, ... }@inputs:
   flake-parts.lib.mkFlake { inherit inputs; } {
     systems = [ "x86_64-linux" ];
@@ -106,25 +141,41 @@ outputs = { self, nixpkgs, home-manager, flake-parts, chaotic, ... }@inputs:
         # Custom packages
         packages = {
           # Add custom packages here
+>>>>>>> 0942a878384e2a2ccdddafd466ab9e531447a5b5
         };
-        
-        # Development shells
-        devShells = {
-          default = pkgs.mkShell {
-            name = "nixos-config";
-            buildInputs = with pkgs; [
-              nixpkgs-fmt
-              statix
-              deadnix
-              alejandra
-              nil # Nix LSP
-              nix-tree # Dependency visualization
-            ];
-            shellHook = ''
-              echo "🔧 NixOS Configuration Development Shell"
-              echo "Available tools: nixpkgs-fmt, statix, deadnix, alejandra, nil, nix-tree"
-            '';
+      });
+
+      # Per-system formatter
+      formatter = forAllSystems (system: let
+        pkgs = nixpkgsFor.${system};
+      in pkgs.alejandra);
+
+      # NixOS Configurations
+      nixosConfigurations = {
+        laptop = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = {
+            inherit inputs self;
+            pkgs = nixpkgsFor.x86_64-linux;
+            users = [ "zrrg" ];
           };
+<<<<<<< HEAD
+          modules = [
+            # Core modules
+            home-manager.nixosModules.home-manager
+            chaotic.nixosModules.default
+
+            # Custom modules
+            ./modules/nixos
+
+            # Users configuration
+            ./users
+
+            # Host configuration
+            ./hosts/laptop/configuration.nix
+
+            # Home Manager integration
+=======
           
         };
         
@@ -148,19 +199,36 @@ outputs = { self, nixpkgs, home-manager, flake-parts, chaotic, ... }@inputs:
             ./modules/nixos
             ./users
             ./hosts/laptop/configuration.nix
+>>>>>>> 0942a878384e2a2ccdddafd466ab9e531447a5b5
             {
               home-manager = {
                 useGlobalPkgs = true;
                 useUserPackages = true;
                 backupFileExtension = "HMBackup";
+<<<<<<< HEAD
+                extraSpecialArgs = { inherit inputs; };
+                users.zrrg = import ./modules/home/profiles/zrrg;
+              };
+
+              # Ensure system is properly set
+              nixpkgs.hostPlatform = "x86_64-linux";
+=======
                 extraSpecialArgs = { inherit inputs system; };
                 users.zrrg = import ./modules/home/profiles/zrrg;
               };
+>>>>>>> 0942a878384e2a2ccdddafd466ab9e531447a5b5
             }
           ];
         };
       };
 
+<<<<<<< HEAD
+      # Home Manager Configurations (standalone)
+      homeConfigurations = {
+        zrrg = home-manager.lib.homeManagerConfiguration {
+          pkgs = nixpkgsFor.x86_64-linux;
+          extraSpecialArgs = { inherit inputs; };
+=======
       homeConfigurations = {
         zrrg = let
           system = "x86_64-linux";
@@ -168,12 +236,17 @@ outputs = { self, nixpkgs, home-manager, flake-parts, chaotic, ... }@inputs:
           inherit system;
           pkgs = nixpkgs.legacyPackages.${system};
           extraSpecialArgs = { inherit inputs system; };
+>>>>>>> 0942a878384e2a2ccdddafd466ab9e531447a5b5
           modules = [
             ./modules/home/profiles/zrrg
           ];
         };
       };
 
+<<<<<<< HEAD
+      # Templates for creating new configurations
+=======
+>>>>>>> 0942a878384e2a2ccdddafd466ab9e531447a5b5
       templates = {
         nixos-host = {
           path = ./templates/nixos-host;
