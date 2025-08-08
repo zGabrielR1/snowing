@@ -4,7 +4,7 @@
 # It defines packages, aliases, and program settings.
 # Note: Dotfiles are now managed by Hjem in users/zrrg.nix
 #
-{ config, pkgs, system, inputs, ... }:
+{ config, pkgs, inputs, ... }:
 
 let
   # --- Package Sets for Better Organization ---
@@ -82,7 +82,7 @@ let
     lite-xl
     zed-editor
     #jetbrains-toolbox
-    #(inputs.windsurf.packages."${system}".windsurf)
+    # (inputs.windsurf.packages.${pkgs.system}.windsurf)
 
     # Programming Language Support
     tokei # code stats
@@ -90,7 +90,7 @@ let
 
   gui-apps = with pkgs; [
     # Browser
-    (inputs.zen-browser.packages."${system}".default)
+    (inputs.zen-browser.packages.${pkgs.system}.default)
     # File Managers
     pcmanfm
     nautilus
