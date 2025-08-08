@@ -149,7 +149,6 @@
             pkgs = nixpkgsFor.x86_64-linux;
             users = [ "zrrg" ];
           };
-<<<<<<< HEAD
           modules = [
             # Core modules
             home-manager.nixosModules.home-manager
@@ -165,78 +164,34 @@
             ./hosts/laptop/configuration.nix
 
             # Home Manager integration
-=======
-          
-        };
-        
-        # Formatters
-        formatter = pkgs.alejandra;
-      };
-
-    flake = {
-      nixosConfigurations = {
-        laptop = let
-          system = "x86_64-linux";
-        in nixpkgs.lib.nixosSystem {
-          inherit system;
-          specialArgs = {
-            inherit inputs self system;
-            users = [ "zrrg" ];
-          };
-          modules = [
-            home-manager.nixosModules.home-manager
-            chaotic.nixosModules.default
-            ./modules/nixos
-            ./users
-            ./hosts/laptop/configuration.nix
->>>>>>> 0942a878384e2a2ccdddafd466ab9e531447a5b5
             {
               home-manager = {
                 useGlobalPkgs = true;
                 useUserPackages = true;
                 backupFileExtension = "HMBackup";
-<<<<<<< HEAD
                 extraSpecialArgs = { inherit inputs; };
                 users.zrrg = import ./modules/home/profiles/zrrg;
               };
 
               # Ensure system is properly set
               nixpkgs.hostPlatform = "x86_64-linux";
-=======
-                extraSpecialArgs = { inherit inputs system; };
-                users.zrrg = import ./modules/home/profiles/zrrg;
-              };
->>>>>>> 0942a878384e2a2ccdddafd466ab9e531447a5b5
             }
           ];
         };
       };
 
-<<<<<<< HEAD
       # Home Manager Configurations (standalone)
       homeConfigurations = {
         zrrg = home-manager.lib.homeManagerConfiguration {
           pkgs = nixpkgsFor.x86_64-linux;
           extraSpecialArgs = { inherit inputs; };
-=======
-      homeConfigurations = {
-        zrrg = let
-          system = "x86_64-linux";
-        in home-manager.lib.homeManagerConfiguration {
-          inherit system;
-          pkgs = nixpkgs.legacyPackages.${system};
-          extraSpecialArgs = { inherit inputs system; };
->>>>>>> 0942a878384e2a2ccdddafd466ab9e531447a5b5
           modules = [
             ./modules/home/profiles/zrrg
           ];
         };
       };
 
-<<<<<<< HEAD
       # Templates for creating new configurations
-=======
->>>>>>> 0942a878384e2a2ccdddafd466ab9e531447a5b5
       templates = {
         nixos-host = {
           path = ./templates/nixos-host;
