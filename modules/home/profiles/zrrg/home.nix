@@ -67,6 +67,7 @@ let
     gh
     glab
     delta
+    nodejs_24
 
     # Editors & IDEs
     neovim
