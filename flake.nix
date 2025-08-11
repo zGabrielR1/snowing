@@ -154,7 +154,8 @@
                 useUserPackages = true;
                 backupFileExtension = "HMBackup";
                 extraSpecialArgs = { inherit inputs; };
-                users.zrrg = import ./modules/home/profiles/zrrg;
+                users.${user} = { config, pkgs, lib, ... }:
+                  import ./modules/home/profiles/zrrg { inherit config pkgs lib inputs; };
               };
 
               # Ensure system is properly set

@@ -18,7 +18,7 @@
   # SYSTEM IDENTIFICATION
   # ============================================================================
   
-  networking.hostName = "HOSTNAME"; # Replace with actual hostname
+  networking.hostName = "nixos"; # Replace with actual hostname
   system.stateVersion = "25.11"; # Set to your NixOS version
 
   # ============================================================================
