@@ -1,10 +1,8 @@
-# flake.nix
 {
-  description = "My configs (Refactored with flake-parts)";
+  description = "My configs";
 
   inputs = {
-
-        # --- Core Inputs ---
+    # --- Core Inputs ---
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     
     chaotic = {
@@ -19,10 +17,7 @@
     # Snaps? why?
     #nix-snapd.url = "github:nix-community/nix-snapd";
     #nix-snapd.inputs.nixpkgs.follows = "nixpkgs";
-    flake-parts = {
-      url = "github:hercules-ci/flake-parts";
-      inputs.nixpkgs-lib.follows = "nixpkgs";
-    };
+    # NOTE: Previously used flake-parts; removed as unnecessary
 
     # --- Dotfile Management ---
     hjem = {
@@ -99,81 +94,88 @@
     #nur.url = "github:nix-community/NUR";
   };
 
-outputs = { self, nixpkgs, home-manager, flake-parts, chaotic, ... }@inputs:
-  flake-parts.lib.mkFlake { inherit inputs; } {
-    systems = [ "x86_64-linux" ];
-      perSystem = { config, pkgs, system, lib, ... }: {
-        # Custom packages
-        packages = {
-          # Add custom packages here
+  outputs = { self, nixpkgs, home-manager, chaotic, ... }@inputs:
+    let
+      inherit (nixpkgs) lib;
+      supportedSystems = [ "x86_64-linux" ];
+      forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
+    in
+    {
+      # Per-system development shells
+      devShells = forAllSystems (system: let
+        pkgs = nixpkgs.legacyPackages.${system};
+      in {
+        default = pkgs.mkShell {
+          name = "nixos-config";
+          buildInputs = with pkgs; [
+            nixpkgs-fmt
+            statix
+            deadnix
+            alejandra
+            nil
+            nix-tree
+          ];
+          shellHook = ''
+            echo " NixOS Configuration Development Shell"
+            echo "Available tools: nixpkgs-fmt, statix, deadnix, alejandra, nil, nix-tree"
+          '';
         };
-        
-        # Development shells
-        devShells = {
-          default = pkgs.mkShell {
-            name = "nixos-config";
-            buildInputs = with pkgs; [
-              nixpkgs-fmt
-              statix
-              deadnix
-              alejandra
-              nil # Nix LSP
-              nix-tree # Dependency visualization
-            ];
-            shellHook = ''
-              echo "🔧 NixOS Configuration Development Shell"
-              echo "Available tools: nixpkgs-fmt, statix, deadnix, alejandra, nil, nix-tree"
-            '';
-          };
-          
-        };
-        
-        # Formatters
-        formatter = pkgs.alejandra;
-      };
+      });
 
-    flake = {
+      # Per-system formatter
+      formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.alejandra);
+
+      # NixOS Configurations
       nixosConfigurations = {
-        laptop = let
+        laptop = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
-        in nixpkgs.lib.nixosSystem {
-          inherit system;
           specialArgs = {
-            inherit inputs self system;
+            inherit inputs self;
             users = [ "zrrg" ];
           };
           modules = [
+            # Core modules
             home-manager.nixosModules.home-manager
             chaotic.nixosModules.default
+
+            # Custom modules
             ./modules/nixos
+
+            # Users configuration
             ./users
+
+            # Host configuration
             ./hosts/laptop/configuration.nix
+
+            # Home Manager integration
             {
               home-manager = {
                 useGlobalPkgs = true;
                 useUserPackages = true;
                 backupFileExtension = "HMBackup";
-                extraSpecialArgs = { inherit inputs system; };
+                extraSpecialArgs = { inherit inputs; };
                 users.zrrg = import ./modules/home/profiles/zrrg;
               };
+
+              # Ensure system is properly set
+              nixpkgs.hostPlatform = "x86_64-linux";
             }
           ];
         };
       };
 
+      # Home Manager Configurations (standalone)
       homeConfigurations = {
-        zrrg = let
-          system = "x86_64-linux";
-        in home-manager.lib.homeManagerConfiguration {
-          inherit system;
-          pkgs = nixpkgs.legacyPackages.${system};
-          extraSpecialArgs = { inherit inputs system; };
+        zrrg = home-manager.lib.homeManagerConfiguration {
+          pkgs = nixpkgs.legacyPackages.x86_64-linux;
+          extraSpecialArgs = { inherit inputs; };
           modules = [
             ./modules/home/profiles/zrrg
           ];
         };
       };
 
+      # Templates for creating new configurations
       templates = {
         nixos-host = {
           path = ./templates/nixos-host;
@@ -185,5 +187,4 @@ outputs = { self, nixpkgs, home-manager, flake-parts, chaotic, ... }@inputs:
         };
       };
     };
-  };
 }

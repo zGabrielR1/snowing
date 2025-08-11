@@ -1,8 +1,6 @@
 { config, lib, pkgs, ... }:
 
 {
-  nixpkgs.config.allowUnfree = true;
-
   environment.systemPackages = with pkgs; [
     # Custom VSCode Insiders build
     /*((pkgs.vscode.override { isInsiders = true; }).overrideAttrs (oldAttrs: rec {

@@ -45,7 +45,7 @@
       enable = true;
       exitNode.enable = false;
     };
-    openssh.enable = true;
+    openssh.enable = false;
   };
 
   # ============================================================================
