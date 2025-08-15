@@ -27,7 +27,6 @@ snowing/
 │               └── wm/
 │                   └── hyprland/
 └── pkgs/                    # Custom packages
-    └── windsurf/
 ```
 
 ## 🚀 Quick Start

@@ -15,7 +15,6 @@
     #vim
     nano
     #code-cursor
-    #windsurf
     git
     gh
     #runc

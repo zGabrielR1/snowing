@@ -81,11 +81,7 @@
     inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # --- Windsurf IDE ---
-    #windsurf = {
-    #  url = "path:./pkgs/windsurf";
-    #  inputs.nixpkgs.follows = "nixpkgs";
-    #};
+
 
     # --- Compatibility ---
     #flake-compat.url = "github:edolstra/flake-compat";

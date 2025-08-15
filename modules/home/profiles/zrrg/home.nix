@@ -83,7 +83,6 @@ let
     lite-xl
     zed-editor
     #jetbrains-toolbox
-    # (inputs.windsurf.packages.${pkgs.system}.windsurf)
 
     # Programming Language Support
     tokei # code stats
