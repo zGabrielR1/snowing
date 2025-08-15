@@ -18,7 +18,6 @@ let
   flatpakAppDefs = [
     { option = "refine";      id = "page.tesk.Refine";           description = "Enable pre-installation of the Refine Flatpak app."; }
     { option = "flatseal";    id = "com.github.tchx84.Flatseal"; description = "Enable pre-installation of the Flatseal Flatpak app."; }
-    { option = "kontainer";   id = "io.github.DenysMb.Kontainer"; description = "Enable pre-installation of the Kontainer Flatpak app."; }
     { option = "zen_browser"; id = "app.zen_browser.zen";        description = "Enable pre-installation of the Zen Browser Flatpak app."; }
   ];
 
