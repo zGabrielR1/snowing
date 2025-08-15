@@ -84,9 +84,6 @@ in
         "https://divnix.cachix.org"
         "https://nixpkgs-wayland.cachix.org"
         "https://chaotic-nyx.cachix.org"
-        "https://colmena.cachix.org"
-        "https://anyrun.cachix.org"
-        "https://niri.cachix.org"
       ];
 
       trusted-public-keys = [
@@ -98,9 +95,6 @@ in
         "divnix.cachix.org-1:U8QPQF411uJGX3mW9E1ojuFu6QLJrrUETcOEjBuBYHg="
         "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
         "chaotic-nyx.cachix.org-1:HfnXSw4pj95iI/n17rIDy40agHj12WfF+Gqk6SonIT8="
-        "colmena.cachix.org-1:7BzpDnjjH8ki2CT3f6GdOk7QAzPOl+1t3LvTLXqYcSg="
-        "anyrun.cachix.org-1:pqBobmOjI7nKlsUMV25u9QHa9btJK65/C8vnO3p346s="
-        "niri.cachix.org-1:Wv0OmO7PsuocRKzfDoJ3mulSl7Z6oezYhGhR+3W2964="
       ];
 
       # Performance optimizations
