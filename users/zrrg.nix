@@ -34,90 +34,90 @@ in {
     packages = [ ];
   };
 
-  # Hjem configuration for dotfile management
-  hjem.users.${username} = {
-    enable = true;
-    user = username;
-    directory = config.users.users.${username}.home;
-    clobberFiles = lib.mkForce true;
+  # Hjem configuration for dotfile management - DISABLED: Making dotfiles independent
+  # hjem.users.${username} = {
+  #   enable = true;
+  #   user = username;
+  #   directory = config.users.users.${username}.home;
+  #   clobberFiles = lib.mkForce true;
 
-    files = {
-      # ============================================================================
-      # SHELL CONFIGURATIONS
-      # ============================================================================
+  #   files = {
+  #     # ============================================================================
+  #     # SHELL CONFIGURATIONS
+  #     # ============================================================================
       
-      # Shell configurations
-      ".zshrc".source = ../modules/home/lazuhyprDotfiles/.zshrc;
-      ".bashrc".source = ../modules/home/lazuhyprDotfiles/.bashrc;
-      ".config/zshrc".source = ../modules/home/lazuhyprDotfiles/.config/zshrc;
-      ".config/bashrc".source = ../modules/home/lazuhyprDotfiles/.config/bashrc;
-      ".config/fish".source = ../modules/home/lazuhyprDotfiles/.config/fish;
+  #     # Shell configurations
+  #     ".zshrc".source = ../modules/home/lazuhyprDotfiles/.zshrc;
+  #     ".bashrc".source = ../modules/home/lazuhyprDotfiles/.bashrc;
+  #     ".config/zshrc".source = ../modules/home/lazuhyprDotfiles/.config/zshrc;
+  #     ".config/bashrc".source = ../modules/home/lazuhyprDotfiles/.config/bashrc;
+  #     ".config/fish".source = ../modules/home/lazuhyprDotfiles/.config/fish;
 
-      # ============================================================================
-      # TERMINAL & EDITOR CONFIGURATIONS
-      # ============================================================================
+  #     # ============================================================================
+  #     # TERMINAL & EDITOR CONFIGURATIONS
+  #     # ============================================================================
       
-      # Terminal and editor configurations
-      ".tmux.conf".source = ../modules/home/lazuhyprDotfiles/.tmux.conf;
-      ".vimrc".source = ../modules/home/lazuhyprDotfiles/.vimrc;
-      ".ideavimrc".source = ../modules/home/lazuhyprDotfiles/.ideavimrc;
-      ".config/nvim".source = ../modules/home/lazuhyprDotfiles/.config/nvim;
-      ".config/wezterm".source = ../modules/home/lazuhyprDotfiles/.config/wezterm;
-      ".config/btop".source = ../modules/home/lazuhyprDotfiles/.config/btop;
-      ".config/ohmyposh".source = ../modules/home/lazuhyprDotfiles/.config/ohmyposh;
+  #     # Terminal and editor configurations
+  #     ".tmux.conf".source = ../modules/home/lazuhyprDotfiles/.tmux.conf;
+  #     ".vimrc".source = ../modules/home/lazuhyprDotfiles/.vimrc;
+  #     ".ideavimrc".source = ../modules/home/lazuhyprDotfiles/.ideavimrc;
+  #     ".config/nvim".source = ../modules/home/lazuhyprDotfiles/.config/nvim;
+  #     ".config/wezterm".source = ../modules/home/lazuhyprDotfiles/.config/wezterm;
+  #     ".config/btop".source = ../modules/home/lazuhyprDotfiles/.config/btop;
+  #     ".config/ohmyposh".source = ../modules/home/lazuhyprDotfiles/.config/ohmyposh;
 
-      # ============================================================================
-      # DESKTOP & THEMING
-      # ============================================================================
+  #     # ============================================================================
+  #     # DESKTOP & THEMING
+  #     # ============================================================================
       
-      # X11 and GTK configurations
-      ".gtkrc-2.0".source = ../modules/home/lazuhyprDotfiles/.gtkrc-2.0;
-      # ".Xresources".source = ../modules/home/lazuhyprDotfiles/.Xresources;
+  #     # X11 and GTK configurations
+  #     ".gtkrc-2.0".source = ../modules/home/lazuhyprDotfiles/.gtkrc-2.0;
+  #     # ".Xresources".source = ../modules/home/lazuhyprDotfiles/.Xresources;
 
-      # ============================================================================
-      # DEVELOPMENT TOOLS
-      # ============================================================================
+  #     # ============================================================================
+  #     # DEVELOPMENT TOOLS
+  #     # ============================================================================
       
-      # Git delta themes
-      ".delta-themes.gitconfig".source = ../modules/home/lazuhyprDotfiles/.delta-themes.gitconfig;
+  #     # Git delta themes
+  #     ".delta-themes.gitconfig".source = ../modules/home/lazuhyprDotfiles/.delta-themes.gitconfig;
 
-      # ============================================================================
-      # FILE MANAGEMENT
-      # ============================================================================
+  #     # ============================================================================
+  #     # FILE MANAGEMENT
+  #     # ============================================================================
       
-      # Stow configuration
-      ".stow-local-ignore".source = ../modules/home/lazuhyprDotfiles/.stow-local-ignore;
-      ".config/lf".source = ../modules/home/lazuhyprDotfiles/.config/lf;
-      ".config/ctpv".source = ../modules/home/lazuhyprDotfiles/.config/ctpv;
+  #     # Stow configuration
+  #     ".stow-local-ignore".source = ../modules/home/lazuhyprDotfiles/.stow-local-ignore;
+  #     ".config/lf".source = ../modules/home/lazuhyprDotfiles/.config/lf;
+  #     ".config/ctpv".source = ../modules/home/lazuhyprDotfiles/.config/ctpv;
 
-      # ============================================================================
-      # WINDOW MANAGER & DESKTOP ENVIRONMENT
-      # ============================================================================
+  #     # ============================================================================
+  #     # WINDOW MANAGER & DESKTOP ENVIRONMENT
+  #     # ============================================================================
       
-      # Hyprland ecosystem
-      ".config/hypr".source = ../modules/home/lazuhyprDotfiles/.config/hypr;
-      ".config/waybar".source = ../modules/home/lazuhyprDotfiles/.config/waybar;
-      ".config/rofi".source = ../modules/home/lazuhyprDotfiles/.config/rofi;
-      ".config/swaync".source = ../modules/home/lazuhyprDotfiles/.config/swaync;
-      ".config/wlogout".source = ../modules/home/lazuhyprDotfiles/.config/wlogout;
+  #     # Hyprland ecosystem
+  #     ".config/hypr".source = ../modules/home/lazuhyprDotfiles/.config/hypr;
+  #     ".config/waybar".source = ../modules/home/lazuhyprDotfiles/.config/waybar;
+  #     ".config/rofi".source = ../modules/home/lazuhyprDotfiles/.config/rofi;
+  #     ".config/swaync".source = ../modules/home/lazuhyprDotfiles/.config/swaync;
+  #     ".config/wlogout".source = ../modules/home/lazuhyprDotfiles/.config/wlogout;
 
-      # ============================================================================
-      # MULTIMEDIA & ENTERTAINMENT
-      # ============================================================================
+  #     # ============================================================================
+  #     # MULTIMEDIA & ENTERTAINMENT
+  #     # ============================================================================
       
-      # Media players and entertainment
-      ".config/mpv".source = ../modules/home/lazuhyprDotfiles/.config/mpv;
-      ".config/spicetify".source = ../modules/home/lazuhyprDotfiles/.config/spicetify;
+  #     # Media players and entertainment
+  #     ".config/mpv".source = ../modules/home/lazuhyprDotfiles/.config/mpv;
+  #     ".config/spicetify".source = ../modules/home/lazuhyprDotfiles/.config/spicetify;
 
-      # ============================================================================
-      # SYSTEM UTILITIES
-      # ============================================================================
+  #     # ============================================================================
+  #     # SYSTEM UTILITIES
+  #     # ============================================================================
       
-      # System monitoring and utilities
-      ".config/fastfetch".source = ../modules/home/lazuhyprDotfiles/.config/fastfetch;
-      ".config/lsd".source = ../modules/home/lazuhyprDotfiles/.config/lsd;
-    };
-  };
+  #     # System monitoring and utilities
+  #     ".config/fastfetch".source = ../modules/home/lazuhyprDotfiles/.config/fastfetch;
+  #     ".config/lsd".source = ../modules/home/lazuhyprDotfiles/.config/lsd;
+  #   };
+  # };
 
   # ============================================================================
   # ADDITIONAL USER-SPECIFIC CONFIGURATIONS
