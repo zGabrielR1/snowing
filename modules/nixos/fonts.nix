@@ -2,6 +2,8 @@
 
   fonts = {
     packages = with pkgs; [
+
+
       roboto
       work-sans
       comic-neue
@@ -15,6 +17,12 @@
       noto-fonts
       noto-fonts-cjk-sans
       noto-fonts-emoji
+      nerd-fonts.jetbrains-mono
+      nerd-fonts.symbols-only
+      nerd-fonts.fira-code
+      nerd-fonts.meslo-lg
+      nerd-fonts.jetbrains-mono
+      nerd-fonts.symbols-only
       nerd-fonts.fira-code
       nerd-fonts.meslo-lg
       openmoji-color

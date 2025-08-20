@@ -27,7 +27,6 @@
     #pods
     #github-desktop
     kitty 
-    #awesome
     #niri
     flatpak
     bottles

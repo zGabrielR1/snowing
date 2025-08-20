@@ -138,7 +138,7 @@ let
     pywal16
     spicetify-cli
   ];
-  
+  /*
   fonts = with pkgs; [
     # Nerd Fonts
     nerd-fonts.jetbrains-mono
@@ -151,6 +151,7 @@ let
     openmoji-color
     twemoji-color-font
   ];
+  */
 
 in
 {
@@ -162,8 +163,7 @@ in
     shell-tools ++ 
     dev-tools ++
     gui-apps ++
-    hyprland-ecosystem ++
-    fonts;
+    hyprland-ecosystem;
 
   # --- State Version ---
   home.stateVersion = "25.11";
