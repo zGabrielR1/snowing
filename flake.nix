@@ -4,12 +4,12 @@
   inputs = {
     # --- Core Inputs ---
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    
+
     chaotic = {
       url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    
+
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -77,8 +77,8 @@
     #   inputs.nixpkgs.follows = "nixpkgs";
     # };
     zen-browser = {
-    url = "github:0xc000022070/zen-browser-flake";
-    inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:0xc000022070/zen-browser-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
 
@@ -102,18 +102,40 @@
         pkgs = nixpkgs.legacyPackages.${system};
       in {
         default = pkgs.mkShell {
-          name = "nixos-config";
+          name = "nixos-config-dev";
           buildInputs = with pkgs; [
+            # Nix formatting and linting
             nixpkgs-fmt
             statix
             deadnix
             alejandra
             nil
+
+            # Development utilities
             nix-tree
+            nix-diff
+            nix-output-monitor
+            nh # Yet another nix helper
+
+            # System utilities
+            git
+            jq
+            yq
+            ripgrep
           ];
+
           shellHook = ''
-            echo " NixOS Configuration Development Shell"
-            echo "Available tools: nixpkgs-fmt, statix, deadnix, alejandra, nil, nix-tree"
+            echo "🚀 NixOS Configuration Development Shell"
+            echo "Available tools:"
+            echo "  Formatting: nixpkgs-fmt, alejandra"
+            echo "  Linting: statix, deadnix, nil"
+            echo "  Analysis: nix-tree, nix-diff, nix-output-monitor"
+            echo "  Utilities: nh, jq, yq, ripgrep"
+            echo ""
+            echo "Quick commands:"
+            echo "  nh os switch    - Build and switch to new config"
+            echo "  nh os test      - Test configuration"
+            echo "  nh clean all    - Clean up old generations"
           '';
         };
       });
@@ -123,21 +145,23 @@
 
       # NixOS Configurations
       nixosConfigurations = {
+        # Main laptop configuration
         laptop = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           specialArgs = {
             inherit inputs self;
             users = [ "zrrg" ];
           };
+
           modules = [
             # Core modules
             home-manager.nixosModules.home-manager
             chaotic.nixosModules.default
 
-            # Custom modules
+            # Custom NixOS modules (auto-imports all .nix files)
             ./modules/nixos
 
-            # Users configuration
+            # User configurations
             ./users
 
             # Host configuration
@@ -150,11 +174,13 @@
                 useUserPackages = true;
                 backupFileExtension = "HMBackup";
                 extraSpecialArgs = { inherit inputs; };
+
+                # Import user-specific home-manager configuration
                 users.zrrg = { config, pkgs, lib, ... }:
                   import ./modules/home/profiles/zrrg { inherit config pkgs lib inputs; };
               };
 
-              # Ensure system is properly set
+              # Platform configuration
               nixpkgs.hostPlatform = "x86_64-linux";
             }
           ];
@@ -163,10 +189,13 @@
 
       # Home Manager Configurations (standalone)
       homeConfigurations = {
+        # Standalone home-manager configuration for user 'zrrg'
         zrrg = home-manager.lib.homeManagerConfiguration {
           pkgs = nixpkgs.legacyPackages.x86_64-linux;
           extraSpecialArgs = { inherit inputs; };
+
           modules = [
+            # Import user-specific home-manager modules
             ./modules/home/profiles/zrrg
           ];
         };
@@ -174,13 +203,14 @@
 
       # Templates for creating new configurations
       templates = {
+        # Template for new NixOS host configurations
         nixos-host = {
           path = ./templates/nixos-host;
-          description = "Template for a new NixOS host configuration";
+          description = "Template for creating a new NixOS host configuration with standard modules";
         };
         home-user = {
           path = ./templates/home-user;
-          description = "Template for a new Home Manager user configuration";
+          description = "Template for creating a new Home Manager user configuration";
         };
       };
     };

@@ -1,6 +1,39 @@
 # Snowing NixOS Modules
 
-This directory contains the NixOS modules for the Snowing configuration system, inspired by the Zaphkiel configuration system.
+This directory contains the NixOS modules for the Snowing configuration system, providing a modular and organized approach to system configuration management.
+
+## Module Organization
+
+Modules are organized by functionality and follow consistent naming conventions:
+
+### Core System Modules
+- `default.nix` - Main module with options and auto-imports
+- `packages.nix` - System-wide packages
+- `services.nix` - System services configuration
+- `utils.nix` - Utility functions and helpers
+
+### Hardware & Graphics
+- `audio.nix` - Audio configuration and pipewire setup
+- `bluetooth.nix` - Bluetooth support
+- `graphics.nix` - Graphics drivers and GPU configuration
+- `networking.nix` - Network configuration
+
+### Desktop Environment
+- `gnome.nix` - GNOME desktop environment
+- `hyprland.nix` - Hyprland window manager
+
+### Applications & Tools
+- `appimage.nix` - AppImage support
+- `flatpak.nix` - Flatpak package management
+- `fonts.nix` - System fonts configuration
+- `snap.nix` - Snap package support
+- `wine.nix` - Wine/Proton configuration
+
+### Development & Utilities
+- `locale.nix` - Localization settings
+- `nix-ld.nix` - Dynamic linker for binaries
+- `nix-settings.nix` - Nix package manager settings
+- `virtualization.nix` - VM and container support
 
 ## Configuration System
 

@@ -74,14 +74,38 @@
   
   networking = {
     networkmanager.enable = true;
-    
+
     # Modern firewall with nftables
     nftables.enable = true;
     firewall = {
       enable = true;
-      trustedInterfaces = [ "incusbr0" "docker0" ];
-      allowedTCPPorts = [ 22 80 443 8080 ];
-      allowedUDPPorts = [ 53 ];
+
+      # Trusted interfaces for virtual machines and containers
+      trustedInterfaces = [ "incusbr0" "docker0" "virbr0" ];
+
+      # Allowed ports with specific purposes
+      allowedTCPPorts = [
+        22    # SSH
+        80    # HTTP
+        443   # HTTPS
+        8080  # Alternative HTTP
+        1143  # IMAPS
+        993   # IMAPS (alternative)
+        587   # SMTP submission
+      ];
+
+      allowedUDPPorts = [
+        53    # DNS
+        67    # DHCP server
+        68    # DHCP client
+        51820 # WireGuard
+        5353  # mDNS
+      ];
+
+      # Additional security measures
+      allowPing = true;
+      logRefusedConnections = false;  # Set to true for debugging
+      logRefusedPackets = false;
     };
   };
 
@@ -155,12 +179,12 @@
   # Home Manager configured at flake-level
 
   # ============================================================================
-  # PROGRAMS & PACKAGES
+  # NIX & PACKAGE MANAGEMENT
   # ============================================================================
   
   # Enable Firefox
   programs.firefox.enable = true;
-  
+
   # Enable nix-ld with all necessary libraries
   custom.nix-ld.enable = true;
   
