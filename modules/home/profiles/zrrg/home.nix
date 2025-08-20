@@ -222,9 +222,9 @@ in
   programs.home-manager.enable = true;
 
   # Browser configuration
-  programs.zen-browser = {
-    enable = true;
-  };
+  #programs.zen-browser = {
+  #  enable = true;
+  #};
 
   # Zsh configuration - DISABLED: Managed by Hjem to avoid file conflicts
   # programs.zsh = {
