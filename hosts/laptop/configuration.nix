@@ -192,10 +192,6 @@
   programs.appimage.enable = true;
   programs.appimage.binfmt = true;
   
-  # Enable Flatpak apps
-  services.flatpak-apps = {
-    flatseal.enable = true;
-  };
 
   #Enable Tailscale
   services.tailscale.enable = true;
