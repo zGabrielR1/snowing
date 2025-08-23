@@ -57,7 +57,8 @@
   boot.loader.efi.canTouchEfiVariables = true;
   
   # Use testing kernel for latest features
-  boot.kernelPackages = pkgs.linuxPackages_testing;
+ # boot.kernelPackages = pkgs.linuxPackages_testing;
+  boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.tmp.cleanOnBoot = true;
 # boot.readOnlyNixStore = false;
 

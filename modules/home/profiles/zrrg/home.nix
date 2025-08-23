@@ -25,7 +25,7 @@ let
     tmuxPlugins.vim-tmux-navigator
     sesh
     kitty
-    wezterm
+    #wezterm
 
     # Core Utilities
     optipng
