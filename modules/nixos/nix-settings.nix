@@ -115,6 +115,11 @@ in
       
       # Warn about dirty Git trees
       warn-dirty = false;
+
+
+      # Better compression (faster downloads)
+      narinfo-cache-negative-ttl = 1;
+      http-connections = 50;
       
       # Network settings
       connect-timeout = 5;
