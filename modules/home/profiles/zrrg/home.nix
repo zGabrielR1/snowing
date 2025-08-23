@@ -280,6 +280,5 @@ in
   imports = [
     ./wm/hyprland/default.nix
     inputs.zen-browser.homeModules.beta
-    #inputs.nix-index-db.hmModules.nix-index
   ];
 }
