@@ -19,7 +19,7 @@
     upower.enable = true;
     power-profiles-daemon.enable = true;
     udisks2.enable = true;
-    logind.settings.Login {
+    logind.settings.Login = {
 	HandlePowerKey = "ignore";
     };
   };
