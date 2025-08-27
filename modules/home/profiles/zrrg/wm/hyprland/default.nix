@@ -79,7 +79,6 @@ in
 
     # File managers with Wayland support
     nautilus                     # GNOME file manager
-    dolphin                      # KDE file manager
 
     # Terminal with Wayland support
     kitty                        # GPU-accelerated terminal
