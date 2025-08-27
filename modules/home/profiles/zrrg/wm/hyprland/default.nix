@@ -249,7 +249,7 @@ in
     platformTheme = "gtk3";
     style = {
       name = "gtk3";
-      package = pkgs.qt6.qt6gtk2;
+      package = pkgs.qt6gtk2;
     };
   };
 
