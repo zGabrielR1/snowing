@@ -276,9 +276,18 @@ in
     # };
   };
 
+  # In home.nix
+  home.sessionVariables = {
+    EDITOR = "nvim";
+    BROWSER = "zen-browser";
+    TERMINAL = "kitty";
+    XDG_CONFIG_HOME = "$HOME/.config";
+  };
+
   # Also import other modules for this user
   imports = [
     ./wm/hyprland/default.nix
     inputs.zen-browser.homeModules.beta
   ];
+
 }
