@@ -286,7 +286,6 @@ in
 
   # Also import other modules for this user
   imports = [
-    ./wm/hyprland/default.nix
     inputs.zen-browser.homeModules.beta
   ];
 
