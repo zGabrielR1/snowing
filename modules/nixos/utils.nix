@@ -19,10 +19,9 @@
     upower.enable = true;
     power-profiles-daemon.enable = true;
     udisks2.enable = true;
-    logind.extraConfig = ''
-      # don't shutdown when power button is short-pressed
-      HandlePowerKey=ignore
-    '';
+    logind.settings.Login {
+	HandlePowerKey = ignore
+    };
   };
 
   # Environment defaults
