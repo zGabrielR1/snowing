@@ -40,46 +40,46 @@ in
 
   home.packages = with pkgs; [
     # Core Hyprland utilities
-    hyprpaper                    # Wallpaper daemon
-    hyprshot                     # Screenshot utility with region selection
-    hyprpicker                   # Color picker
-    hypridle                     # Idle management daemon
-    hyprlock                     # Screen locker
+    #hyprpaper                    # Wallpaper daemon
+    #hyprshot                     # Screenshot utility with region selection
+    #hyprpicker                   # Color picker
+    #hypridle                     # Idle management daemon
+    #hyprlock                     # Screen locker
 
     # Status bar and launcher
-    waybar                       # Highly customizable status bar
-    (rofi-wayland.override {     # Application launcher
-      plugins = [ rofi-calc ];
-    })
+    #waybar                       # Highly customizable status bar
+    #(rofi-wayland.override {     # Application launcher
+    #  plugins = [ rofi-calc ];
+    #})
 
     # Notification system
-    dunst                        # Lightweight notification daemon
-    swaynotificationcenter       # Notification center with history
+    #dunst                        # Lightweight notification daemon
+    #swaynotificationcenter       # Notification center with history
 
     # Essential Wayland utilities
-    wl-clipboard                 # Clipboard manager for Wayland
-    slurp                        # Select region for screenshots
-    grim                         # Screenshot tool
-    swappy                       # Screenshot editor/annotation tool
-    brightnessctl                # Brightness control utility
-    playerctl                    # Media player control
+    #wl-clipboard                 # Clipboard manager for Wayland
+    #slurp                        # Select region for screenshots
+    #grim                         # Screenshot tool
+    #swappy                       # Screenshot editor/annotation tool
+    #brightnessctl                # Brightness control utility
+    #playerctl                    # Media player control
 
     # System integration
-    networkmanagerapplet         # Network manager tray icon
-    blueman                      # Bluetooth manager
-    pavucontrol                  # PulseAudio volume control GUI
+    #networkmanagerapplet         # Network manager tray icon
+    #blueman                      # Bluetooth manager
+    #pavucontrol                  # PulseAudio volume control GUI
 
     # Qt Wayland support for Qt applications
     qt6.qtwayland                # Qt6 Wayland platform plugin
     libsForQt5.qt5.qtwayland     # Qt5 Wayland platform plugin
 
     # GTK integration
-    gtk3                         # GTK3 for theming
-    gtk4                         # GTK4 for modern GTK apps
+    #gtk3                         # GTK3 for theming
+    #gtk4                         # GTK4 for modern GTK apps
 
     # File managers with Wayland support
-    nautilus                     # GNOME file manager
-
+    #nautilus                     # GNOME file manager
+    /*
     # Terminal with Wayland support
     kitty                        # GPU-accelerated terminal
     foot                         # Fast terminal emulator
@@ -91,6 +91,7 @@ in
     wdisplays                    # Graphical display management
     nwg-look                     # GTK theme switcher
     lxappearance-gtk2            # GTK2 theme switcher
+    */
   ];
 
   # ============================================================================
@@ -263,6 +264,7 @@ in
   # ============================================================================
 
   # Enable dunst notification daemon
+  /*
   services.dunst = {
     enable = true;
     settings = {
@@ -310,6 +312,7 @@ in
       };
     };
   };
+  */
 
   # ============================================================================
   # DEVELOPMENT ENVIRONMENT INTEGRATION
@@ -322,7 +325,7 @@ in
   };
 
   # Enable bash integration for direnv
-  programs.bash.enable = true;
+  #programs.bash.enable = true;
 
   # Enable zsh integration for direnv
   programs.zsh.enable = true;
