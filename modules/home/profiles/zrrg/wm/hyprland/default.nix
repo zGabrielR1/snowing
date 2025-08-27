@@ -16,7 +16,7 @@ in
 
     # Use latest Hyprland from flake if available
     package = lib.mkIf (inputs ? hyprland) inputs.hyprland.packages.${pkgs.system}.hyprland;
-
+/*
     # Basic environment setup - can be extended by user config
     extraConfig = ''
       # Basic environment variables for Wayland compatibility
@@ -32,6 +32,7 @@ in
     # plugins = lib.mkIf (inputs ? hyprland-plugins) [
     #   inputs.hyprland-plugins.packages.${pkgs.system}.hyprbars
     # ];
+*/
   };
 
   # ============================================================================
@@ -223,7 +224,7 @@ in
   # ============================================================================
   # GTK THEMING CONFIGURATION
   # ============================================================================
-
+/*
   gtk = {
     enable = true;
     theme = {
@@ -252,7 +253,7 @@ in
       package = pkgs.kdePackages.qt6gtk2;
     };
   };
-
+*/
   # ============================================================================
   # FONT CONFIGURATION
   # ============================================================================
@@ -313,20 +314,4 @@ in
     };
   };
   */
-
-  # ============================================================================
-  # DEVELOPMENT ENVIRONMENT INTEGRATION
-  # ============================================================================
-
-  # Enable direnv for automatic environment management
-  programs.direnv = {
-    enable = true;
-    nix-direnv.enable = true;
-  };
-
-  # Enable bash integration for direnv
-  #programs.bash.enable = true;
-
-  # Enable zsh integration for direnv
-  programs.zsh.enable = true;
 }
