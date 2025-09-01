@@ -184,8 +184,8 @@
   # ============================================================================
   
   # Enable Firefox
-  programs.firefox.enable = true;
-
+  #programs.firefox.enable = true;
+  programs.localsend.enable = true;
   # Enable nix-ld with all necessary libraries
   custom.nix-ld.enable = true;
   
