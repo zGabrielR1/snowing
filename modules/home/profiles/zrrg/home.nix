@@ -49,7 +49,6 @@ let
     htop
     bottom
     fastfetch
-    pfetch
     du-dust
     procs
     hyperfine
@@ -118,7 +117,8 @@ let
     # Bar & Launchers
     waybar
     rofi-wayland
-    wofi
+    walker
+    #wofi
 
     # System Utilities
     swww
