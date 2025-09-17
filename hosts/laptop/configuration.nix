@@ -195,7 +195,7 @@
   
 
   #Enable Tailscale
-  services.tailscale.enable = true;
+  services.tailscale.enable = false;
 
   #Enable Jellyfin
   snowing.services.jellyfin.enable = true;
