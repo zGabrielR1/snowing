@@ -46,6 +46,7 @@
       exitNode.enable = false;
     };
     openssh.enable = false;
+    jellyfin.enable = false;
   };
 
   # ============================================================================
@@ -193,13 +194,6 @@
   programs.appimage.enable = true;
   programs.appimage.binfmt = true;
   
-
-  #Enable Tailscale
-  services.tailscale.enable = false;
-
-  #Enable Jellyfin
-  snowing.services.jellyfin.enable = true;
-
   hardware.bluetooth.powerOnBoot = false;
 
   # disable network manager wait online service (+6 seconds to boot time!!!!)
