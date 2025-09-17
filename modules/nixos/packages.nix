@@ -35,10 +35,6 @@
     nix-index
     quickemu
     #quickgui
-    #Enable Jellyfin:
-    jellyfin
-    jellyfin-web
-    jellyfin-ffmpeg
     #gparted
     
   ];

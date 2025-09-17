@@ -198,7 +198,7 @@
   services.tailscale.enable = true;
 
   #Enable Jellyfin
-  services.jellyfin.enable = true;
+  snowing.services.jellyfin.enable = true;
 
   hardware.bluetooth.powerOnBoot = false;
 
