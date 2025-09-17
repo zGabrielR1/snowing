@@ -34,7 +34,11 @@
     #jetbrains-toolbox
     nix-index
     quickemu
-    quickgui
+    #quickgui
+    #Enable Jellyfin:
+    jellyfin
+    jellyfin-web
+    jellyfin-ffmpeg
     #gparted
     
   ];

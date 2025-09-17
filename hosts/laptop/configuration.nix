@@ -197,6 +197,9 @@
   #Enable Tailscale
   services.tailscale.enable = true;
 
+  #Enable Jellyfin
+  services.jellyfin.enable = true;
+
   hardware.bluetooth.powerOnBoot = false;
 
   # disable network manager wait online service (+6 seconds to boot time!!!!)

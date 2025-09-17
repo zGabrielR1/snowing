@@ -135,7 +135,7 @@ let
     udiskie
 
     # Theming
-    pywal16
+    #pywal16
     spicetify-cli
   ];
   /*

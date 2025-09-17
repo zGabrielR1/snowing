@@ -2,8 +2,6 @@
 
   fonts = {
     packages = with pkgs; [
-
-
       roboto
       work-sans
       comic-neue
