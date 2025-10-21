@@ -8,7 +8,7 @@
 
 let
   # --- Package Sets for Better Organization ---
-  
+
   shell-tools = with pkgs; [
     # Shells & Prompts
     zsh
@@ -52,7 +52,7 @@ let
     du-dust
     procs
     hyperfine
-    
+
     # Network Tools
     gping
     dog
@@ -143,7 +143,7 @@ let
     # Nerd Fonts
     nerd-fonts.jetbrains-mono
     nerd-fonts.symbols-only
-    
+
     # Standard Fonts
     noto-fonts
     noto-fonts-cjk-sans
@@ -159,8 +159,8 @@ in
   home.homeDirectory = "/home/zrrg";
 
   # --- Combine all package lists ---
-  home.packages = 
-    shell-tools ++ 
+  home.packages =
+    shell-tools ++
     dev-tools ++
     gui-apps ++
     hyprland-ecosystem;
@@ -174,11 +174,11 @@ in
     ll = "ls -l";
     la = "ls -la";
     l = "ls -CF";
-    
+
     # System management
     update = "nh os switch --flake ~/Documentos/snowing";
     rebuild = "sudo nixos-rebuild switch --flake ~/Documentos/snowing";
-    
+
     # Modern replacements
     ls = "eza --icons --group-directories-first";
     cat = "bat";
@@ -194,7 +194,7 @@ in
     wget = "xh";
     http = "xh";
     https = "xh";
-    
+
     # Development shortcuts
     g = "git";
     ga = "git add";
@@ -205,12 +205,12 @@ in
     gd = "git diff";
     gco = "git checkout";
     gcb = "git checkout -b";
-    
+
     # Directory navigation
     # .. = "cd ..";
     # ... = "cd ../..";
     # .... = "cd ../../..";
-    
+
     # Quick access
     config = "cd ~/Documentos/snowing";
     docs = "cd ~/Documents";
@@ -242,7 +242,7 @@ in
   #   # Source our beautiful, modular rc from the dotfiles
   #   initContent = "source ${config.xdg.configHome}/zshrc/20-customization";
   # };
-  
+
   # Tmux configuration - DISABLED: Managed by Hjem to avoid file conflicts
   # programs.tmux = {
   #   enable = true;
@@ -253,9 +253,11 @@ in
   # Git delta configuration - DISABLED: Managed by Hjem to avoid file conflicts
   programs.git = {
     enable = true;
-    userName = "zGabrielR1";
-    userEmail = "gabrielrenostro581@gmail.com";
-    extraConfig = {
+    settings = {
+        user = {
+            email = "gabrielrenostro581@gmail.com"
+            name = "zGabrielR1"
+        };
       init.defaultBranch = "main";
       core.editor = "nvim";
       pull.rebase = true;
@@ -265,6 +267,8 @@ in
       color.branch = "auto";
       color.status = "auto";
     };
+    userName = "zGabrielR1";
+    userEmail = "gabrielrenostro581@gmail.com";
     # delta = {
     #   enable = true;
     #   options = {
