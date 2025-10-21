@@ -267,8 +267,6 @@ in
       color.branch = "auto";
       color.status = "auto";
     };
-    userName = "zGabrielR1";
-    userEmail = "gabrielrenostro581@gmail.com";
     # delta = {
     #   enable = true;
     #   options = {
