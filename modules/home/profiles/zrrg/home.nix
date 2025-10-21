@@ -116,7 +116,7 @@ let
     hyprshot
     # Bar & Launchers
     waybar
-    rofi-wayland
+    rofi
     walker
     #wofi
 
