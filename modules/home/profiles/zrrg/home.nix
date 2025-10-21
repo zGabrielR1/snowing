@@ -255,8 +255,8 @@ in
     enable = true;
     settings = {
         user = {
-            email = "gabrielrenostro581@gmail.com"
-            name = "zGabrielR1"
+            email = "gabrielrenostro581@gmail.com";
+            name = "zGabrielR1";
         };
       init.defaultBranch = "main";
       core.editor = "nvim";
