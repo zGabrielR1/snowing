@@ -49,7 +49,7 @@ let
     htop
     bottom
     fastfetch
-    du-dust
+    dust
     procs
     hyperfine
 
