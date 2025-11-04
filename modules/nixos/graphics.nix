@@ -22,7 +22,7 @@ in {
       extraPackages = with pkgs; (
         (if cfg.intel.enable then [
           intel-media-driver
-          vaapiIntel
+          intel-vaapi-driver
           vaapiVdpau
           libvdpau-va-gl
         ] else [])
