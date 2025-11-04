@@ -45,7 +45,7 @@ in {
 
     # Common graphics packages
     environment.systemPackages = with pkgs; [
-      glxinfo
+      mesa-demos
       vulkan-tools
       vulkan-loader
       vulkan-validation-layers
