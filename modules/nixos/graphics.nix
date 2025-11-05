@@ -18,18 +18,13 @@ in {
     # Intel graphics
     hardware.graphics = {
       enable = true;
-      
+
       extraPackages = with pkgs; (
         (if cfg.intel.enable then [
           intel-media-driver
           intel-vaapi-driver
           libva-vdpau-driver
           libvdpau-va-gl
-        ] else [])
-        ++
-        (if cfg.amd.enable then [
-          rocm-opencl-icd
-          rocm-opencl-runtime
         ] else [])
       );
     };
