@@ -9,7 +9,7 @@
     # Hardware configuration
     ./hardware-configuration.nix
     ./user-configuration.nix
-    
+
     # User configurations
     ../../users
   ];
@@ -17,10 +17,10 @@
   # ============================================================================
   # SNOWING CONFIGURATION
   # ============================================================================
-  
+
   # Define users for the snowing system
   snowing.data.users = ["zrrg"];
-  
+
   # Enable wine with all features
   snowing.programs.wine = {
     enable = true;
@@ -28,13 +28,13 @@
     wayland.enable = true;
     ge-proton.enable = true;
   };
-  
+
   # Enable graphics support
   snowing.graphics = {
     enable = true;
     amd.enable = true;
   };
-  
+
   # Enable services
   snowing.services = {
     enable = true;
@@ -49,11 +49,11 @@
   # ============================================================================
   # BOOT CONFIGURATION
   # ============================================================================
-  
+
   # Bootloader configuration
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  
+
   # Use testing kernel for latest features
  # boot.kernelPackages = pkgs.linuxPackages_testing;
   boot.kernelPackages = pkgs.linuxPackages_latest;
@@ -70,7 +70,7 @@
   # Enable networking
   # Enable the X11 windowing system - but minimize what gets pulled in
   #services.xserver.enable = true;
-  
+
   networking = {
     networkmanager.enable = true;
 
@@ -135,7 +135,7 @@
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
-  
+
   # Make shebang work.
   services.envfs.enable = true;
 
@@ -145,12 +145,12 @@
   users.users.zrrg = {
     isNormalUser = true;
     description = "Gabriel Renostro";
-    extraGroups = [ 
-      "networkmanager" 
-      "wheel" 
-      "incus-admin" 
-      "podman" 
-      "docker" 
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+      "incus-admin"
+      "podman"
+      "docker"
       "video"
       "audio"
       "input"
@@ -177,17 +177,17 @@
   # ============================================================================
   # NIX & PACKAGE MANAGEMENT
   # ============================================================================
-  
+
   # Enable Firefox
   #programs.firefox.enable = true;
-  programs.localsend.enable = true;
+  #programs.localsend.enable = false;
   # Enable nix-ld with all necessary libraries
   custom.nix-ld.enable = true;
-  
+
   # Enable AppImage support
   programs.appimage.enable = true;
   programs.appimage.binfmt = true;
-  
+
   hardware.bluetooth.powerOnBoot = false;
 
   # disable network manager wait online service (+6 seconds to boot time!!!!)
@@ -199,13 +199,13 @@
 
   programs.virt-manager.enable = true;
   virtualisation.libvirtd.enable = true;
-  
+
   # Enable basic virt-manager with QEMU/KVM and IOMMU
   virtualisation.vm = {
     enable = true;
     type = "virt-manager";
     username = "zrrg";
-    
+
     # VFIO/GPU Passthrough configuration
     vfio = {
       enable = true;
@@ -214,21 +214,21 @@
       hostGraphicsDriver = "i915";  # Intel iGPU for host when VM is not running
       enableVgaSwitcheroo = true;   # Enable dynamic GPU switching
       blacklistGraphics = true;      # Blacklist conflicting graphics drivers
-      
+
       # HugePages for better performance
       hugepages = {
         enable = true;
         size = "1G";
         count = 8;
       };
-      
+
       # Looking Glass support for better VM display performance
       lookingGlass = {
         enable = true;
         user = "zrrg";
       };
     };
-    
+
     # Libvirt configuration
     libvirt = {
       enableOvmf = true;       # UEFI firmware support
@@ -236,7 +236,7 @@
       enableTpm = true;        # TPM 2.0 emulation
       enableSpice = true;      # SPICE protocol for better VM display
     };
-    
+
     # Performance tuning
     performance = {
       enable = true;

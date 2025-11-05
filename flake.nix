@@ -185,7 +185,7 @@
             }
           ];
         };
-        
+
         # Desktop configuration with manual module imports
         desktop = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
@@ -203,15 +203,20 @@
             # Core system modules
             ./modules/nixos/default.nix     # Snowing configuration system
             ./modules/nixos/packages.nix    # System packages
+            ./modules/nixos/appimage.nix    # AppImage
+            ./modules/nixos/flatpak.nix    # Flatpak
+            ./modules/nixos/gnome.nix    # gnome
+            ./modules/nixos/nix-ld.nix    # nixld
             ./modules/nixos/services.nix    # System services
             ./modules/nixos/nix-settings.nix # Nix settings
             ./modules/nixos/locale.nix      # Localization
             ./modules/nixos/networking.nix  # Basic networking
             ./modules/nixos/audio.nix       # Audio support
-            ./modules/nixos/bluetooth.nix   # Bluetooth support
+            # ./modules/nixos/bluetooth.nix   # Bluetooth support
             ./modules/nixos/fonts.nix       # Fonts
             ./modules/nixos/utils.nix       # Utility functions
-            
+            ./modules/nixos/automount.nix    # AppImage
+
             # User configurations
             ./users
 
