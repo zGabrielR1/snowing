@@ -158,7 +158,7 @@
             home-manager.nixosModules.home-manager
             chaotic.nixosModules.default
 
-            # Custom NixOS modules (auto-imports all .nix files)
+            # Custom NixOS modules (auto-imports all .nix files via default.nix)
             ./modules/nixos
 
             # User configurations
@@ -166,6 +166,57 @@
 
             # Host configuration
             ./hosts/laptop/configuration.nix
+
+            # Home Manager integration
+            {
+              home-manager = {
+                useGlobalPkgs = true;
+                useUserPackages = true;
+                backupFileExtension = "HMBackup";
+                extraSpecialArgs = { inherit inputs; };
+
+                # Import user-specific home-manager configuration
+                users.zrrg = { config, pkgs, lib, ... }:
+                  import ./modules/home/profiles/zrrg { inherit config pkgs lib inputs; };
+              };
+
+              # Platform configuration
+              nixpkgs.hostPlatform = "x86_64-linux";
+            }
+          ];
+        };
+        
+        # Desktop configuration with manual module imports
+        desktop = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = {
+            inherit inputs self;
+            users = [ "zrrg" ];
+          };
+
+          modules = [
+            # Core modules
+            home-manager.nixosModules.home-manager
+            chaotic.nixosModules.default
+
+            # Manually import only the modules we want for desktop
+            # Core system modules
+            ./modules/nixos/default.nix     # Snowing configuration system
+            ./modules/nixos/packages.nix    # System packages
+            ./modules/nixos/services.nix    # System services
+            ./modules/nixos/nix-settings.nix # Nix settings
+            ./modules/nixos/locale.nix      # Localization
+            ./modules/nixos/networking.nix  # Basic networking
+            ./modules/nixos/audio.nix       # Audio support
+            ./modules/nixos/bluetooth.nix   # Bluetooth support
+            ./modules/nixos/fonts.nix       # Fonts
+            ./modules/nixos/utils.nix       # Utility functions
+            
+            # User configurations
+            ./users
+
+            # Host configuration
+            ./hosts/desktop/configuration.nix
 
             # Home Manager integration
             {

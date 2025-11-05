@@ -10,9 +10,6 @@
     ./hardware-configuration.nix
     ./user-configuration.nix
     
-    # NixOS modules (imported via modules/nixos/default.nix)
-    # Individual modules are auto-imported, no need to specify each one
-    
     # User configurations
     ../../users
   ];
