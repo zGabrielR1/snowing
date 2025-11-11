@@ -135,7 +135,11 @@
 
   # Enable CUPS to print documents.
   #services.printing.enable = true;
-  programs.steam.enable = true;
+  programs.steam = {
+    enable = true;
+    remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
+    dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
+  };
   # Make shebang work.
   services.envfs.enable = true;
 
