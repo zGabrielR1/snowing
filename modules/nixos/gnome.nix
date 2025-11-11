@@ -5,7 +5,7 @@ lib.mkIf (config.services.desktopManager.gnome.enable) {
   services.gnome = {
     # Enable GNOME keyring for secure storage
     gnome-keyring.enable = true;
-    
+
     # Enable GNOME settings daemon for night light and other features
     gnome-settings-daemon.enable = true;
   };
@@ -13,9 +13,6 @@ lib.mkIf (config.services.desktopManager.gnome.enable) {
   # Enable power management (night light may depend on this)
   services.upower.enable = true;
 
-  # GNOME terminal
-  programs.gnome-terminal.enable = true;
-  
   # Enable dconf for GNOME settings
   programs.dconf.enable = true;
 }
