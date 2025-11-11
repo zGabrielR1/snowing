@@ -21,12 +21,13 @@
     #cri-o
     distrobox
     distroshelf
+    prismlauncher
     #boxbuddy
     #toolbox
     podman
     #pods
     #github-desktop
-    kitty 
+    kitty
     #niri
     flatpak
     bottles
@@ -36,6 +37,6 @@
     quickemu
     #quickgui
     #gparted
-    
+
   ];
 }

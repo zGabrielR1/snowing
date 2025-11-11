@@ -46,7 +46,6 @@ let
 
     # System Monitors
     btop
-    htop
     bottom
     fastfetch
     dust
@@ -84,7 +83,7 @@ let
     #jetbrains-toolbox
 
     # Programming Language Support
-    tokei # code stats
+    #tokei # code stats
   ];
 
   gui-apps = with pkgs; [
