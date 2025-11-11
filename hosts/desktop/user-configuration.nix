@@ -8,31 +8,31 @@
   generic = [
     # === Terminal and Shell Tools ===
     pkgs.zsh
-    
+
     # === System Utilities ===
     pkgs.btop
-    pkgs.htop
+    #pkgs.htop
     pkgs.eza
     pkgs.bat
     pkgs.ripgrep
     pkgs.fd
     pkgs.fzf
     pkgs.zoxide
-    
+
     # === Development Tools ===
     pkgs.git
     pkgs.delta
     pkgs.lazygit
-    
+
     # === Entertainment ===
     pkgs.cbonsai
     pkgs.cowsay
     pkgs.mpv
-    
+
     # === Network Tools ===
     pkgs.curl
     pkgs.wget
-    
+
     # === File Management ===
     pkgs.unzip
     pkgs.p7zip
@@ -52,4 +52,4 @@ in {
   # hjem.users."zrrg".files = {
   #   ".config/host-specific".source = ./host-specific-config;
   # };
-} 
+}
