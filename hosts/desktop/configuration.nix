@@ -134,8 +134,8 @@
   console.keyMap = "br-abnt2";
 
   # Enable CUPS to print documents.
-  services.printing.enable = true;
-
+  #services.printing.enable = true;
+  programs.steam.enable = true;
   # Make shebang work.
   services.envfs.enable = true;
 
