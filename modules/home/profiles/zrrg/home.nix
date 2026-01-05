@@ -77,7 +77,7 @@ let
     your-editor
     amp
     ad
-    vis
+    #vis
     lite-xl
     zed-editor
     #jetbrains-toolbox
@@ -99,7 +99,7 @@ let
     bottles
     refine
     kdePackages.kate
-    vesktop
+    # vesktop
     mpv
     dunst
   ];
