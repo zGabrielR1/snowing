@@ -131,7 +131,7 @@
   #};
 
   # Configure console keymap
-  console.keyMap = "br-abnt2";
+  console.keyMap = "us";
 
   # Enable CUPS to print documents.
   #services.printing.enable = true;

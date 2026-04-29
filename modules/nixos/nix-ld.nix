@@ -14,16 +14,16 @@ in {
         glib
         glib-networking
         gobject-introspection
-        
+
         # NSS components
         nss
         nspr
-        
+
         # System libraries
         dbus
         libdbusmenu-gtk3
         systemd # For libudev.so.1
-        
+
         # GTK and display related
         gtk3
         atk
@@ -33,21 +33,21 @@ in {
         libdrm
         pango
         cairo
-        xorg.libX11
-        xorg.libXcomposite
-        xorg.libXdamage
-        xorg.libXext
-        xorg.libXfixes
-        xorg.libXrandr
+        libX11
+        libXcomposite
+        libXdamage
+        libXext
+        libXfixes
+        libXrandr
         mesa
         libgbm
-        
+
         # Other dependencies
         libxkbcommon
         expat
-        xorg.libxcb
+        libxcb
         alsa-lib
-        
+
         # Special handling for libffmpeg.so
         ffmpeg-full
       ];
@@ -61,4 +61,4 @@ in {
     # Set the libraries
     programs.nix-ld.libraries = cfg.libraries;
   };
-} 
+}

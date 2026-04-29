@@ -25,6 +25,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    pineconemc = {
+      url = "github:ElyPrismLauncher/Launcher"; # replace with actual repo
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # --- Theming ---
     #nix-colors.url = "github:misterio77/nix-colors";
     # matugen.url = "github:InioX/matugen";
