@@ -21,7 +21,6 @@
     #cri-o
     distrobox
     distroshelf
-    prismlauncher
     #boxbuddy
     #toolbox
     podman

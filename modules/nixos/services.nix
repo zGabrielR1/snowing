@@ -36,11 +36,11 @@ in {
     # Common service configurations
     services = {
       # CUPS for printing
-      printing.enable = true;
-      
+      printing.enable = false;
+
       # Bluetooth
-      blueman.enable = true;
-      
+      blueman.enable = false;
+
       # Pipewire for audio
       pipewire = {
         enable = true;

@@ -96,7 +96,7 @@ let
     ctpv
 
     # Utilities
-    bottles
+    #bottles
     refine
     kdePackages.kate
     # vesktop
@@ -120,7 +120,7 @@ let
     #wofi
 
     # System Utilities
-    swww
+    awww
     swaynotificationcenter
     wlogout
     wl-clipboard

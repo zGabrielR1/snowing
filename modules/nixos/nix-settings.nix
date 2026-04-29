@@ -8,8 +8,8 @@ in
 {
   # For flakes
   # Essential packages for flakes
-  environment.systemPackages = with pkgs; [ 
-    git 
+  environment.systemPackages = with pkgs; [
+    git
     curl
     wget
     nix-output-monitor # Better build output
@@ -48,8 +48,12 @@ in
   documentation = {
     enable = true;
     doc.enable = false;
-    man.enable = true;
-    man.generateCaches = true;
+    man = {
+      enable = true;
+      cache = {
+        enable = true;
+      }
+    };
     dev.enable = false;
     info.enable = false;
     nixos.enable = false;
@@ -99,18 +103,18 @@ in
 
       # Build optimization
       builders-use-substitutes = true;
-      
+
       # Sandbox settings
       sandbox = true;
       sandbox-fallback = false;
-      
+
       # Keep outputs and derivations for development
       keep-outputs = true;
       keep-derivations = true;
-      
+
       # Auto-optimize store
       auto-optimise-store = true;
-      
+
       # Warn about dirty Git trees
       warn-dirty = false;
 
@@ -118,17 +122,17 @@ in
       # Better compression (faster downloads)
       narinfo-cache-negative-ttl = 1;
       http-connections = 50;
-      
+
       # Network settings
       connect-timeout = 5;
       stalled-download-timeout = 300;
-      
+
       # Build log settings
       log-lines = 25;
-      
+
       # Allow import from derivation (needed for some packages)
       allow-import-from-derivation = true;
-      
+
       # Netrc file for private repositories
       netrc-file = "/etc/nix/netrc";
     };
