@@ -52,7 +52,7 @@ in
       enable = true;
       cache = {
         enable = true;
-      }
+      };
     };
     dev.enable = false;
     info.enable = false;

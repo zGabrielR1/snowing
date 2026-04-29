@@ -2,7 +2,7 @@
 
 {
   # Bluetooth
-  services.blueman.enable = true;
+  services.blueman.enable = false;
   hardware.bluetooth = {
     enable = true;
     powerOnBoot = lib.mkForce false; # Save power

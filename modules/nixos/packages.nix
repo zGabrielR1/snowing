@@ -29,7 +29,7 @@
     kitty
     #niri
     flatpak
-    bottles
+    #bottles
     wineWow64Packages.stagingFull
     #jetbrains-toolbox
     nix-index
