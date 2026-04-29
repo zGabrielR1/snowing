@@ -31,6 +31,7 @@
     flatpak
     #bottles
     wineWow64Packages.stagingFull
+    openjdk25
     #jetbrains-toolbox
     nix-index
     quickemu
