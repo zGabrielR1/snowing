@@ -86,8 +86,8 @@ let
     #tokei # code stats
   ];
 
-  pinecone = inputs.pineconemc.packages.${system}.prismlauncher;
-  zen = inputs.zen-browser.packages.${system}.default;
+  pinecone = inputs.pineconemc.packages.${pkgs.stdenv.hostPlatform.system}.prismlauncher;
+  zen = inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default;
 
   gui-apps = with pkgs; [
     # Browser
