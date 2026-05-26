@@ -31,6 +31,7 @@ in {
 
     # Nvidia specific configuration
     hardware.nvidia = mkIf cfg.nvidia.enable {
+      services.xserver.videoDrivers = ["nvidia"];
       modesetting.enable = true;
       powerManagement.enable = true;
       open = false;

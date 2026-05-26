@@ -32,7 +32,7 @@
   # Enable graphics support
   snowing.graphics = {
     enable = true;
-    amd.enable = true;
+    nvidia.enable = true;
   };
 
   # Enable services
