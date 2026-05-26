@@ -35,6 +35,8 @@
     nvidia.enable = true;
   };
 
+  services.xserver.videoDrivers = ["nvidia"];
+
   # Enable services
   snowing.services = {
     enable = true;
